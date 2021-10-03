@@ -143,7 +143,7 @@ class Preference(QtWidgets.QWidget, Ui_Preference):
     # TAB COMMON
 
     def interface_lang(self):  # выбор языка интерфейса
-        path = "lang"
+        path = "../lang"
         language = filter(lambda x: x.lower().endswith(('.qm', )), os.listdir(path))
         self.comboBox_language.addItems(language)
 

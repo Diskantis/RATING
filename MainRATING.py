@@ -19,7 +19,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
         self.load_def_ref()
-        print("GIT")
 
         self.id = 1
         self.image = ""
