@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import sys
 
 from PyQt5 import QtWidgets
@@ -55,12 +56,12 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.image = lin_ibg
 
-        self.start_player()
+        self.start_player(lin_vbg, lin_vlg)
 
         return self.image
 
-    def start_player(self):
-        self.player_1, self.player_2 = create_player()
+    def start_player(self, lin_vbg, lin_vlg):
+        self.player_1, self.player_2 = create_player("Video Background", lin_vbg, "Video Logo", lin_vlg)
 
         self.player_1.video.setFixedSize(app.desktop().availableGeometry().size())
         self.player_2.video.setFixedSize(app.desktop().availableGeometry().size())
@@ -84,8 +85,8 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.close()
 
     def preferences(self):
-
         self.pref.show()
+
         # TAB VIDEO
         self.pref.check_box_player.stateChanged.connect(self.pref.check_player_stat_chang)  # check box Player internal
         self.pref.check_box_pause.stateChanged.connect(self.pref.check_pause_stat_chang)  # check box Pause animation
@@ -101,6 +102,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
         # OK
         self.pref.btn_ok.clicked.connect(lambda: self.pref.ok(self.player_1, self.player_2))  # button OK
+        # self.pref.btn_ok.clicked.connect(self.pref.ok)  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
         self.pref.btn_cancel.clicked.connect(self.pref.cancel)  # button CANCEL
@@ -129,10 +131,18 @@ class MainRATING(QMainWindow, Ui_MainWindow):
             self.player_2.video.hide()
             self.player_1.video.show()
             self.id -= 1
+            self.btn_Logo_Scene.setText("S C E N E")
+            self.btn_Logo_Scene.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                              "border: 1px solid rgba(50, 50, 50, 240); "
+                                              "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                              "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                              "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
         elif self.id == 0:
             self.player_1.video.hide()
             self.player_2.video.show()
             self.id += 1
+            self.btn_Logo_Scene.setText("L O G O")
+            self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
 
     def closeEvent(self, event):
         self.player_1.close()

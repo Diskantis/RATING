@@ -30,19 +30,18 @@ def read_reference(file_name):
     return list_data
 
 
-def create_player():
-    val = read_reference("reference.reg")
-    # if self.radio_btn_video_back.isChecked() == True
-    player_1 = VideoPlayer(val[4])  # class dll.VideoPlayer
-    player_2 = VideoPlayer(val[6])  # class dll.VideoPlayer
+def create_player(name_1, path_1, name_2, path_2):
+    player_1 = VideoPlayer(name_1, path_1)  # class dll.VideoPlayer
+    player_2 = VideoPlayer(name_2, path_2)  # class dll.VideoPlayer
     return player_1, player_2
 
 
 class VideoPlayer:
-    def __init__(self, path):
+    def __init__(self, name, path):
         path = path
 
         self.video = QVideoWidget()
+        self.video.setWindowTitle(name)
         # self.video.setFullScreen(True)
         # self.video.setFixedSize(app.desktop().availableGeometry().size())
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
@@ -152,7 +151,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         #     self.player_1 = VideoPlayer(self.image)
 
     def bg_brow_vid(self):  # выбор файла для Video Background
-        path_vid_1 = QFileDialog.getOpenFileNames()
+        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")
         try:
             self.line_back_video.setText(path_vid_1[0][0])
             self.path_vid_1 = path_vid_1[0][0]
@@ -160,15 +159,15 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             pass
 
     def bg_brow_img(self):  # выбор файла для Image Background
-        path_img = QFileDialog.getOpenFileNames()
+        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background", directory="res")
         try:
             self.line_back_image.setText(path_img[0][0])
             self.image = path_img[0][0]
         except IndexError:
             pass
 
-    def lg_brow_vid(self):  # выбор файла для Logo
-        path_vid_2 = QFileDialog.getOpenFileNames()
+    def lg_brow_vid(self):  # выбор файла для Video Logo
+        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo", directory="res")
         try:
             self.line_logo_video.setText(path_vid_2[0][0])
             self.path_vid_2 = path_vid_2[0][0]
@@ -219,6 +218,3 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
 
     def cancel(self):
         self.close()
-
-    # def __str__(self):
-    #     return self.path_1, self.path_2, self.image
