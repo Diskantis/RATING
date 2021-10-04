@@ -4,10 +4,11 @@ import re
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, QPoint
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout
 
 from UI_RATING import Ui_Preference
 
@@ -31,6 +32,7 @@ def read_reference(file_name):
 
 def create_player():
     val = read_reference("reference.reg")
+    # if self.radio_btn_video_back.isChecked() == True
     player_1 = VideoPlayer(val[4])  # class dll.VideoPlayer
     player_2 = VideoPlayer(val[6])  # class dll.VideoPlayer
     return player_1, player_2
@@ -57,24 +59,6 @@ class VideoPlayer:
         self.player.setPlaylist(self.playlist)
         self.player.play()
 
-        # pixmap1 = QPixmap("res/002_Desktop Wallpapers  HD Part (162).jpg")
-        # pixmap1 = pixmap1.scaledToWidth(self.video.width())
-        #
-        # self.image = QLabel()
-        # self.image.setPixmap(pixmap1)
-        #
-        # layout_box = QHBoxLayout(self.video)
-        # layout_box.setContentsMargins(0, 0, 0, 0)
-        # layout_box.addWidget(self.image)
-        #
-        # pixmap2 = QPixmap("res/PLASHKA_БОРОДА.png")
-        # pixmap2 = pixmap2.scaledToWidth(200)
-        # self.image2 = QLabel(self.video)
-        # self.image2.setPixmap(pixmap2)
-        # self.image2.setFixedSize(pixmap2.size())
-        #
-        # p = self.video.geometry().bottomRight() - self.image2.geometry().bottomRight() - QPoint(100, 100)
-        # self.image2.move(p)
     def reload(self, path):
         self.playlist.clear()
         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
@@ -87,6 +71,38 @@ class VideoPlayer:
 
     def close(self):
         self.video.close()
+
+
+class ImagePlayer:
+    def __init__(self, path):
+        path = path
+
+        self.video = QVideoWidget()
+        # self.video.setFullScreen(True)
+        # self.video.setFixedSize(app.desktop().availableGeometry().size())
+        self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
+        self.video.move(1920, 0)
+        # self.video.resize(1920, 1080)
+        self.video.hide()
+
+        pixmap1 = QPixmap(path)
+        pixmap1 = pixmap1.scaledToWidth(self.video.width())
+
+        self.image = QLabel()
+        self.image.setPixmap(pixmap1)
+
+        layout_box = QHBoxLayout(self.video)
+        layout_box.setContentsMargins(0, 0, 0, 0)
+        layout_box.addWidget(self.image)
+
+        pixmap2 = QPixmap("res/PLASHKA_БОРОДА.png")
+        pixmap2 = pixmap2.scaledToWidth(200)
+        self.image2 = QLabel(self.video)
+        self.image2.setPixmap(pixmap2)
+        self.image2.setFixedSize(pixmap2.size())
+
+        p = self.video.geometry().bottomRight() - self.image2.geometry().bottomRight() - QPoint(100, 100)
+        self.image2.move(p)
 
 
 class Preference(QtWidgets.QDialog, Ui_Preference):
