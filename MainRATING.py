@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
-from dll import read_reference, create_player, VideoPlayer, Preference
+from dll import read_reference, create_player, ImagePlayer, VideoPlayer, Preference
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -22,7 +22,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.load_def_ref()
 
         self.id = 1
-        self.image = ""
+        self.image = None
 
         self.action_New.triggered.connect(self.create_new)  # button "New" menu "File"
         self.action_Open.triggered.connect(self.open_file)  # button "Open" menu "File"
@@ -54,18 +54,22 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.check_last_session.setChecked(chb_lse)
         self.pref.comboBox_language.setCurrentText(cmb_lng)
 
-        self.image = lin_ibg
-
-        self.start_player(lin_vbg, lin_vlg)
+        self.start_player(lin_vbg, lin_ibg, lin_vlg)
 
         return self.image
 
-    def start_player(self, lin_vbg, lin_vlg):
-        self.player_1, self.player_2 = create_player("Video Background", lin_vbg, "Video Logo", lin_vlg)
+    def start_player(self, path_1, path_img, path_2):
+        if self.pref.radio_btn_video_back.isChecked():
+            self.player_1 = VideoPlayer("Video Background", path_1)  # class dll.VideoPlayer
+            self.player_1.video.setFixedSize(app.desktop().availableGeometry().size())
+            self.player_1.video.show()
 
-        self.player_1.video.setFixedSize(app.desktop().availableGeometry().size())
+        elif self.pref.radio_btn_image_back.isChecked():
+            self.player_1 = ImagePlayer("Image Background", path_img)
+            self.player_1.video.show()
+
+        self.player_2 = VideoPlayer("Video Logo", path_2)  # class dll.VideoPlayer
         self.player_2.video.setFixedSize(app.desktop().availableGeometry().size())
-        self.player_1.video.show()
         self.player_2.video.show()
 
     def create_new(self):
@@ -113,6 +117,13 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
     def add_item(self):
         pass
+        # path_2 = "E:/6_PROGRAMING/1_PROJECT/3_NEW PROJECT/QT Creator/RATING/res/002_Desktop Wallpapers  HD Part (162).jpg"
+        # # self.player_img = ImagePlayer("Image Background", path)  # class dll.ImagePlayer
+        # # self.player_img.widget.show()
+        #
+        # self.img = VideoPlayer("Image Background")
+        # self.img.image(path_img=path_2)
+        # self.img.video.show()
 
     def remove_item(self):
         pass
@@ -124,7 +135,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         pass
 
     def logo_scene(self):
-        self.player_1.video.setFullScreen(True)
+        # self.player_1.video.setFullScreen(True)
         self.player_2.video.setFullScreen(True)
 
         if self.id == 1:

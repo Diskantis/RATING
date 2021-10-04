@@ -8,7 +8,7 @@ from PyQt5.QtCore import QUrl, Qt, QPoint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout
+from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 
 from UI_RATING import Ui_Preference
 
@@ -36,14 +36,66 @@ def create_player(name_1, path_1, name_2, path_2):
     return player_1, player_2
 
 
+# class VideoPlayer:
+#     def __init__(self, name, path):
+#         path = path
+#
+#         self.video = QVideoWidget()
+#         self.video.setWindowTitle(name)
+#         # self.video.setFullScreen(True)
+#         # self.video.setFixedSize(app.desktop().availableGeometry().size())
+#         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
+#         self.video.move(1920, 0)
+#         # self.video.resize(1920, 1080)
+#         self.video.hide()
+#
+#         self.playlist = QMediaPlaylist()
+#         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
+#         self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
+#
+#         self.player = QMediaPlayer()
+#         self.player.setVideoOutput(self.video)
+#         self.player.setPlaylist(self.playlist)
+#         self.player.play()
+#
+#     def reload(self, path):
+#         self.playlist.clear()
+#         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
+#
+#     def play(self):
+#         self.player.play()
+#
+#     def pause(self):
+#         self.player.pause()
+#
+#     def close(self):
+#         self.video.close()
+#
+#
+# class ImagePlayer:
+#     def __init__(self, name, path):
+#         path = path
+#
+#         self.widget = QVideoWidget()
+#         self.widget.setWindowTitle(name)
+#         self.widget.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
+#         self.widget.move(1920, 0)
+#         self.widget.resize(1920, 1080)
+#         # self.image_wid.show()
+#
+#         pixmap1 = QPixmap(path)
+#         # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
+#         self.image1 = QLabel()
+#         self.image1.setPixmap(pixmap1)
+#
+#         layout_box = QHBoxLayout(self.widget)
+#         layout_box.setContentsMargins(0, 0, 0, 0)
+#         layout_box.addWidget(self.image1)
+
 class VideoPlayer:
     def __init__(self, name, path):
-        path = path
-
         self.video = QVideoWidget()
         self.video.setWindowTitle(name)
-        # self.video.setFullScreen(True)
-        # self.video.setFixedSize(app.desktop().availableGeometry().size())
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.move(1920, 0)
         # self.video.resize(1920, 1080)
@@ -65,43 +117,30 @@ class VideoPlayer:
     def play(self):
         self.player.play()
 
-    def pause(self):
-        self.player.pause()
-
     def close(self):
         self.video.close()
 
 
 class ImagePlayer:
-    def __init__(self, path):
-        path = path
-
-        self.video = QVideoWidget()
-        # self.video.setFullScreen(True)
-        # self.video.setFixedSize(app.desktop().availableGeometry().size())
+    def __init__(self, name, path):
+        self.video = QWidget()
+        self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.move(1920, 0)
-        # self.video.resize(1920, 1080)
+        self.video.resize(1920, 1080)
         self.video.hide()
 
         pixmap1 = QPixmap(path)
-        pixmap1 = pixmap1.scaledToWidth(self.video.width())
-
-        self.image = QLabel()
-        self.image.setPixmap(pixmap1)
+        # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
+        self.image1 = QLabel()
+        self.image1.setPixmap(pixmap1)
 
         layout_box = QHBoxLayout(self.video)
         layout_box.setContentsMargins(0, 0, 0, 0)
-        layout_box.addWidget(self.image)
+        layout_box.addWidget(self.image1)
 
-        pixmap2 = QPixmap("res/PLASHKA_БОРОДА.png")
-        pixmap2 = pixmap2.scaledToWidth(200)
-        self.image2 = QLabel(self.video)
-        self.image2.setPixmap(pixmap2)
-        self.image2.setFixedSize(pixmap2.size())
-
-        p = self.video.geometry().bottomRight() - self.image2.geometry().bottomRight() - QPoint(100, 100)
-        self.image2.move(p)
+    def close(self):
+        self.video.close()
 
 
 class Preference(QtWidgets.QDialog, Ui_Preference):
