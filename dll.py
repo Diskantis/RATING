@@ -30,12 +30,6 @@ def read_reference(file_name):
     return list_data
 
 
-def create_player(name_1, path_1, name_2, path_2):
-    player_1 = VideoPlayer(name_1, path_1)  # class dll.VideoPlayer
-    player_2 = VideoPlayer(name_2, path_2)  # class dll.VideoPlayer
-    return player_1, player_2
-
-
 # class VideoPlayer:
 #     def __init__(self, name, path):
 #         path = path
@@ -98,8 +92,8 @@ class VideoPlayer:
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.move(1920, 0)
-        # self.video.resize(1920, 1080)
-        self.video.hide()
+        self.video.setFixedSize(1920, 1080)
+        self.video.setFullScreen(True)
 
         self.playlist = QMediaPlaylist()
         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
@@ -121,23 +115,29 @@ class VideoPlayer:
         self.video.close()
 
 
-class ImagePlayer:
+class ImagePlayer:  # (VideoPlayer)
     def __init__(self, name, path):
+        # super(ImagePlayer, self).__init__(name, path)
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.move(1920, 0)
         self.video.resize(1920, 1080)
-        self.video.hide()
 
-        pixmap1 = QPixmap(path)
-        # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
         self.image1 = QLabel()
-        self.image1.setPixmap(pixmap1)
-
         layout_box = QHBoxLayout(self.video)
         layout_box.setContentsMargins(0, 0, 0, 0)
         layout_box.addWidget(self.image1)
+
+        self.load(path)
+
+    def load(self, path):
+        pixmap1 = QPixmap(path)
+        self.image1.setPixmap(pixmap1)
+        # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
+
+    def reload_pix(self, path_1):
+        self.load(path_1)
 
     def close(self):
         self.video.close()
@@ -150,7 +150,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         self.setupUi(self)
 
     # TAB VIDEO
-
     def check_player_stat_chang(self):  # использовать внутрений видео плеер (Use internal video player)
         if self.check_box_player.checkState() == QtCore.Qt.Checked:
             print("check_player =", self.check_box_player.isTristate())
@@ -162,12 +161,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("check_pause True")
         elif self.check_box_pause.checkState() == QtCore.Qt.Unchecked:
             print("check_pause False")
-
-    def video_back(self):
-        pass
-
-    def image_back(self):
-        pass
 
     def radio_btn_grp(self):
         pass
@@ -214,7 +207,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             pass
 
     # TAB SCENE
-
     def margins(self):
         pass
 
@@ -222,7 +214,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         pass
 
     # TAB COMMON
-
     def last_session(self):
         pass
 
@@ -232,7 +223,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         self.comboBox_language.addItems(self.language)
 
     # OK
-
     def ok(self, pl_1, pl_2):
         with open("reference.reg", "w") as f:
             print("Use Internal Video Player", "=", '"' + str(self.check_box_player.isChecked()) + '"', file=f)
@@ -248,8 +238,12 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("RestoreLastSession", "=", '"' + str(self.check_last_session.isChecked()) + '"', file=f)
             print("Language", "=", '"' + str(self.comboBox_language.currentText()) + '"', file=f)
 
-        pl_1.reload(self.line_back_video.displayText())
-        pl_1.play()
+        if self.radio_btn_video_back.isChecked():
+            pl_1.reload(self.line_back_video.displayText())
+            pl_1.play()
+        elif self.radio_btn_image_back.isChecked():
+            pl_1.reload_pix(self.line_back_image.displayText())
+
         pl_2.reload(self.line_logo_video.displayText())
         pl_2.play()
 

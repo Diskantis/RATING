@@ -221,7 +221,6 @@ class Ui_Preference(object):
         self.tab_Widget.setObjectName("tab_Widget")
 
         # TAB VIDEO
-
         self.tab_Video = QtWidgets.QWidget()
         self.tab_Video.setObjectName("tab_Video")
 
@@ -355,11 +354,10 @@ class Ui_Preference(object):
         self.tab_Widget.addTab(self.tab_Video, "")
 
         # TAB SCENE
+        self.tab_Scene = QtWidgets.QWidget()
+        self.tab_Scene.setObjectName("tab_Scene")
 
-        self.tab_Scence = QtWidgets.QWidget()
-        self.tab_Scence.setObjectName("tab_Scence")
-
-        self.grp_margins = QtWidgets.QGroupBox(self.tab_Scence)
+        self.grp_margins = QtWidgets.QGroupBox(self.tab_Scene)
         self.grp_margins.setGeometry(QtCore.QRect(10, 10, 355, 113))
         self.grp_margins.setFont(font_grp)
         self.grp_margins.setStyleSheet("border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
@@ -398,7 +396,7 @@ class Ui_Preference(object):
                                            "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
         self.spin_box_bottom.setObjectName("spin_box_bottom")
 
-        self.grp_animation = QtWidgets.QGroupBox(self.tab_Scence)
+        self.grp_animation = QtWidgets.QGroupBox(self.tab_Scene)
         self.grp_animation.setGeometry(QtCore.QRect(10, 133, 355, 73))
         self.grp_animation.setFont(font_grp)
         self.grp_animation.setStyleSheet("border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
@@ -421,10 +419,9 @@ class Ui_Preference(object):
                                          "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
         self.line_duration.setObjectName("line_duration")
 
-        self.tab_Widget.addTab(self.tab_Scence, "")
+        self.tab_Widget.addTab(self.tab_Scene, "")
 
         # TAB COMMON
-
         self.tab_Common = QtWidgets.QWidget()
         self.tab_Common.setObjectName("tab_Common")
 
@@ -459,7 +456,6 @@ class Ui_Preference(object):
         self.tab_Widget.addTab(self.tab_Common, "")
 
         # FRAME OK
-
         self.frame_ok = QtWidgets.QFrame(Preference)
         self.frame_ok.setEnabled(True)
         self.frame_ok.setGeometry(QtCore.QRect(10, 390, 388, 50))
@@ -510,7 +506,7 @@ class Ui_Preference(object):
         self.label_bottom.setText(_translate("Preference", "Bottom:"))
         self.grp_animation.setTitle(_translate("Preference", "Animation:"))
         self.label_duration.setText(_translate("Preference", "Duration, msecs:"))
-        self.tab_Widget.setTabText(self.tab_Widget.indexOf(self.tab_Scence), _translate("Preference", "Scene"))
+        self.tab_Widget.setTabText(self.tab_Widget.indexOf(self.tab_Scene), _translate("Preference", "Scene"))
         self.check_last_session.setText(_translate("Preference", "Restore last session"))
         self.label_interface_language.setText(_translate("Preference", "Interface language:*"))
         self.label_restart_for_changing.setText(_translate(
@@ -553,5 +549,3 @@ class Ui_About(QtWidgets.QDialog):
         self.label_1.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: 5px 0 5px 0;")
         self.label_1.setAlignment(QtCore.Qt.AlignCenter)
         self.label_1.setObjectName("label_1")
-
-        self.show()
