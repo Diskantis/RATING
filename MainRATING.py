@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
-from dll import read_reference, ImagePlayer, VideoPlayer, Preference
+from dll import read_reference, start_player, Preference
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -18,7 +18,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
         self.load_def_ref()
-
         self.id = 1
 
         self.action_New.triggered.connect(self.create_new)  # button "New" menu "File"
@@ -51,19 +50,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.check_last_session.setChecked(chb_lse)
         self.pref.comboBox_language.setCurrentText(cmb_lng)
 
-        self.start_player(lin_vbg, lin_ibg, lin_vlg)
-
-    def start_player(self, path_1, path_img, path_2):
-        if self.pref.radio_btn_video_back.isChecked():
-            self.player_1 = VideoPlayer("Video Background", path_1)  # class dll.VideoPlayer
-            self.player_1.video.show()
-
-        elif self.pref.radio_btn_image_back.isChecked():
-            self.player_1 = ImagePlayer("Image Background", path_img)
-            self.player_1.video.show()
-
-        self.player_2 = VideoPlayer("Video Logo", path_2)  # class dll.VideoPlayer
-        self.player_2.video.show()
+        self.player_1, self.player_2 = start_player()
 
     def create_new(self):
         pass
@@ -97,10 +84,20 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
 
         # OK
-        self.pref.btn_ok.clicked.connect(lambda: self.pref.ok(self.player_1, self.player_2))  # button OK
+        self.pref.btn_ok.clicked.connect(lambda: self.ok_preferences(self.player_1, self.player_2))  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
         self.pref.btn_cancel.clicked.connect(self.pref.cancel)  # button CANCEL
+
+    def ok_preferences(self, pl_1, pl_2):
+        self.pref.save_preferences()
+
+        pl_1.video.deleteLater()
+        pl_2.video.deleteLater()
+
+        self.player_1, self.player_2 = start_player()  # func dll.start_player
+
+        self.pref.close()
 
     def about(self):
         self.About = Ui_About()  # class UI_RATING.Ui_About

@@ -179,7 +179,7 @@ class Ui_MainWindow(object):
         self.btn_Remove_Item.setText(_translate("MainWindow", "Remove Item"))
         self.btn_Swap_Items.setText(_translate("MainWindow", "Swap Items"))
         self.btn_Move_to_Pos.setText(_translate("MainWindow", "Move to Position №"))
-        self.btn_Logo_Scene.setText(_translate("MainWindow", "Logo/Scene"))
+        self.btn_Logo_Scene.setText(_translate("MainWindow", "L O G O / S C E N E"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuOptions.setTitle(_translate("MainWindow", "Options"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))

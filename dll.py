@@ -29,6 +29,20 @@ def read_reference(file_name):
     return list_data
 
 
+def start_player():
+    val = read_reference("reference.reg")
+
+    if val[2]:
+        player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
+        player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
+        return player_1, player_2
+
+    elif val[3]:
+        player_1 = ImagePlayer("Image Background", val[5])
+        player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
+        return player_1, player_2
+
+
 class VideoPlayer:
     def __init__(self, name, path):
         self.video = QVideoWidget()
@@ -45,13 +59,6 @@ class VideoPlayer:
         self.player = QMediaPlayer()
         self.player.setVideoOutput(self.video)
         self.player.setPlaylist(self.playlist)
-        self.player.play()
-
-    def reload(self, path):
-        self.playlist.clear()
-        self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
-
-    def play(self):
         self.player.play()
 
     def close(self):
@@ -71,15 +78,9 @@ class ImagePlayer:
         layout_box.setContentsMargins(0, 0, 0, 0)
         layout_box.addWidget(self.image1)
 
-        self.load(path)
-
-    def load(self, path):
         pixmap1 = QPixmap(path)
         self.image1.setPixmap(pixmap1)
         # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
-
-    def reload_pix(self, path_1):
-        self.load(path_1)
 
     def close(self):
         self.video.close()
@@ -103,26 +104,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("check_pause True")
         elif self.check_box_pause.checkState() == QtCore.Qt.Unchecked:
             print("check_pause False")
-
-    def radio_btn_grp(self):
-        pass
-        # self.grp_radio = QtWidgets.QButtonGroup()
-        # self.grp_radio.setExclusive(True)
-        #
-        # self.grp_radio.addButton(self.radio_btn_video_back)
-        # self.grp_radio.addButton(self.radio_btn_image_back)
-        #
-        # self.radio_btn_video_back.clicked.connect(self.video_back)
-        # self.radio_btn_image_back.clicked.connect(self.image_back)
-        #
-        # self.groupVAlignment.buttonClicked['int'].connect(self.groupHAlignmentClicked)
-        # self.grp_radio.buttonClicked.connect(self.pr)
-        #
-        # if self.Preference.radio_btn_video_back.setChecked(True) is True:
-        #     self.player_1 = VideoPlayer(self.path_1)
-        #
-        # elif self.Preference.radio_btn_image_back.setChecked(True) is True:
-        #     self.player_1 = VideoPlayer(self.image)
 
     def bg_brow_vid(self):  # выбор файла для Video Background
         path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")
@@ -165,7 +146,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         self.comboBox_language.addItems(self.language)
 
     # OK
-    def ok(self, pl_1, pl_2):
+    def save_preferences(self):
         with open("reference.reg", "w") as f:
             print("Use Internal Video Player", "=", '"' + str(self.check_box_player.isChecked()) + '"', file=f)
             print("Pause Background When Animating", "=", '"' + str(self.check_box_pause.isChecked()) + '"', file=f)
@@ -179,17 +160,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("AnimationDuration", "=", '"' + str(self.line_duration.displayText()) + '"', file=f)
             print("RestoreLastSession", "=", '"' + str(self.check_last_session.isChecked()) + '"', file=f)
             print("Language", "=", '"' + str(self.comboBox_language.currentText()) + '"', file=f)
-
-        if self.radio_btn_video_back.isChecked():
-            pl_1.reload(self.line_back_video.displayText())
-            pl_1.play()
-        elif self.radio_btn_image_back.isChecked():
-            pl_1.reload_pix(self.line_back_image.displayText())
-
-        pl_2.reload(self.line_logo_video.displayText())
-        pl_2.play()
-
-        self.close()
 
     def cancel(self):
         self.close()
