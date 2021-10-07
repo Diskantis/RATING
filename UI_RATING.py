@@ -12,40 +12,64 @@ class Ui_MainWindow(object):
         # self.MainWindow.setWindowIcon(QIcon('Resource/img/euro.png'))
         MainWindow.setStyleSheet("background-color: rgb(78, 79, 84);")
 
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+
+        # Центральный виджет (все окно)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(10, 0, 10, 10)
-        self.verticalLayout.setObjectName("verticalLayout")
+        # слой вертекального выравнивания Центрального виджета (всего окна)
+        self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.v_Layout_centralwidget.setContentsMargins(10, 0, 10, 10)
+        self.v_Layout_centralwidget.setObjectName("verticalLayout")
 
-        self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(10, 0, 580, 470))
-        self.groupBox.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: .5em 1em; "
-                                    " border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
-        self.groupBox.setObjectName("groupBox")
+        # # группа виджетов команд (кнопка и название)
+        # self.grb_items = QtWidgets.QGroupBox(self.centralwidget)
+        # self.grb_items.setGeometry(QtCore.QRect(10, 0, 580, 470))
+        # self.grb_items.setContentsMargins(0, 0, 0, 0)
+        # # self.grb_items.setStyleSheet("border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
+        # self.grb_items.setObjectName("grb_items")
 
-        self.verticalLayout.addWidget(self.groupBox)
+        self.frame_items = QtWidgets.QFrame(self.centralwidget)
+        self.frame_items.setMinimumSize(QtCore.QSize(580, 450))
+        self.frame_items.setStyleSheet("border-radius: 5px;\n border: 1px solid rgba(209, 209, 217, 240);")
+        self.frame_items.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_items.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_items.setObjectName("frame_items")
+
+        # слой вертекального выравнивания группы виджетов команд
+        self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_items)
+        self.v_Layout_grb_items.setObjectName("v_Layout_grb_items_top")
+
+        # верхиний толкатель группы
+        spacerItem_TOP = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.v_Layout_grb_items.addItem(spacerItem_TOP)
+
+        # нижний толкатель группы
+        spacerItem_BOT = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.v_Layout_grb_items.addItem(spacerItem_BOT)
+
+        # прикрепляет группу виджетов к слою центрального виджета
+        self.v_Layout_centralwidget.addWidget(self.frame_items)
 
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setMinimumSize(QtCore.QSize(0, 50))
         self.frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame.setContentsMargins(0, 0, 0, 0)
         self.frame.setObjectName("frame")
 
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName("horizontalLayout")
-
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
 
         self.btn_Add_Item = QtWidgets.QPushButton(self.frame)
         self.btn_Add_Item.setGeometry(QtCore.QRect(0, 480, 100, 30))
         self.btn_Add_Item.setMinimumSize(QtCore.QSize(100, 30))
         self.btn_Add_Item.setMaximumSize(QtCore.QSize(100, 30))
         self.btn_Add_Item.setFont(font)
-        # self.btn_Add_Item.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: .5em 1em;")
         self.btn_Add_Item.setStyleSheet("color: rgb(209, 209, 217);")
         self.btn_Add_Item.setObjectName("btn_Add_Item")
         self.horizontalLayout.addWidget(self.btn_Add_Item)
@@ -96,7 +120,7 @@ class Ui_MainWindow(object):
         self.lineEdit_Pos.setObjectName("lineEdit")
         self.horizontalLayout.addWidget(self.lineEdit_Pos)
 
-        self.verticalLayout.addWidget(self.frame)
+        self.v_Layout_centralwidget.addWidget(self.frame)
 
         self.btn_Logo_Scene = QtWidgets.QPushButton(self.centralwidget)
         self.btn_Logo_Scene.setGeometry(QtCore.QRect(10, 520, 580, 40))
@@ -105,7 +129,7 @@ class Ui_MainWindow(object):
         self.btn_Logo_Scene.setFont(font)
         self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
         self.btn_Logo_Scene.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.btn_Logo_Scene)
+        self.v_Layout_centralwidget.addWidget(self.btn_Logo_Scene)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -174,7 +198,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", 'TEAM RATING "WHAT? WHERE? WHEN?"'))
-        self.groupBox.setTitle(_translate("MainWindow", ""))
+        # self.grb_items.setTitle(_translate("MainWindow", ""))
         self.btn_Add_Item.setText(_translate("MainWindow", "Add Item", ))
         self.btn_Remove_Item.setText(_translate("MainWindow", "Remove Item"))
         self.btn_Swap_Items.setText(_translate("MainWindow", "Swap Items"))
@@ -201,6 +225,9 @@ class Ui_MainWindow(object):
 
         self.action_About.setText(_translate("MainWindow", "About"))
         self.action_About.setShortcut(_translate("MainWindow", "Ctrl+A"))
+
+
+
 
 
 class Ui_Preference(object):
@@ -549,3 +576,49 @@ class Ui_About(QtWidgets.QDialog):
         self.label_1.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: 5px 0 5px 0;")
         self.label_1.setAlignment(QtCore.Qt.AlignCenter)
         self.label_1.setObjectName("label_1")
+
+
+class Widget_Item(QtWidgets.QWidget):
+    def __init__(self, name):
+        super(Widget_Item, self).__init__()
+
+        # слой вертекального выравнивания виджета команды 1
+        v_Layout_widget_Item = QtWidgets.QVBoxLayout(self)
+        v_Layout_widget_Item.setObjectName("v_Layout_widget_Item")
+
+        # кнопка с названием команды 1
+        btn_Item = QtWidgets.QPushButton(name)
+        btn_Item.setMinimumSize(QtCore.QSize(0, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        btn_Item.setFont(font)
+        btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
+        btn_Item.setObjectName("btn_Item")
+        v_Layout_widget_Item.addWidget(btn_Item)
+
+
+        # # виджет команды 1
+        # self.widget_Item = QtWidgets.QWidget(self.grb_items)
+        # self.widget_Item.setMinimumSize(QtCore.QSize(0, 40))
+        # self.widget_Item.setContentsMargins(0, 0, 0, 0)
+        # # self.widget_Item.setStyleSheet("border: 0px solid;")
+        # self.widget_Item.setObjectName("widget_Item")
+        #
+        # # слой вертекального выравнивания виджета команды 1
+        # self.v_Layout_widget_Item = QtWidgets.QVBoxLayout(self.widget_Item)
+        # self.v_Layout_widget_Item.setObjectName("v_Layout_widget_Item")
+        #
+        # # кнопка с названием команды 1
+        # self.btn_Item = QtWidgets.QPushButton("Команда Бурды", self.widget_Item)
+        # self.btn_Item.setMinimumSize(QtCore.QSize(0, 40))
+        # font = QtGui.QFont()
+        # font.setPointSize(10)
+        # font.setBold(True)
+        # self.btn_Item.setFont(font)
+        # self.btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
+        # self.btn_Item.setObjectName("btn_Item")
+        # self.v_Layout_widget_Item.addWidget(self.btn_Item)
+        #
+        # # прикрепляет виджет команды 1 к слою группы виджетов
+        # self.v_Layout_grb_items.addWidget(self.widget_Item)

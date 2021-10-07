@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QTranslator
 
-from UI_RATING import Ui_MainWindow, Ui_About
+from UI_RATING import Ui_MainWindow, Ui_About, Widget_Item
 from dll import read_reference, start_player, Preference
 
 
@@ -105,7 +105,25 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.About.show()
 
     def add_item(self):
-        pass
+        # self.widget_item = QtWidgets.QWidget(self.frame_items)
+        # self.widget_item.setGeometry(QtCore.QRect(0, 0, 560, 50))
+        # self.widget_item.setContentsMargins(0, 0, 0, 0)
+        # self.widget_item.setStyleSheet("border: 0px solid;")
+        # self.widget_item.setObjectName("widget_item")
+        #
+        # self.btn_Item = QtWidgets.QPushButton("Команда Зайкова", self.widget_item)
+        # self.btn_Item.setMinimumSize(QtCore.QSize(560, 40))
+        # font = QtGui.QFont()
+        # font.setPointSize(10)
+        # font.setBold(True)
+        # self.btn_Item.setFont(font)
+        # self.btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
+        # self.btn_Item.setObjectName("btn_Item")
+        #
+        # self.v_Layout_grb_items.addWidget(self.widget_item)
+
+        self.team_1 = Widget_Item("Команда Зайкова")
+        self.v_Layout_grb_items.addWidget(self.team_1)
 
     def remove_item(self):
         pass
