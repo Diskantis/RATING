@@ -5,8 +5,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtCore import QTranslator
 
-from UI_RATING import Ui_MainWindow, Ui_About, Widget_Item
-from dll import read_reference, start_player, Preference
+from UI_RATING import Ui_MainWindow, Ui_About, Ui_Add_Item, Widget_Item
+from dll import read_reference, start_player, Preference, Add_Item
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -14,6 +14,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
 
         self.pref = Preference()  # class dll.Preference
+        self.add_item = Add_Item()
 
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
@@ -27,7 +28,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.action_Preferences.triggered.connect(self.preferences)  # button "Preferences" menu "Options"
         self.action_About.triggered.connect(self.about)  # button "About" menu "Help"
 
-        self.btn_Add_Item.clicked.connect(self.add_item)  # button "Add Item"
+        self.btn_Add_Item.clicked.connect(self.add_new_item)  # button "Add Item"
         self.btn_Remove_Item.clicked.connect(self.remove_item)  # button "Add Item"
         self.btn_Swap_Items.clicked.connect(self.swap_item)  # button "Add Item"
         self.btn_Move_to_Pos.clicked.connect(self.move_item)  # button "Add Item"
@@ -104,26 +105,18 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.About.setupUi()
         self.About.show()
 
-    def add_item(self):
-        # self.widget_item = QtWidgets.QWidget(self.frame_items)
-        # self.widget_item.setGeometry(QtCore.QRect(0, 0, 560, 50))
-        # self.widget_item.setContentsMargins(0, 0, 0, 0)
-        # self.widget_item.setStyleSheet("border: 0px solid;")
-        # self.widget_item.setObjectName("widget_item")
-        #
-        # self.btn_Item = QtWidgets.QPushButton("Команда Зайкова", self.widget_item)
-        # self.btn_Item.setMinimumSize(QtCore.QSize(560, 40))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # self.btn_Item.setFont(font)
-        # self.btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
-        # self.btn_Item.setObjectName("btn_Item")
-        #
-        # self.v_Layout_grb_items.addWidget(self.widget_item)
+    def add_new_item(self):
+        self.add_item.show()
 
-        self.team_1 = Widget_Item("Команда Зайкова")
-        self.v_Layout_grb_items.addWidget(self.team_1)
+        self.add_item.btn_brow_image.clicked.connect(self.add_item.brow_img)  # button "Browse..." Item Image
+
+        self.add_item.btn_ok.clicked.connect(self.add_item.ok)  # button OK
+        self.add_item.btn_ok.setAutoDefault(True)
+
+        self.add_item.btn_cancel.clicked.connect(self.add_item.cancel)  # button CANCEL
+
+        # self.team_1 = Widget_Item("Команда Зайкова")
+        # self.v_Layout_grb_items.addWidget(self.team_1)
 
     def remove_item(self):
         pass

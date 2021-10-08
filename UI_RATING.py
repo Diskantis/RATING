@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class Ui_MainWindow(object):
@@ -32,34 +33,41 @@ class Ui_MainWindow(object):
         # # self.grb_items.setStyleSheet("border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
         # self.grb_items.setObjectName("grb_items")
 
-        self.frame_items = QtWidgets.QFrame(self.centralwidget)
-        self.frame_items.setMinimumSize(QtCore.QSize(580, 450))
-        self.frame_items.setStyleSheet("border-radius: 5px;\n border: 1px solid rgba(209, 209, 217, 240);")
-        self.frame_items.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_items.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_items.setObjectName("frame_items")
+        self.frame_grb_items = QtWidgets.QFrame(self.centralwidget)
+        self.frame_grb_items.setMinimumSize(QtCore.QSize(580, 450))
+        self.frame_grb_items.setStyleSheet("border-radius: 5px;\n border: 1px solid rgba(209, 209, 217, 240);")
+        self.frame_grb_items.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_grb_items.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_grb_items.setObjectName("frame_items")
 
         # слой вертекального выравнивания группы виджетов команд
-        self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_items)
+        self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_grb_items)
         self.v_Layout_grb_items.setObjectName("v_Layout_grb_items_top")
 
         # верхиний толкатель группы
         spacerItem_TOP = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.v_Layout_grb_items.addItem(spacerItem_TOP)
 
+        self.frame_items = QtWidgets.QFrame(self.frame_grb_items)
+        self.frame_items.setMinimumSize(QtCore.QSize(560, 50))
+        self.frame_items.setStyleSheet("border-radius: 5px;\n border: 1px solid rgba(209, 209, 217, 240);")
+        self.frame_items.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_items.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_items.setObjectName("frame_items")
+        self.v_Layout_grb_items.addWidget(self.frame_items)
+
         # нижний толкатель группы
         spacerItem_BOT = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.v_Layout_grb_items.addItem(spacerItem_BOT)
 
         # прикрепляет группу виджетов к слою центрального виджета
-        self.v_Layout_centralwidget.addWidget(self.frame_items)
+        self.v_Layout_centralwidget.addWidget(self.frame_grb_items)
 
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setMinimumSize(QtCore.QSize(0, 50))
         self.frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.frame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.frame.setContentsMargins(0, 0, 0, 0)
+        self.frame.setStyleSheet("QFrame { border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setObjectName("frame")
 
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
@@ -225,9 +233,6 @@ class Ui_MainWindow(object):
 
         self.action_About.setText(_translate("MainWindow", "About"))
         self.action_About.setShortcut(_translate("MainWindow", "Ctrl+A"))
-
-
-
 
 
 class Ui_Preference(object):
@@ -511,7 +516,6 @@ class Ui_Preference(object):
         self.h_Layout_ok.addWidget(self.btn_ok)
 
         self.retranslateUi(Preference)
-        self.tab_Widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Preference)
 
     def retranslateUi(self, Preference):
@@ -578,6 +582,116 @@ class Ui_About(QtWidgets.QDialog):
         self.label_1.setObjectName("label_1")
 
 
+class Ui_Add_Item(object):
+    def setupUi(self, Add_item):
+        Add_item.setObjectName("Add_item")
+        Add_item.setWindowModality(QtCore.Qt.ApplicationModal)
+        Add_item.resize(400, 210)
+        Add_item.setMinimumSize(QtCore.QSize(400, 210))
+        Add_item.setMaximumSize(QtCore.QSize(400, 210))
+        Add_item.setStyleSheet("background-color: rgb(78, 79, 84); color: rgb(209, 209, 217);")
+
+        font = QtGui.QFont()
+        font.setPointSize(10)
+
+        self.grb_item_prp = QtWidgets.QGroupBox(Add_item)
+        self.grb_item_prp.setGeometry(QtCore.QRect(10, 10, 380, 150))
+        self.grb_item_prp.setObjectName("groupBox")
+        font_grp = QtGui.QFont()
+        font_grp.setPointSize(10)
+        font_grp.setBold(True)
+        font_grp.setUnderline(True)
+        self.grb_item_prp.setFont(font_grp)
+        self.grb_item_prp.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
+        self.grb_item_prp.setAlignment(QtCore.Qt.AlignCenter)
+        self.grb_item_prp.setObjectName("grb_item_prp")
+
+        self.frame_image = QtWidgets.QFrame(self.grb_item_prp)
+        self.frame_image.setGeometry(QtCore.QRect(1, 40, 378, 50))
+        self.frame_image.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_image.setObjectName("frame")
+
+        self.h_Layout_frame_image = QtWidgets.QHBoxLayout(self.frame_image)
+        self.h_Layout_frame_image.setContentsMargins(10, 0, 10, 0)
+        self.h_Layout_frame_image.setObjectName("h_Layout_frame_image")
+
+        self.line_image = QtWidgets.QLineEdit(self.frame_image)
+        self.line_image.setMinimumSize(QtCore.QSize(0, 30))
+        self.line_image.setFont(font)
+        self.line_image.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                      "border: 1px solid rgba(50, 50, 50, 240); "
+                                      "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                      "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                      "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.line_image.setObjectName("lineEdit")
+        self.h_Layout_frame_image.addWidget(self.line_image)
+
+        self.btn_brow_image = QtWidgets.QPushButton(self.frame_image)
+        self.btn_brow_image.setMinimumSize(QtCore.QSize(80, 30))
+        self.btn_brow_image.setFont(font)
+        self.btn_brow_image.setObjectName("pushButton")
+        self.h_Layout_frame_image.addWidget(self.btn_brow_image)
+
+        self.label_image = QtWidgets.QLabel(self.grb_item_prp)
+        self.label_image.setGeometry(QtCore.QRect(12, 20, 355, 30))
+        self.label_image.setFont(font)
+        self.label_image.setObjectName("label")
+
+        self.label_text = QtWidgets.QLabel(self.grb_item_prp)
+        self.label_text.setGeometry(QtCore.QRect(12, 80, 355, 30))
+        self.label_text.setFont(font)
+        self.label_text.setObjectName("label_2")
+
+        self.line_text = QtWidgets.QLineEdit(self.grb_item_prp)
+        self.line_text.setGeometry(QtCore.QRect(12, 110, 355, 30))
+        self.line_text.setFont(font)
+        self.line_text.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                     "border: 1px solid rgba(50, 50, 50, 240); "
+                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.line_text.setObjectName("lineEdit_2")
+
+        # FRAME OK ADD_NEW_ITEM
+        self.frame_ok = QtWidgets.QFrame(Add_item)
+        self.frame_ok.setEnabled(True)
+        self.frame_ok.setGeometry(QtCore.QRect(0, 160, 400, 50))
+        self.frame_ok.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_ok.setObjectName("frame_ok")
+
+        self.h_Layout_ok = QtWidgets.QHBoxLayout(self.frame_ok)
+        self.h_Layout_ok.setObjectName("h_Layout_ok")
+
+        spacerItem1 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_Layout_ok.addItem(spacerItem1)
+
+        self.btn_cancel = QtWidgets.QPushButton(self.frame_ok)
+        self.btn_cancel.setMinimumSize(QtCore.QSize(80, 30))
+        self.btn_cancel.setFont(font)
+        self.btn_cancel.setObjectName("btn_cancel")
+        self.h_Layout_ok.addWidget(self.btn_cancel)
+
+        self.btn_ok = QtWidgets.QPushButton(self.frame_ok)
+        self.btn_ok.setMinimumSize(QtCore.QSize(80, 30))
+        self.btn_ok.setFont(font)
+        self.btn_ok.setObjectName("btn_ok")
+        self.h_Layout_ok.addWidget(self.btn_ok)
+
+        self.retranslateUi(Add_item)
+        QtCore.QMetaObject.connectSlotsByName(Add_item)
+
+    def retranslateUi(self, Add_item):
+        _translate = QtCore.QCoreApplication.translate
+        Add_item.setWindowTitle(_translate("Add_item", "Add new item"))
+        self.grb_item_prp.setTitle(_translate("Add_item", "Item properties:"))
+        self.label_image.setText(_translate("Add_item", "Image:"))
+        self.label_text.setText(_translate("Add_item", "Text:"))
+        self.btn_brow_image.setText(_translate("Add_item", "Browse..."))
+
+        self.btn_cancel.setText(_translate("Preference", "Cancel"))
+        self.btn_ok.setText(_translate("Preference", "OK"))
+
+
 class Widget_Item(QtWidgets.QWidget):
     def __init__(self, name):
         super(Widget_Item, self).__init__()
@@ -596,7 +710,6 @@ class Widget_Item(QtWidgets.QWidget):
         btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
         btn_Item.setObjectName("btn_Item")
         v_Layout_widget_Item.addWidget(btn_Item)
-
 
         # # виджет команды 1
         # self.widget_Item = QtWidgets.QWidget(self.grb_items)

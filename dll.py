@@ -9,7 +9,7 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 
-from UI_RATING import Ui_Preference
+from UI_RATING import Ui_Preference, Ui_Add_Item
 
 
 def read_reference(file_name):
@@ -106,26 +106,23 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("check_pause False")
 
     def bg_brow_vid(self):  # выбор файла для Video Background
-        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")
+        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")[0]
         try:
-            self.line_back_video.setText(path_vid_1[0][0])
-            self.path_vid_1 = path_vid_1[0][0]
+            self.line_back_video.setText(path_vid_1[0])
         except IndexError:
             pass
 
     def bg_brow_img(self):  # выбор файла для Image Background
-        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background", directory="res")
+        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background", directory="res")[0]
         try:
-            self.line_back_image.setText(path_img[0][0])
-            self.image = path_img[0][0]
+            self.line_back_image.setText(path_img[0])
         except IndexError:
             pass
 
     def lg_brow_vid(self):  # выбор файла для Video Logo
-        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo", directory="res")
+        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo", directory="res")[0]
         try:
-            self.line_logo_video.setText(path_vid_2[0][0])
-            self.path_vid_2 = path_vid_2[0][0]
+            self.line_logo_video.setText(path_vid_2[0])
         except IndexError:
             pass
 
@@ -160,6 +157,29 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("AnimationDuration", "=", '"' + str(self.line_duration.displayText()) + '"', file=f)
             print("RestoreLastSession", "=", '"' + str(self.check_last_session.isChecked()) + '"', file=f)
             print("Language", "=", '"' + str(self.comboBox_language.currentText()) + '"', file=f)
+
+        f.close()
+
+    def cancel(self):
+        self.close()
+
+
+class Add_Item(QtWidgets.QDialog, Ui_Add_Item):
+    def __init__(self):
+        super(Add_Item, self).__init__()
+
+        self.setupUi(self)
+
+    def brow_img(self):  # выбор файла для Video Background
+        path_image = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")[0]
+        try:
+            self.line_image.setText(path_image[0])
+        except IndexError:
+            pass
+
+    # OK
+    def ok(self):
+        pass
 
     def cancel(self):
         self.close()
