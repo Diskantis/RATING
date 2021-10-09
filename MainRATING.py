@@ -2,11 +2,13 @@
 import sys
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
+from tkinter import filedialog as fd
+
 from UI_RATING import Ui_MainWindow, Ui_About, Ui_Add_Item, Widget_Item
-from dll import read_reference, start_player, Preference, Add_Item
+from dll import read_reference, start_player, Preference, Add_Team
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -14,7 +16,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
 
         self.pref = Preference()  # class dll.Preference
-        self.add_item = Add_Item()
+        self.add_team = Add_Team()
 
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
@@ -28,10 +30,10 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.action_Preferences.triggered.connect(self.preferences)  # button "Preferences" menu "Options"
         self.action_About.triggered.connect(self.about)  # button "About" menu "Help"
 
-        self.btn_Add_Item.clicked.connect(self.add_new_item)  # button "Add Item"
-        self.btn_Remove_Item.clicked.connect(self.remove_item)  # button "Add Item"
-        self.btn_Swap_Items.clicked.connect(self.swap_item)  # button "Add Item"
-        self.btn_Move_to_Pos.clicked.connect(self.move_item)  # button "Add Item"
+        self.btn_Add_Item.clicked.connect(self.add_new_team)  # button "Add Item"
+        self.btn_Remove_Item.clicked.connect(self.remove_team)  # button "Add Item"
+        self.btn_Swap_Items.clicked.connect(self.swap_teams)  # button "Add Item"
+        self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
 
     def load_def_ref(self):
@@ -105,26 +107,26 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.About.setupUi()
         self.About.show()
 
-    def add_new_item(self):
-        self.add_item.show()
+    def add_new_team(self):
+        self.add_team.show()
 
-        self.add_item.btn_brow_image.clicked.connect(self.add_item.brow_img)  # button "Browse..." Item Image
+        self.add_team.btn_brow_image.clicked.connect(self.add_team.brow_img)  # button "Browse..." Item Image
 
-        self.add_item.btn_ok.clicked.connect(self.add_item.ok)  # button OK
-        self.add_item.btn_ok.setAutoDefault(True)
+        self.add_team.btn_ok.clicked.connect(self.add_team.ok)  # button OK
+        self.add_team.btn_ok.setAutoDefault(True)
 
-        self.add_item.btn_cancel.clicked.connect(self.add_item.cancel)  # button CANCEL
+        self.add_team.btn_cancel.clicked.connect(self.add_team.cancel)  # button CANCEL
 
         # self.team_1 = Widget_Item("Команда Зайкова")
         # self.v_Layout_grb_items.addWidget(self.team_1)
 
-    def remove_item(self):
+    def remove_team(self):
         pass
 
-    def swap_item(self):
+    def swap_teams(self):
         pass
 
-    def move_item(self):
+    def move_team(self):
         pass
 
     def logo_scene(self):
@@ -151,7 +153,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.close()
 
 
-if __name__ == "__main__":
+def application():
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("Fusion")
 
@@ -166,3 +168,7 @@ if __name__ == "__main__":
     windows = MainRATING()
     windows.show()
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    application()

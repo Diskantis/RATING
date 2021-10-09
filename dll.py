@@ -3,7 +3,7 @@ import os
 import re
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, QDir
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -32,6 +32,8 @@ def read_reference(file_name):
 def start_player():
     val = read_reference("reference.reg")
 
+    # if val[4] and val[6]:
+
     if val[2]:
         player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
@@ -48,9 +50,11 @@ class VideoPlayer:
         self.video = QVideoWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        self.video.move(1920, 0)
-        self.video.setFixedSize(1920, 1080)
-        self.video.setFullScreen(True)
+        # self.video.move(1920, 0)
+        # self.video.setFixedSize(1920, 1080)
+        # self.video.setFullScreen(True)
+        self.video.move(10, 10)
+        self.video.setFixedSize(800, 600)
 
         self.playlist = QMediaPlaylist()
         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
@@ -70,8 +74,10 @@ class ImagePlayer:
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        self.video.move(1920, 0)
-        self.video.resize(1920, 1080)
+        # self.video.move(1920, 0)
+        # self.video.resize(1920, 1080)
+        self.video.move(10, 10)
+        self.video.resize(800, 600)
 
         self.image1 = QLabel()
         layout_box = QHBoxLayout(self.video)
@@ -106,23 +112,29 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("check_pause False")
 
     def bg_brow_vid(self):  # выбор файла для Video Background
-        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")[0]
+        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background",
+                                                  directory="res",
+                                                  filter="*.avi *.mov")[0][0]
         try:
-            self.line_back_video.setText(path_vid_1[0])
-        except IndexError:
+            self.line_back_video.setText(path_vid_1)
+        except FileNotFoundError:
             pass
 
     def bg_brow_img(self):  # выбор файла для Image Background
-        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background", directory="res")[0]
+        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background",
+                                                directory="res",
+                                                filter="*.jpg *.png")[0][0]
         try:
-            self.line_back_image.setText(path_img[0])
+            self.line_back_image.setText(path_img)
         except IndexError:
             pass
 
     def lg_brow_vid(self):  # выбор файла для Video Logo
-        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo", directory="res")[0]
+        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo",
+                                                  directory="res",
+                                                  filter="*.avi *.mov")[0][0]
         try:
-            self.line_logo_video.setText(path_vid_2[0])
+            self.line_logo_video.setText(path_vid_2)
         except IndexError:
             pass
 
@@ -164,16 +176,16 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         self.close()
 
 
-class Add_Item(QtWidgets.QDialog, Ui_Add_Item):
+class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
     def __init__(self):
-        super(Add_Item, self).__init__()
+        super(Add_Team, self).__init__()
 
         self.setupUi(self)
 
     def brow_img(self):  # выбор файла для Video Background
-        path_image = QFileDialog.getOpenFileNames(caption="Open Video Background", directory="res")[0]
+        path_image = QFileDialog.getOpenFileNames(caption="Open Image Team", directory="res", filter="*.jpg *.png")[0][0]
         try:
-            self.line_image.setText(path_image[0])
+            self.line_image.setText(path_image)
         except IndexError:
             pass
 
