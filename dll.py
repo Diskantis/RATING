@@ -33,8 +33,6 @@ def read_reference(file_name):
 def start_player():
     val = read_reference("reference.reg")
 
-    # if val[4] and val[6]:
-
     if val[2]:
         player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
@@ -66,6 +64,8 @@ class VideoPlayer:
         self.player.setPlaylist(self.playlist)
         self.player.play()
 
+        self.video.show()
+
     def close(self):
         self.video.close()
 
@@ -86,8 +86,10 @@ class ImagePlayer:
         layout_box.addWidget(self.image1)
 
         pixmap1 = QPixmap(path)
+        pixmap1 = pixmap1.scaledToWidth(self.video.width())
         self.image1.setPixmap(pixmap1)
-        # pixmap1 = pixmap1.scaledToWidth(self.image_wid.width())
+
+        self.video.show()
 
     def close(self):
         self.video.close()
@@ -113,28 +115,26 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             print("check_pause False")
 
     def bg_brow_vid(self):  # выбор файла для Video Background
-        path_vid_1 = QFileDialog.getOpenFileNames(caption="Open Video Background",
-                                                  directory="res",
-                                                  filter="*.avi *.mov")[0][0]
         try:
+            path_vid_1 = QFileDialog.getOpenFileNames(self, caption="Open Video Background", directory="res",
+                                                      filter="*.avi *.mov")[0][0]
+
             self.line_back_video.setText(path_vid_1)
         except IndexError:
             pass
 
     def bg_brow_img(self):  # выбор файла для Image Background
-        path_img = QFileDialog.getOpenFileNames(caption="Open Image Background",
-                                                directory="res",
-                                                filter="*.jpg *.png")[0][0]
         try:
+            path_img = QFileDialog.getOpenFileNames(self, caption="Open Image Background", directory="res",
+                                                    filter="*.jpg *.png")[0][0]
             self.line_back_image.setText(path_img)
         except IndexError:
             pass
 
     def lg_brow_vid(self):  # выбор файла для Video Logo
-        path_vid_2 = QFileDialog.getOpenFileNames(caption="Open Video Logo",
-                                                  directory="res",
-                                                  filter="*.avi *.mov")[0][0]
         try:
+            path_vid_2 = QFileDialog.getOpenFileNames(self, caption="Open Video Logo", directory="res",
+                                                      filter="*.avi *.mov")[0][0]
             self.line_logo_video.setText(path_vid_2)
         except IndexError:
             pass
@@ -184,17 +184,20 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
         self.setupUi(self)
 
     def add_brow_img(self):  # выбор файла для Video Background
-        # self.line_image.setText("")
         try:
-            path_image = QFileDialog.getOpenFileNames(self,
-                                                      caption="Open Image Team",
-                                                      directory="res",
+            path_image = QFileDialog.getOpenFileNames(self, caption="Open Image Team", directory="res",
                                                       filter="*.jpg *.png")[0][0]
             self.line_image.setText(path_image)
+
         except IndexError:
             pass
 
     def add_ok(self):
+        with open("autosave.sav", "a") as f:
+            print(str(self.line_image.displayText()), file=f)
+            print(str(self.line_text.displayText()), file=f)
+        f.close()
+
         self.close()
 
     def add_cancel(self):

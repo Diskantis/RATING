@@ -13,9 +13,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.pref = Preference()  # class dll.Preference
-        self.add_team = Add_Team()
-
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
         self.load_def_ref()
@@ -35,6 +32,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
 
     def load_def_ref(self):
+        self.pref = Preference()  # class dll.Preference
         val = read_reference("reference.reg")  # func dll.load_def_ref
         chb_ply, chb_pus, rbt_vbg, rbt_ibg, lin_vbg, lin_ibg, lin_vlg, mar_top, mar_bot, ani_dur, chb_lse, cmb_lng = val
 
@@ -51,7 +49,11 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.check_last_session.setChecked(chb_lse)
         self.pref.comboBox_language.setCurrentText(cmb_lng)
 
-        self.player_1, self.player_2 = start_player()
+        try:
+            if self.player_1 and self.player_2:
+                pass
+        except AttributeError:
+            self.player_1, self.player_2 = start_player()
 
     def create_new(self):
         pass
@@ -71,6 +73,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.close()
 
     def preferences(self):
+        self.load_def_ref()
         self.pref.show()
 
         # TAB VIDEO
@@ -107,8 +110,9 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.About.show()
 
     def add_new_team(self):
+        self.add_team = Add_Team()
         self.add_team.show()
-
+        self.add_team.line_image.clear()
         self.add_team.btn_brow_image.clicked.connect(self.add_team.add_brow_img)  # button "Browse..." Item Image
 
         self.add_team.btn_ok.clicked.connect(self.add_team.add_ok)  # button OK
