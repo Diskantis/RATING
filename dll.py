@@ -1,10 +1,9 @@
 import ast
 import os
 import re
-import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QUrl, Qt, QDir
+from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget

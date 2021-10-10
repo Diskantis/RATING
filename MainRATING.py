@@ -25,9 +25,9 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.action_Preferences.triggered.connect(self.preferences)  # button "Preferences" menu "Options"
         self.action_About.triggered.connect(self.about)  # button "About" menu "Help"
 
-        self.btn_Add_Item.clicked.connect(self.add_new_team)  # button "Add Item"
-        self.btn_Remove_Item.clicked.connect(self.remove_team)  # button "Add Item"
-        self.btn_Swap_Items.clicked.connect(self.swap_teams)  # button "Add Item"
+        self.btn_Add_Team.clicked.connect(self.add_new_team)  # button "Add Item"
+        self.btn_Remove_Team.clicked.connect(self.remove_team)  # button "Add Item"
+        self.btn_Swap_Teams.clicked.connect(self.swap_teams)  # button "Add Item"
         self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
 
@@ -61,7 +61,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def open_file(self):
         pass
         # path_op_preset = QFileDialog.getOpenFileNames()
-        # print(path_op_preset)
 
     def save_file(self):
         pass
