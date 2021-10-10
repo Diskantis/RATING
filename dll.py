@@ -1,6 +1,7 @@
 import ast
 import os
 import re
+import sys
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QUrl, Qt, QDir
@@ -117,7 +118,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
                                                   filter="*.avi *.mov")[0][0]
         try:
             self.line_back_video.setText(path_vid_1)
-        except FileNotFoundError:
+        except IndexError:
             pass
 
     def bg_brow_img(self):  # выбор файла для Image Background
@@ -172,7 +173,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
 
         f.close()
 
-    def cancel(self):
+    def pref_cancel(self):
         self.close()
 
 
@@ -182,16 +183,19 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
 
         self.setupUi(self)
 
-    def brow_img(self):  # выбор файла для Video Background
-        path_image = QFileDialog.getOpenFileNames(caption="Open Image Team", directory="res", filter="*.jpg *.png")[0][0]
+    def add_brow_img(self):  # выбор файла для Video Background
+        # self.line_image.setText("")
         try:
+            path_image = QFileDialog.getOpenFileNames(self,
+                                                      caption="Open Image Team",
+                                                      directory="res",
+                                                      filter="*.jpg *.png")[0][0]
             self.line_image.setText(path_image)
         except IndexError:
             pass
 
-    # OK
-    def ok(self):
-        pass
+    def add_ok(self):
+        self.close()
 
-    def cancel(self):
+    def add_cancel(self):
         self.close()

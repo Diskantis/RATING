@@ -5,8 +5,6 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
-from tkinter import filedialog as fd
-
 from UI_RATING import Ui_MainWindow, Ui_About, Ui_Add_Item, Widget_Item
 from dll import read_reference, start_player, Preference, Add_Team
 
@@ -61,6 +59,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def open_file(self):
         pass
         # path_op_preset = QFileDialog.getOpenFileNames()
+        # print(path_op_preset)
 
     def save_file(self):
         pass
@@ -87,16 +86,16 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
 
         # OK
-        self.pref.btn_ok.clicked.connect(lambda: self.ok_preferences(self.player_1, self.player_2))  # button OK
+        self.pref.btn_ok.clicked.connect(lambda: self.pref_ok(self.player_1, self.player_2))  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
-        self.pref.btn_cancel.clicked.connect(self.pref.cancel)  # button CANCEL
+        self.pref.btn_cancel.clicked.connect(self.pref.pref_cancel)  # button CANCEL
 
-    def ok_preferences(self, pl_1, pl_2):
+    def pref_ok(self, pl_1, pl_2):
         self.pref.save_preferences()
 
-        pl_1.video.deleteLater()
-        pl_2.video.deleteLater()
+        pl_1.video.close()
+        pl_2.video.close()
 
         self.player_1, self.player_2 = start_player()  # func dll.start_player
 
@@ -110,12 +109,12 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def add_new_team(self):
         self.add_team.show()
 
-        self.add_team.btn_brow_image.clicked.connect(self.add_team.brow_img)  # button "Browse..." Item Image
+        self.add_team.btn_brow_image.clicked.connect(self.add_team.add_brow_img)  # button "Browse..." Item Image
 
-        self.add_team.btn_ok.clicked.connect(self.add_team.ok)  # button OK
+        self.add_team.btn_ok.clicked.connect(self.add_team.add_ok)  # button OK
         self.add_team.btn_ok.setAutoDefault(True)
 
-        self.add_team.btn_cancel.clicked.connect(self.add_team.cancel)  # button CANCEL
+        self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button CANCEL
 
         # self.team_1 = Widget_Item("Команда Зайкова")
         # self.v_Layout_grb_items.addWidget(self.team_1)
