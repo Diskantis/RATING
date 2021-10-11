@@ -9,7 +9,7 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Item
+from UI_RATING import Ui_Preference, Ui_Add_Item, Widget_Item
 
 
 def read_reference(file_name):
@@ -179,7 +179,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
 
         self.setupUi(self)
 
-    def add_brow_img(self):  # выбор файла для Video Background
+    def add_team_brow_img(self):  # выбор файла для Video Background
         try:
             path_image = QFileDialog.getOpenFileNames(self, caption="Open Image Team", directory="res",
                                                       filter="*.jpg *.png")[0][0]
@@ -188,13 +188,11 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
         except IndexError:
             pass
 
-    def add_ok(self):
+    def add_team_save(self):
         with open("autosave.sav", "a") as f:
             print(str(self.line_image.displayText()), file=f)
             print(str(self.line_text.displayText()), file=f)
         f.close()
-
-        self.close()
 
     def add_cancel(self):
         self.close()

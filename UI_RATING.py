@@ -9,7 +9,7 @@ class Ui_MainWindow(object):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 600)
-        MainWindow.setGeometry(QtCore.QRect(660, 240, 600, 600))
+        MainWindow.setGeometry(QtCore.QRect(1920+660, 240, 600, 600))
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
         # self.MainWindow.setWindowIcon(QIcon('Resource/img/euro.png'))
         MainWindow.setStyleSheet("background-color: rgb(78, 79, 84);")
@@ -27,37 +27,38 @@ class Ui_MainWindow(object):
         self.v_Layout_centralwidget.setContentsMargins(10, 0, 10, 10)
         self.v_Layout_centralwidget.setObjectName("verticalLayout")
 
-        # # группа виджетов команд (кнопка)
-        # self.grb_items = QtWidgets.QGroupBox(self.centralwidget)
-        # self.grb_items.setGeometry(QtCore.QRect(10, 0, 580, 470))
-        # self.grb_items.setContentsMargins(0, 0, 0, 0)
-        # # self.grb_items.setStyleSheet("border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);")
-        # self.grb_items.setObjectName("grb_items")
-
+        # окошко группа виджетов команд
         self.frame_grb_items = QtWidgets.QFrame(self.centralwidget)
         self.frame_grb_items.setMinimumSize(QtCore.QSize(580, 450))
         self.frame_grb_items.setStyleSheet("QFrame {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
-        self.frame_grb_items.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_grb_items.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_grb_items.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_grb_items.setObjectName("frame_items")
 
         # слой вертекального выравнивания группы виджетов команд
         self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_grb_items)
-        self.v_Layout_grb_items.setObjectName("v_Layout_grb_items_top")
+        self.v_Layout_grb_items.setObjectName("v_Layout_grb_items")
 
         # верхиний толкатель группы
-        spacerItem_TOP = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem_TOP = QtWidgets.QSpacerItem(20, 185, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.v_Layout_grb_items.addItem(spacerItem_TOP)
 
+        # виджеты команд
         self.frame_items = QtWidgets.QFrame(self.frame_grb_items)
-        self.frame_items.setMinimumSize(QtCore.QSize(560, 50))
-        self.frame_items.setStyleSheet("border: 0px solid;")
+        self.frame_items.setMinimumSize(QtCore.QSize(560, 0))
+        self.frame_items.setMaximumSize(QtCore.QSize(560, 16777215))
+        self.frame_items.setStyleSheet("QFrame {border: 0px solid;}")
         self.frame_items.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_items.setObjectName("frame_items")
         self.v_Layout_grb_items.addWidget(self.frame_items)
 
+        # слой вертекального выравнивания группы виджетов команд
+        self.v_Layout_frame_items = QtWidgets.QVBoxLayout(self.frame_items)
+        self.v_Layout_frame_items.setSpacing(10)
+        self.v_Layout_frame_items.setContentsMargins(0, 0, 0, 0)
+        self.v_Layout_frame_items.setObjectName("v_Layout_frame_items")
+
         # нижний толкатель группы
-        spacerItem_BOT = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem_BOT = QtWidgets.QSpacerItem(20, 185, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.v_Layout_grb_items.addItem(spacerItem_BOT)
 
         # прикрепляет группу виджетов к слою центрального виджета
@@ -143,7 +144,13 @@ class Ui_MainWindow(object):
         self.btn_Logo_Scene.setMinimumSize(QtCore.QSize(580, 40))
         self.btn_Logo_Scene.setMaximumSize(QtCore.QSize(16777215, 40))
         self.btn_Logo_Scene.setFont(font)
-        self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
+        self.btn_Logo_Scene.setCheckable(True)
+        self.btn_Logo_Scene.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
+                                          "QPushButton:checked {border-radius: 4px; color: rgb(209, 209, 217); "
+                                          "border: 1px solid rgba(50, 50, 50, 240); "
+                                          "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                          "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                          "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
         self.btn_Logo_Scene.setObjectName("pushButton")
         self.v_Layout_centralwidget.addWidget(self.btn_Logo_Scene)
 
@@ -566,28 +573,28 @@ class Ui_About(QtWidgets.QDialog):
         self.setStyleSheet("background-color: rgb(78, 79, 84);")
         self.setWindowTitle("About")
 
-        self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(10, 5, 270, 30))
+        self.label_scence = QtWidgets.QLabel(self)
+        self.label_scence.setGeometry(QtCore.QRect(10, 5, 270, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(87)
-        self.label.setFont(font)
-        self.label.setText("Scence")
-        self.label.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: 5px 0 5px 0;")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
+        self.label_scence.setFont(font)
+        self.label_scence.setText("Scence")
+        self.label_scence.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: 5px 0 5px 0;")
+        self.label_scence.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_scence.setObjectName("label_scence")
 
-        self.label_1 = QtWidgets.QLabel(self)
-        self.label_1.setGeometry(QtCore.QRect(10, 35, 270, 120))
+        self.label_release = QtWidgets.QLabel(self)
+        self.label_release.setGeometry(QtCore.QRect(10, 35, 270, 120))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.label_1.setFont(font)
-        self.label_1.setText("Release 1.1 \n\n Author - Sergey Litvinov \n linch@adsl.by \n\n "
-                             "Python adaptation - Michael Zajkov \n mn.zajkov@gmail.com")
-        self.label_1.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: 5px 0 5px 0;")
-        self.label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_1.setObjectName("label_1")
+        self.label_release.setFont(font)
+        self.label_release.setText("Release 1.1 \n\n Author - Sergey Litvinov \n linch@adsl.by \n\n "
+                                   "Python adaptation - Michael Zajkov \n mn.zajkov@gmail.com")
+        self.label_release.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: 5px 0 5px 0;")
+        self.label_release.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_release.setObjectName("label_release")
 
 
 class Ui_Add_Item(object):
@@ -604,7 +611,6 @@ class Ui_Add_Item(object):
 
         self.grb_item_prp = QtWidgets.QGroupBox(Add_item)
         self.grb_item_prp.setGeometry(QtCore.QRect(10, 10, 380, 150))
-        self.grb_item_prp.setObjectName("groupBox")
         font_grp = QtGui.QFont()
         font_grp.setPointSize(10)
         font_grp.setBold(True)
@@ -612,6 +618,7 @@ class Ui_Add_Item(object):
         self.grb_item_prp.setFont(font_grp)
         self.grb_item_prp.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
         self.grb_item_prp.setAlignment(QtCore.Qt.AlignCenter)
+        self.grb_item_prp.setObjectName("groupBox")
         self.grb_item_prp.setObjectName("grb_item_prp")
 
         self.frame_image = QtWidgets.QFrame(self.grb_item_prp)
@@ -706,6 +713,7 @@ class Widget_Item(QtWidgets.QWidget):
 
         # слой вертекального выравнивания виджета команды 1
         v_Layout_widget_Item = QtWidgets.QVBoxLayout(self)
+        v_Layout_widget_Item.setContentsMargins(0, 0, 0, 0)
         v_Layout_widget_Item.setObjectName("v_Layout_widget_Item")
 
         # кнопка с названием команды 1
@@ -715,7 +723,13 @@ class Widget_Item(QtWidgets.QWidget):
         font.setPointSize(10)
         font.setBold(True)
         btn_Item.setFont(font)
-        btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
+        btn_Item.setCheckable(True)
+        btn_Item.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
+                               "QPushButton:checked {border-radius: 4px; color: rgb(0, 0, 190); "
+                               "border: 1px solid rgba(50, 50, 50, 240); "
+                               "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                               "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                               "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
         btn_Item.setObjectName("btn_Item")
         v_Layout_widget_Item.addWidget(btn_Item)
 

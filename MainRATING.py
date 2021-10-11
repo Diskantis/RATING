@@ -55,7 +55,8 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-                self.player_1, self.player_2 = start_player()
+                pass
+                # self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
@@ -93,7 +94,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.btn_bg_brow_img.clicked.connect(self.pref.bg_brow_img)  # button "Browse..." Background Image file
         self.pref.btn_lg_brow_vid.clicked.connect(self.pref.lg_brow_vid)  # button "Browse..." Logo Video file
 
-        # TAB SCENE
         # TAB COMMON
         self.pref.interface_lang()
 
@@ -130,16 +130,20 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def add_new_team(self):
         self.add_team = Add_Team()
         self.add_team.show()
-        self.add_team.line_image.clear()
-        self.add_team.btn_brow_image.clicked.connect(self.add_team.add_brow_img)  # button "Browse..." Item Image
+        self.add_team.btn_brow_image.clicked.connect(self.add_team.add_team_brow_img)  # button "Browse..." Item Image
 
-        self.add_team.btn_ok.clicked.connect(self.add_team.add_ok)  # button OK
+        self.add_team.btn_ok.clicked.connect(self.add_team_ok)  # button OK
         self.add_team.btn_ok.setAutoDefault(True)
 
         self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button CANCEL
 
-        # self.team_1 = Widget_Item("Команда Зайкова")
-        # self.v_Layout_grb_items.addWidget(self.team_1)
+    def add_team_ok(self):
+        self.add_team.add_team_save()
+
+        self.team = Widget_Item(self.add_team.line_text.displayText())
+        self.v_Layout_frame_items.addWidget(self.team)
+
+        self.add_team.close()
 
     def remove_team(self):
         pass
@@ -158,18 +162,11 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                     self.player_1.video.show()
                     self.id -= 1
                     self.btn_Logo_Scene.setText("S C E N E")
-                    self.btn_Logo_Scene.setStyleSheet(
-                        "border-radius: 4px; color: rgb(209, 209, 217); "
-                        "border: 1px solid rgba(50, 50, 50, 240); "
-                        "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                        "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                        "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
                 elif self.id == 0:
                     self.player_1.video.hide()
                     self.player_2.video.show()
                     self.id += 1
                     self.btn_Logo_Scene.setText("L O G O")
-                    self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
         except AttributeError:
             pass
 
