@@ -2,11 +2,11 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
-from UI_RATING import Ui_MainWindow, Ui_About, Ui_Add_Item, Widget_Item
+from UI_RATING import Ui_MainWindow, Ui_About, Widget_Item
 from dll import read_reference, start_player, Preference, Add_Team
 
 
@@ -56,7 +56,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
                 pass
-                # self.player_1, self.player_2 = start_player()
+                self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
