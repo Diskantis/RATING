@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import sys
 
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -53,7 +54,12 @@ class MainRATING(QMainWindow, Ui_MainWindow):
             if self.player_1 and self.player_2:
                 pass
         except AttributeError:
-            self.player_1, self.player_2 = start_player()
+            if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
+                self.player_1, self.player_2 = start_player()
+            else:
+                self.pref.line_back_video.clear()
+                self.pref.line_back_image.clear()
+                self.pref.line_logo_video.clear()
 
     def create_new(self):
         pass
@@ -67,9 +73,13 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         # path_sv_preset = QFileDialog.getSaveFileName()
 
     def exit(self):
-        self.player_1.close()
-        self.player_2.close()
-        self.close()
+        try:
+            if self.player_1 and self.player_2:
+                self.player_1.close()
+                self.player_2.close()
+                self.close()
+        except AttributeError:
+            self.close()
 
     def preferences(self):
         self.load_def_ref()
@@ -88,10 +98,19 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
 
         # OK
-        self.pref.btn_ok.clicked.connect(lambda: self.pref_ok(self.player_1, self.player_2))  # button OK
+        self.pref.btn_ok.clicked.connect(self.check_path_players)  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
         self.pref.btn_cancel.clicked.connect(self.pref.pref_cancel)  # button CANCEL
+
+    def check_path_players(self):
+        try:
+            if self.player_1 and self.player_2:
+                self.pref_ok(self.player_1, self.player_2)
+        except AttributeError:
+            self.pref.save_preferences()
+            self.player_1, self.player_2 = start_player()  # func dll.start_player
+            self.pref.close()
 
     def pref_ok(self, pl_1, pl_2):
         self.pref.save_preferences()
@@ -132,27 +151,30 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         pass
 
     def logo_scene(self):
-        if self.id == 1:
-            self.player_2.video.hide()
-            self.player_1.video.show()
-            self.id -= 1
-            self.btn_Logo_Scene.setText("S C E N E")
-            self.btn_Logo_Scene.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
-                                              "border: 1px solid rgba(50, 50, 50, 240); "
-                                              "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                                              "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                                              "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
-        elif self.id == 0:
-            self.player_1.video.hide()
-            self.player_2.video.show()
-            self.id += 1
-            self.btn_Logo_Scene.setText("L O G O")
-            self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
+        try:
+            if self.player_1 and self.player_2:
+                if self.id == 1:
+                    self.player_2.video.hide()
+                    self.player_1.video.show()
+                    self.id -= 1
+                    self.btn_Logo_Scene.setText("S C E N E")
+                    self.btn_Logo_Scene.setStyleSheet(
+                        "border-radius: 4px; color: rgb(209, 209, 217); "
+                        "border: 1px solid rgba(50, 50, 50, 240); "
+                        "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                        "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                        "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+                elif self.id == 0:
+                    self.player_1.video.hide()
+                    self.player_2.video.show()
+                    self.id += 1
+                    self.btn_Logo_Scene.setText("L O G O")
+                    self.btn_Logo_Scene.setStyleSheet("color: rgb(209, 209, 217);")
+        except AttributeError:
+            pass
 
     def closeEvent(self, event):
-        self.player_1.close()
-        self.player_2.close()
-        self.close()
+        self.exit()
 
 
 def application():
