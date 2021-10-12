@@ -2,12 +2,12 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, Qt, QtCore
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
-from UI_RATING import Ui_MainWindow, Ui_About, Widget_Item
-from dll import read_reference, start_player, Preference, Add_Team
+from UI_RATING import Ui_MainWindow, Ui_About
+from dll import read_reference, start_player, Preference, Add_Team, Widget_Team
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -56,7 +56,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
                 pass
-                self.player_1, self.player_2 = start_player()
+                # self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
@@ -98,12 +98,12 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
 
         # OK
-        self.pref.btn_ok.clicked.connect(self.check_path_players)  # button OK
+        self.pref.btn_ok.clicked.connect(self.pref_check)  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
         self.pref.btn_cancel.clicked.connect(self.pref.pref_cancel)  # button CANCEL
 
-    def check_path_players(self):
+    def pref_check(self):
         try:
             if self.player_1 and self.player_2:
                 self.pref_ok(self.player_1, self.player_2)
@@ -140,7 +140,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def add_team_ok(self):
         self.add_team.add_team_save()
 
-        self.team = Widget_Item(self.add_team.line_text.displayText())
+        self.team = Widget_Team(self.add_team.line_text.displayText())
         self.v_Layout_frame_items.addWidget(self.team)
 
         self.add_team.close()

@@ -9,7 +9,7 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Item, Widget_Item
+from UI_RATING import Ui_Preference, Ui_Add_Item, Ui_Widget_Team
 
 
 def read_reference(file_name):
@@ -196,3 +196,38 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
 
     def add_cancel(self):
         self.close()
+
+
+class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
+    def __init__(self, name):
+        super(Widget_Team, self).__init__()
+
+        self.setupUi(self)
+
+        # # кнопка с названием команды
+        self.btn_Team.setText(name)
+        self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
+
+        self.edt_team.triggered.connect(self.edit_team)
+        self.itm_scale.triggered.connect(self.item_scale)
+        self.pos_scale.triggered.connect(self.position_scale)
+        self.pos_offset.triggered.connect(self.position_offset)
+        self.rem_team.triggered.connect(self.remove_team)
+
+    def show_context_menu(self, point):
+        self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
+
+    def edit_team(self):
+        pass
+
+    def item_scale(self):
+        pass
+
+    def position_scale(self):
+        pass
+
+    def position_offset(self):
+        pass
+
+    def remove_team(self):
+        pass

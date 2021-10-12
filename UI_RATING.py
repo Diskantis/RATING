@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
 
 
 class Ui_MainWindow(object):
@@ -707,53 +706,41 @@ class Ui_Add_Item(object):
         self.btn_ok.setText(_translate("Preference", "OK"))
 
 
-class Widget_Item(QtWidgets.QWidget):
-    def __init__(self, name):
-        super(Widget_Item, self).__init__()
+class Ui_Widget_Team(object):
+    def setupUi(self, Widget_Team):
+        # слой вертекального выравнивания виджета команды
+        self.v_Layout_widget_Team = QtWidgets.QVBoxLayout(Widget_Team)
+        self.v_Layout_widget_Team.setContentsMargins(0, 0, 0, 0)
+        self.v_Layout_widget_Team.setObjectName("v_Layout_widget_Team")
 
-        # слой вертекального выравнивания виджета команды 1
-        v_Layout_widget_Item = QtWidgets.QVBoxLayout(self)
-        v_Layout_widget_Item.setContentsMargins(0, 0, 0, 0)
-        v_Layout_widget_Item.setObjectName("v_Layout_widget_Item")
-
-        # кнопка с названием команды 1
-        btn_Item = QtWidgets.QPushButton(name)
-        btn_Item.setMinimumSize(QtCore.QSize(0, 40))
+        # кнопка с названием команды
+        self.btn_Team = QtWidgets.QPushButton(Widget_Team)
+        self.btn_Team.setMinimumSize(QtCore.QSize(0, 40))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
-        btn_Item.setFont(font)
-        btn_Item.setCheckable(True)
-        btn_Item.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
-                               "QPushButton:checked {border-radius: 4px; color: rgb(0, 0, 190); "
-                               "border: 1px solid rgba(50, 50, 50, 240); "
-                               "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                               "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                               "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
-        btn_Item.setObjectName("btn_Item")
-        v_Layout_widget_Item.addWidget(btn_Item)
+        self.btn_Team.setFont(font)
+        self.btn_Team.setCheckable(True)
+        self.btn_Team.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
+                                    "QPushButton:checked {border-radius: 4px; color: rgb(0, 0, 190); "
+                                    "border: 1px solid rgba(50, 50, 50, 240); "
+                                    "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                    "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                    "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
+        self.btn_Team.setObjectName("btn_Team")
+        self.btn_Team.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.v_Layout_widget_Team.addWidget(self.btn_Team)
 
-        # # виджет команды 1
-        # self.widget_Item = QtWidgets.QWidget(self.grb_items)
-        # self.widget_Item.setMinimumSize(QtCore.QSize(0, 40))
-        # self.widget_Item.setContentsMargins(0, 0, 0, 0)
-        # # self.widget_Item.setStyleSheet("border: 0px solid;")
-        # self.widget_Item.setObjectName("widget_Item")
-        #
-        # # слой вертекального выравнивания виджета команды 1
-        # self.v_Layout_widget_Item = QtWidgets.QVBoxLayout(self.widget_Item)
-        # self.v_Layout_widget_Item.setObjectName("v_Layout_widget_Item")
-        #
-        # # кнопка с названием команды 1
-        # self.btn_Item = QtWidgets.QPushButton("Команда Бурды", self.widget_Item)
-        # self.btn_Item.setMinimumSize(QtCore.QSize(0, 40))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # self.btn_Item.setFont(font)
-        # self.btn_Item.setStyleSheet("color: rgb(209, 209, 217);")
-        # self.btn_Item.setObjectName("btn_Item")
-        # self.v_Layout_widget_Item.addWidget(self.btn_Item)
-        #
-        # # прикрепляет виджет команды 1 к слою группы виджетов
-        # self.v_Layout_grb_items.addWidget(self.widget_Item)
+        self.menuTeam = QtWidgets.QMenu(Widget_Team)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.menuTeam.setFont(font)
+        self.menuTeam.setStyleSheet("border-bottom: 0px; selection-color: rgb(0, 0, 0); color: rgb(209, 209, 217);")
+
+        self.edt_team = self.menuTeam.addAction("Edit")
+        self.menuTeam.addSeparator()
+        self.itm_scale = self.menuTeam.addAction("Set item scale")
+        self.pos_scale = self.menuTeam.addAction("Set position scale")
+        self.pos_offset = self.menuTeam.addAction("Set position offset")
+        self.menuTeam.addSeparator()
+        self.rem_team = self.menuTeam.addAction("Remove")
