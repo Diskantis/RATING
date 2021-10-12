@@ -220,10 +220,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", 'TEAM RATING "WHAT? WHERE? WHEN?"'))
-        # self.grb_items.setTitle(_translate("MainWindow", ""))
-        self.btn_Add_Team.setText(_translate("MainWindow", "Add Item", ))
-        self.btn_Remove_Team.setText(_translate("MainWindow", "Remove Item"))
-        self.btn_Swap_Teams.setText(_translate("MainWindow", "Swap Items"))
+        self.btn_Add_Team.setText(_translate("MainWindow", "Add Team", ))
+        self.btn_Remove_Team.setText(_translate("MainWindow", "Remove Team"))
+        self.btn_Swap_Teams.setText(_translate("MainWindow", "Swap Teams"))
         self.btn_Move_to_Pos.setText(_translate("MainWindow", "Move to Position №"))
         self.btn_Logo_Scene.setText(_translate("MainWindow", "L O G O / S C E N E"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
@@ -566,23 +565,23 @@ class Ui_About(QtWidgets.QDialog):
         super().__init__()
 
     def setupUi(self):
-        self.setObjectName("Form")
+        self.setObjectName("About")
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.resize(290, 170)
         self.setStyleSheet("background-color: rgb(78, 79, 84);")
         self.setWindowTitle("About")
 
-        self.label_scence = QtWidgets.QLabel(self)
-        self.label_scence.setGeometry(QtCore.QRect(10, 5, 270, 30))
+        self.label_scene = QtWidgets.QLabel(self)
+        self.label_scene.setGeometry(QtCore.QRect(10, 5, 270, 30))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(87)
-        self.label_scence.setFont(font)
-        self.label_scence.setText("Scence")
-        self.label_scence.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: 5px 0 5px 0;")
-        self.label_scence.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_scence.setObjectName("label_scence")
+        self.label_scene.setFont(font)
+        self.label_scene.setText("Scene")
+        self.label_scene.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: 5px 0 5px 0;")
+        self.label_scene.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_scene.setObjectName("label_scene")
 
         self.label_release = QtWidgets.QLabel(self)
         self.label_release.setGeometry(QtCore.QRect(10, 35, 270, 120))
@@ -596,34 +595,33 @@ class Ui_About(QtWidgets.QDialog):
         self.label_release.setObjectName("label_release")
 
 
-class Ui_Add_Item(object):
-    def setupUi(self, Add_item):
-        Add_item.setObjectName("Add_item")
-        Add_item.setWindowModality(QtCore.Qt.ApplicationModal)
-        Add_item.resize(400, 210)
-        Add_item.setMinimumSize(QtCore.QSize(400, 210))
-        Add_item.setMaximumSize(QtCore.QSize(400, 210))
-        Add_item.setStyleSheet("background-color: rgb(78, 79, 84); color: rgb(209, 209, 217);")
+class Ui_Add_Team(object):
+    def setupUi(self, Add_team):
+        Add_team.setObjectName("Add_team")
+        Add_team.setWindowModality(QtCore.Qt.ApplicationModal)
+        Add_team.resize(400, 210)
+        Add_team.setMinimumSize(QtCore.QSize(400, 210))
+        Add_team.setMaximumSize(QtCore.QSize(400, 210))
+        Add_team.setStyleSheet("background-color: rgb(78, 79, 84); color: rgb(209, 209, 217);")
 
         font = QtGui.QFont()
         font.setPointSize(10)
 
-        self.grb_item_prp = QtWidgets.QGroupBox(Add_item)
-        self.grb_item_prp.setGeometry(QtCore.QRect(10, 10, 380, 150))
+        self.grb_team_prp = QtWidgets.QGroupBox(Add_team)
+        self.grb_team_prp.setGeometry(QtCore.QRect(10, 10, 380, 150))
         font_grp = QtGui.QFont()
         font_grp.setPointSize(10)
         font_grp.setBold(True)
         font_grp.setUnderline(True)
-        self.grb_item_prp.setFont(font_grp)
-        self.grb_item_prp.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
-        self.grb_item_prp.setAlignment(QtCore.Qt.AlignCenter)
-        self.grb_item_prp.setObjectName("groupBox")
-        self.grb_item_prp.setObjectName("grb_item_prp")
+        self.grb_team_prp.setFont(font_grp)
+        self.grb_team_prp.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
+        self.grb_team_prp.setAlignment(QtCore.Qt.AlignCenter)
+        self.grb_team_prp.setObjectName("grb_team_prp")
 
-        self.frame_image = QtWidgets.QFrame(self.grb_item_prp)
+        self.frame_image = QtWidgets.QFrame(self.grb_team_prp)
         self.frame_image.setGeometry(QtCore.QRect(1, 40, 378, 50))
         self.frame_image.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_image.setObjectName("frame")
+        self.frame_image.setObjectName("frame_image")
 
         self.h_Layout_frame_image = QtWidgets.QHBoxLayout(self.frame_image)
         self.h_Layout_frame_image.setContentsMargins(10, 0, 10, 0)
@@ -637,26 +635,26 @@ class Ui_Add_Item(object):
                                       "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
                                       "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
                                       "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
-        self.line_image.setObjectName("lineEdit")
+        self.line_image.setObjectName("line_image")
         self.h_Layout_frame_image.addWidget(self.line_image)
 
         self.btn_brow_image = QtWidgets.QPushButton(self.frame_image)
         self.btn_brow_image.setMinimumSize(QtCore.QSize(80, 30))
         self.btn_brow_image.setFont(font)
-        self.btn_brow_image.setObjectName("pushButton")
+        self.btn_brow_image.setObjectName("btn_brow_image")
         self.h_Layout_frame_image.addWidget(self.btn_brow_image)
 
-        self.label_image = QtWidgets.QLabel(self.grb_item_prp)
+        self.label_image = QtWidgets.QLabel(self.grb_team_prp)
         self.label_image.setGeometry(QtCore.QRect(12, 20, 355, 30))
         self.label_image.setFont(font)
-        self.label_image.setObjectName("label")
+        self.label_image.setObjectName("label_image")
 
-        self.label_text = QtWidgets.QLabel(self.grb_item_prp)
+        self.label_text = QtWidgets.QLabel(self.grb_team_prp)
         self.label_text.setGeometry(QtCore.QRect(12, 80, 355, 30))
         self.label_text.setFont(font)
-        self.label_text.setObjectName("label_2")
+        self.label_text.setObjectName("label_text")
 
-        self.line_text = QtWidgets.QLineEdit(self.grb_item_prp)
+        self.line_text = QtWidgets.QLineEdit(self.grb_team_prp)
         self.line_text.setGeometry(QtCore.QRect(12, 110, 355, 30))
         self.line_text.setFont(font)
         self.line_text.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
@@ -664,10 +662,10 @@ class Ui_Add_Item(object):
                                      "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
                                      "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
                                      "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
-        self.line_text.setObjectName("lineEdit_2")
+        self.line_text.setObjectName("line_text")
 
         # FRAME OK ADD_NEW_ITEM
-        self.frame_ok = QtWidgets.QFrame(Add_item)
+        self.frame_ok = QtWidgets.QFrame(Add_team)
         self.frame_ok.setEnabled(True)
         self.frame_ok.setGeometry(QtCore.QRect(0, 160, 400, 50))
         self.frame_ok.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -691,16 +689,16 @@ class Ui_Add_Item(object):
         self.btn_ok.setObjectName("btn_ok")
         self.h_Layout_ok.addWidget(self.btn_ok)
 
-        self.retranslateUi(Add_item)
-        QtCore.QMetaObject.connectSlotsByName(Add_item)
+        self.retranslateUi(Add_team)
+        QtCore.QMetaObject.connectSlotsByName(Add_team)
 
-    def retranslateUi(self, Add_item):
+    def retranslateUi(self, Add_team):
         _translate = QtCore.QCoreApplication.translate
-        Add_item.setWindowTitle(_translate("Add_item", "Add new item"))
-        self.grb_item_prp.setTitle(_translate("Add_item", "Item properties:"))
-        self.label_image.setText(_translate("Add_item", "Image:"))
-        self.label_text.setText(_translate("Add_item", "Text:"))
-        self.btn_brow_image.setText(_translate("Add_item", "Browse..."))
+        Add_team.setWindowTitle(_translate("Add_team", "Add new Team"))
+        self.grb_team_prp.setTitle(_translate("Add_team", "Team properties:"))
+        self.label_image.setText(_translate("Add_team", "Image:"))
+        self.label_text.setText(_translate("Add_team", "Text:"))
+        self.btn_brow_image.setText(_translate("Add_team", "Browse..."))
 
         self.btn_cancel.setText(_translate("Preference", "Cancel"))
         self.btn_ok.setText(_translate("Preference", "OK"))

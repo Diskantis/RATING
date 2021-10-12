@@ -16,12 +16,17 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
+        self.teams_properties = [0]
+
+        self.create_new()
+
         self.load_def_ref()
+
         self.id = 1
 
         self.action_New.triggered.connect(self.create_new)  # button "New" menu "File"
         self.action_Open.triggered.connect(self.open_file)  # button "Open" menu "File"
-        self.action_Save.triggered.connect(self.save_file)  # button "Save" menu "File"
+        self.action_Save.triggered.connect(lambda: self.save_file(self.teams_properties))  # button "Save" menu "File"
         self.action_Exit.triggered.connect(self.exit)  # button "Exit" menu "File"
         self.action_Preferences.triggered.connect(self.preferences)  # button "Preferences" menu "Options"
         self.action_About.triggered.connect(self.about)  # button "About" menu "Help"
@@ -63,15 +68,25 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 self.pref.line_logo_video.clear()
 
     def create_new(self):
-        pass
+        open("autosave.sav", "w")
 
     def open_file(self):
         pass
         # path_op_preset = QFileDialog.getOpenFileNames()
 
-    def save_file(self):
-        pass
-        # path_sv_preset = QFileDialog.getSaveFileName()
+    def save_file(self, teams_properties):
+        path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Video Background", directory="saves",
+                                                     filter="*.sav")[0][0]
+        print(path_sv_preset)
+        # with open("autosave.sav", "w") as f:
+        #     print(str(0), file=f)
+        teams_properties[0] = str(teams_properties[0])
+        print(teams_properties)
+        MyFile = open(path_sv_preset, "w")
+        for element in teams_properties:
+            MyFile.write(element)
+            MyFile.write('\n')
+        MyFile.close()
 
     def exit(self):
         try:
@@ -138,12 +153,15 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button CANCEL
 
     def add_team_ok(self):
-        self.add_team.add_team_save()
-
+        prop = self.add_team.add_team_save()
         self.team = Widget_Team(self.add_team.line_text.displayText())
         self.v_Layout_frame_items.addWidget(self.team)
 
         self.add_team.close()
+        # self.teams_properties[0+1]
+        self.teams_properties[0] += 1
+        self.teams_properties += prop
+        print(self.teams_properties)
 
     def remove_team(self):
         pass

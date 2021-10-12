@@ -9,7 +9,7 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Item, Ui_Widget_Team
+from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team
 
 
 def read_reference(file_name):
@@ -173,7 +173,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         self.close()
 
 
-class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
+class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
     def __init__(self):
         super(Add_Team, self).__init__()
 
@@ -193,6 +193,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Item):
             print(str(self.line_image.displayText()), file=f)
             print(str(self.line_text.displayText()), file=f)
         f.close()
+        return self.line_image.displayText(), self.line_text.displayText()
 
     def add_cancel(self):
         self.close()
@@ -218,7 +219,21 @@ class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
 
     def edit_team(self):
-        pass
+        self.edit_team = Add_Team()
+        self.edit_team.setWindowTitle("Edit team")
+        self.edit_team.show()
+
+        self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
+
+        # def add_check(self):
+        #     try:
+        #         if self.team:
+        #             self.add_team.close()
+        #     except AttributeError:
+        #         self.add_team.add_team_save()
+        #         self.team = Widget_Team(self.add_team.line_text.displayText())
+        #         self.v_Layout_frame_items.addWidget(self.team)
+        #         self.add_team.close()
 
     def item_scale(self):
         pass
