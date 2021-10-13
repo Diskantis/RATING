@@ -68,25 +68,38 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 self.pref.line_logo_video.clear()
 
     def create_new(self):
-        open("autosave.sav", "w")
+        pass
+        # open("saves/autosave.sav", "w")
 
     def open_file(self):
-        pass
-        # path_op_preset = QFileDialog.getOpenFileNames()
+        path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
+                                                      filter="*.sav")[0][0]
+        list_str = []
+        with open(path_op_preset, "r") as f:
+            for line in f.readlines():
+                line = line.strip("\n")
+                list_str.append(line)
+
+        for i in list_str[2:len(list_str) + 1:2]:
+            index = self.v_Layout_frame_items.count()
+            name = i  # str(index + 1) + " " +
+            self.team = Widget_Team(name)
+            self.v_Layout_frame_items.addWidget(self.team)
+
+        index = self.v_Layout_frame_items.count()
+        print(index)
+        myWidget = self.v_Layout_frame_items.itemAt(1).widget()
+        print(myWidget.btn_Team.text())
 
     def save_file(self, teams_properties):
-        path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Video Background", directory="saves",
-                                                     filter="*.sav")[0][0]
-        print(path_sv_preset)
-        # with open("autosave.sav", "w") as f:
-        #     print(str(0), file=f)
+        path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Teams Rating", directory="saves",
+                                                     filter="*.sav")[0]
         teams_properties[0] = str(teams_properties[0])
-        print(teams_properties)
-        MyFile = open(path_sv_preset, "w")
-        for element in teams_properties:
-            MyFile.write(element)
-            MyFile.write('\n')
-        MyFile.close()
+        save_file = open(path_sv_preset, "w")
+        for line in teams_properties:
+            save_file.write(line)
+            save_file.write('\n')
+        save_file.close()
 
     def exit(self):
         try:
@@ -158,7 +171,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.v_Layout_frame_items.addWidget(self.team)
 
         self.add_team.close()
-        # self.teams_properties[0+1]
+
         self.teams_properties[0] += 1
         self.teams_properties += prop
         print(self.teams_properties)

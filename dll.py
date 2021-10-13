@@ -189,7 +189,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
             pass
 
     def add_team_save(self):
-        with open("autosave.sav", "a") as f:
+        with open("saves/autosave.sav", "a") as f:
             print(str(self.line_image.displayText()), file=f)
             print(str(self.line_text.displayText()), file=f)
         f.close()
