@@ -2,12 +2,12 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets, Qt, QtCore
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
-from dll import read_reference, start_player, Preference, Add_Team, Widget_Team
+from DLL_RATING import read_reference, start_player, Preference, Add_Team, Widget_Team
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -18,11 +18,10 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.teams_properties = [0]
 
-        self.create_new()
-
         self.load_def_ref()
 
         self.id = 1
+        self.v_Layout_frame_items.count()
 
         self.action_New.triggered.connect(self.create_new)  # button "New" menu "File"
         self.action_Open.triggered.connect(self.open_file)  # button "Open" menu "File"
@@ -36,6 +35,17 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Swap_Teams.clicked.connect(self.swap_teams)  # button "Add Item"
         self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
+
+        # try:
+        #     if self.teams_properties[0] > 0:
+        #         self.myWidget = self.v_Layout_frame_items.itemAt(0).widget()
+        #
+        #         print(self.myWidget)
+        # except:
+        #     pass
+
+    # def click(self):
+    #     print("Checkedaaaaaa:", self.btn_Team.isChecked())
 
     def load_def_ref(self):
         self.pref = Preference()  # class dll.Preference
@@ -69,7 +79,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
     def create_new(self):
         pass
-        # open("saves/autosave.sav", "w")
 
     def open_file(self):
         path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
@@ -81,15 +90,25 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 list_str.append(line)
 
         for i in list_str[2:len(list_str) + 1:2]:
-            index = self.v_Layout_frame_items.count()
-            name = i  # str(index + 1) + " " +
-            self.team = Widget_Team(name)
+            index = str(self.v_Layout_frame_items.count() + 1)
+            self.team = Widget_Team(index, i)
             self.v_Layout_frame_items.addWidget(self.team)
 
-        index = self.v_Layout_frame_items.count()
-        print(index)
-        myWidget = self.v_Layout_frame_items.itemAt(1).widget()
-        print(myWidget.btn_Team.text())
+        list_str[0] = int(list_str[0])
+        self.teams_properties = list_str
+
+        # for a in list_str[1:len(list_str) + 1]:
+        #     self.teams_properties[0] += 1
+        #     self.teams_properties += a
+        # print(self.teams_properties)
+
+        # index = self.v_Layout_frame_items.count()
+        # print(index)
+        # myWidget = self.v_Layout_frame_items.itemAt(1).widget()
+        # if myWidget.btn_Team.isChecked():
+        #     print("dsfa")
+        # print(myWidget.btn_Team.isChecked())
+        # print(myWidget.btn_Team.text(), myWidget.label_name_team.text())
 
     def save_file(self, teams_properties):
         path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Teams Rating", directory="saves",
@@ -158,16 +177,18 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def add_new_team(self):
         self.add_team = Add_Team()
         self.add_team.show()
+
         self.add_team.btn_brow_image.clicked.connect(self.add_team.add_team_brow_img)  # button "Browse..." Item Image
 
         self.add_team.btn_ok.clicked.connect(self.add_team_ok)  # button OK
         self.add_team.btn_ok.setAutoDefault(True)
 
-        self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button CANCEL
+        self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button
 
     def add_team_ok(self):
-        prop = self.add_team.add_team_save()
-        self.team = Widget_Team(self.add_team.line_text.displayText())
+        prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText()]
+        index = str(self.v_Layout_frame_items.count() + 1)
+        self.team = Widget_Team(index, self.add_team.line_text.displayText())
         self.v_Layout_frame_items.addWidget(self.team)
 
         self.add_team.close()

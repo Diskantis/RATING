@@ -188,32 +188,32 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         except IndexError:
             pass
 
-    def add_team_save(self):
-        with open("saves/autosave.sav", "a") as f:
-            print(str(self.line_image.displayText()), file=f)
-            print(str(self.line_text.displayText()), file=f)
-        f.close()
-        return self.line_image.displayText(), self.line_text.displayText()
-
     def add_cancel(self):
         self.close()
 
 
 class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
-    def __init__(self, name):
+    def __init__(self, index, name):
         super(Widget_Team, self).__init__()
 
         self.setupUi(self)
 
         # # кнопка с названием команды
-        self.btn_Team.setText(name)
+        self.btn_Team.setText(index)
+        self.label_name_team.setText(name)
         self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
+
+        self.btn_Team.clicked.connect(self.click)
 
         self.edt_team.triggered.connect(self.edit_team)
         self.itm_scale.triggered.connect(self.item_scale)
         self.pos_scale.triggered.connect(self.position_scale)
         self.pos_offset.triggered.connect(self.position_offset)
         self.rem_team.triggered.connect(self.remove_team)
+
+    def click(self):
+        print("Checked:", self.btn_Team.isChecked())
+        return self.btn_Team.isChecked()
 
     def show_context_menu(self, point):
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))

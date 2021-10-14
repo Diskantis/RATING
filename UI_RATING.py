@@ -87,10 +87,12 @@ class Ui_MainWindow(object):
 
         # кнопка удаления команды
         self.btn_Remove_Team = QtWidgets.QPushButton(self.frame)
+        self.btn_Remove_Team.setEnabled(False)
         self.btn_Remove_Team.setMinimumSize(QtCore.QSize(120, 30))
         self.btn_Remove_Team.setMaximumSize(QtCore.QSize(120, 30))
         self.btn_Remove_Team.setFont(font)
-        self.btn_Remove_Team.setStyleSheet("color: rgb(209, 209, 217);")
+        self.btn_Remove_Team.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
+                                           ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Remove_Team.setObjectName("btn_Remove_Item")
         self.horizontalLayout.addWidget(self.btn_Remove_Team)
 
@@ -99,20 +101,24 @@ class Ui_MainWindow(object):
 
         # кнопка взаимного перемещения команд
         self.btn_Swap_Teams = QtWidgets.QPushButton(self.frame)
+        self.btn_Swap_Teams.setEnabled(False)
         self.btn_Swap_Teams.setMinimumSize(QtCore.QSize(110, 30))
         self.btn_Swap_Teams.setMaximumSize(QtCore.QSize(110, 30))
         self.btn_Swap_Teams.setFont(font)
-        self.btn_Swap_Teams.setStyleSheet("color: rgb(209, 209, 217);")
+        self.btn_Swap_Teams.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
+                                          ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Swap_Teams.setObjectName("btn_Swap_Items")
         self.horizontalLayout.addWidget(self.btn_Swap_Teams)
 
         # кнопка перемещения команды на позицию
         self.btn_Move_to_Pos = QtWidgets.QPushButton(self.frame)
+        self.btn_Move_to_Pos.setEnabled(False)
         self.btn_Move_to_Pos.setGeometry(QtCore.QRect(380, 480, 160, 30))
         self.btn_Move_to_Pos.setMinimumSize(QtCore.QSize(160, 30))
         self.btn_Move_to_Pos.setMaximumSize(QtCore.QSize(160, 30))
         self.btn_Move_to_Pos.setFont(font)
-        self.btn_Move_to_Pos.setStyleSheet("color: rgb(209, 209, 217);")
+        self.btn_Move_to_Pos.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
+                                           ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Move_to_Pos.setObjectName("btn_Move_to_Pos")
         self.horizontalLayout.addWidget(self.btn_Move_to_Pos)
 
@@ -715,18 +721,30 @@ class Ui_Widget_Team(object):
         self.btn_Team = QtWidgets.QPushButton(Widget_Team)
         self.btn_Team.setMinimumSize(QtCore.QSize(0, 40))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(12)
         font.setBold(True)
         self.btn_Team.setFont(font)
         self.btn_Team.setCheckable(True)
-        self.btn_Team.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
-                                    "QPushButton:checked {border-radius: 4px; color: rgb(0, 0, 190); "
+        self.btn_Team.setStyleSheet("QPushButton {color: rgb(0, 0, 190); text-align: left; padding: 0 0 0 2em ;} "
+                                    "QPushButton:checked {border-radius: 4px; color: rgb(244, 202, 22); "
                                     "border: 1px solid rgba(50, 50, 50, 240); "
                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
+
         self.btn_Team.setObjectName("btn_Team")
         self.btn_Team.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.v_Layout_widget_Team.addWidget(self.btn_Team)
+
+        self.label_name_team = QtWidgets.QLabel(self.btn_Team)
+        self.label_name_team.setGeometry(QtCore.QRect(0, 0, 560, 40))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.label_name_team.setFont(font)
+        self.label_name_team.setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgb(209, 209, 217);")
+        self.label_name_team.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_name_team.setObjectName("label_text")
         self.v_Layout_widget_Team.addWidget(self.btn_Team)
 
         self.menuTeam = QtWidgets.QMenu(Widget_Team)
