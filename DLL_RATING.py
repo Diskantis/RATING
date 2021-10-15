@@ -3,7 +3,7 @@ import os
 import re
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -193,6 +193,8 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
 
 
 class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
+    clicked = pyqtSignal()
+
     def __init__(self, index, name):
         super(Widget_Team, self).__init__()
 
@@ -203,17 +205,11 @@ class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
         self.label_name_team.setText(name)
         self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
 
-        self.btn_Team.clicked.connect(self.click)
-
         self.edt_team.triggered.connect(self.edit_team)
         self.itm_scale.triggered.connect(self.item_scale)
         self.pos_scale.triggered.connect(self.position_scale)
         self.pos_offset.triggered.connect(self.position_offset)
         self.rem_team.triggered.connect(self.remove_team)
-
-    def click(self):
-        print("Checked:", self.btn_Team.isChecked())
-        return self.btn_Team.isChecked()
 
     def show_context_menu(self, point):
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))

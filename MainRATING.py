@@ -2,8 +2,8 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5 import QtWidgets, sip
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLayoutItem
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
@@ -17,14 +17,24 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
         self.teams_properties = [0]
+        self.team_widgets = []
+        self.select_team = {}
 
-        self.load_def_ref()
+        check = self.load_def_ref()
+
+        if check:
+            self.open_file("saves/autosave.sav")
+
+        if self.team_widgets is not None:
+            print(self.team_widgets)
+            for i in self.team_widgets:
+                self.my_widget = i
+                self.my_widget.btn_Team.clicked.connect(self.click)
 
         self.id = 1
-        self.v_Layout_frame_items.count()
 
-        self.action_New.triggered.connect(self.create_new)  # button "New" menu "File"
-        self.action_Open.triggered.connect(self.open_file)  # button "Open" menu "File"
+        self.action_New.triggered.connect(lambda: self.create_new(self.v_Layout_frame_items))  # button "New" menu"File"
+        self.action_Open.triggered.connect(lambda: self.open_file())  # button "Open" menu "File"
         self.action_Save.triggered.connect(lambda: self.save_file(self.teams_properties))  # button "Save" menu "File"
         self.action_Exit.triggered.connect(self.exit)  # button "Exit" menu "File"
         self.action_Preferences.triggered.connect(self.preferences)  # button "Preferences" menu "Options"
@@ -36,16 +46,30 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
 
-        # try:
-        #     if self.teams_properties[0] > 0:
-        #         self.myWidget = self.v_Layout_frame_items.itemAt(0).widget()
-        #
-        #         print(self.myWidget)
-        # except:
-        #     pass
+    def click(self):
+        sender = self.sender()
+        self.select_team.update({int(sender.text()): sender.isChecked()})
 
-    # def click(self):
-    #     print("Checkedaaaaaa:", self.btn_Team.isChecked())
+        def has_low_price(price):
+            return self.select_team[price] is True
+
+        check_true = list(filter(has_low_price, self.select_team.keys()))
+        if len(check_true) == 2:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(True)
+        elif len(check_true) == 1:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(True)
+            self.btn_Swap_Teams.setEnabled(False)
+        elif len(check_true) > 2:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(False)
+        else:
+            self.btn_Remove_Team.setEnabled(False)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(False)
 
     def load_def_ref(self):
         self.pref = Preference()  # class dll.Preference
@@ -77,50 +101,74 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 self.pref.line_back_image.clear()
                 self.pref.line_logo_video.clear()
 
-    def create_new(self):
-        pass
+        return self.pref.check_last_session.isChecked()
 
-    def open_file(self):
-        path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
-                                                      filter="*.sav")[0][0]
-        list_str = []
-        with open(path_op_preset, "r") as f:
-            for line in f.readlines():
-                line = line.strip("\n")
-                list_str.append(line)
+    def create_new(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.create_new(item.layout())
 
-        for i in list_str[2:len(list_str) + 1:2]:
-            index = str(self.v_Layout_frame_items.count() + 1)
-            self.team = Widget_Team(index, i)
-            self.v_Layout_frame_items.addWidget(self.team)
+        self.teams_properties = [0]
+        self.team_widgets = []
 
-        list_str[0] = int(list_str[0])
-        self.teams_properties = list_str
+        self.btn_Remove_Team.setEnabled(False)
+        self.btn_Move_to_Pos.setEnabled(False)
+        self.btn_Swap_Teams.setEnabled(False)
 
-        # for a in list_str[1:len(list_str) + 1]:
-        #     self.teams_properties[0] += 1
-        #     self.teams_properties += a
-        # print(self.teams_properties)
+        # self.teams_properties = [0]
+        # for wid in self.team_widgets:
+        #     wid.setParent(None)
+        # self.team_widgets = []
 
-        # index = self.v_Layout_frame_items.count()
-        # print(index)
-        # myWidget = self.v_Layout_frame_items.itemAt(1).widget()
-        # if myWidget.btn_Team.isChecked():
-        #     print("dsfa")
-        # print(myWidget.btn_Team.isChecked())
-        # print(myWidget.btn_Team.text(), myWidget.label_name_team.text())
+    def open_file(self, path_op_preset=None):
+        # self.create_new(self.v_Layout_frame_items)
+        try:
+            if path_op_preset is None:
+                path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
+                                                              filter="*.sav")[0][0]
+            else:
+                path_op_preset = path_op_preset
 
-    def save_file(self, teams_properties):
-        path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Teams Rating", directory="saves",
-                                                     filter="*.sav")[0]
+            list_str = []
+            with open(path_op_preset, "r") as f:
+                for line in f.readlines():
+                    line = line.strip("\n")
+                    list_str.append(line)
+
+            for i in list_str[2:len(list_str) + 1:2]:
+                index = str(self.v_Layout_frame_items.count() + 1)
+                self.team = Widget_Team(index, i)
+                self.v_Layout_frame_items.addWidget(self.team)
+                self.team_widgets.append(self.team)
+
+            list_str[0] = int(list_str[0])
+            self.teams_properties = list_str
+
+        except IndexError:
+            pass
+
+    def save_file(self, teams_properties, path_sv_preset=None):
+        if path_sv_preset is None:
+            path_sv_preset = QFileDialog.getSaveFileName(self, caption="Save Teams Rating", directory="saves",
+                                                         filter="*.sav")[0]
+        else:
+            path_sv_preset = path_sv_preset
         teams_properties[0] = str(teams_properties[0])
-        save_file = open(path_sv_preset, "w")
-        for line in teams_properties:
-            save_file.write(line)
-            save_file.write('\n')
-        save_file.close()
+        try:
+            with open(path_sv_preset, "w") as f:
+                for line in teams_properties:
+                    f.write(line)
+                    f.write('\n')
+        except FileNotFoundError:
+            pass
 
     def exit(self):
+        self.save_file(self.teams_properties, path_sv_preset="saves/autosave.sav")
         try:
             if self.player_1 and self.player_2:
                 self.player_1.close()
@@ -198,13 +246,14 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         print(self.teams_properties)
 
     def remove_team(self):
-        pass
+        print("Remove")
+        # removeItem()
 
     def swap_teams(self):
-        pass
+        print("Swap")
 
     def move_team(self):
-        pass
+        print("Move")
 
     def logo_scene(self):
         try:
