@@ -2,8 +2,8 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets, sip
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLayoutItem
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
@@ -16,22 +16,17 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
-        self.teams_properties = [0]
-        self.team_widgets = []
+        self.teams_properties = [0]  # список с параметрами команд кол. команд + (путь к файлу банера и имя команды)
+        self.team_widgets = []  # список с виджетами команд
         self.select_team = {}
+        self.logo_or_scene = 1
 
-        check = self.load_def_ref()
+        self.on_last_session = self.load_def_ref()
 
-        if check:
+        if self.on_last_session:
             self.open_file("saves/autosave.sav")
 
-        if self.team_widgets is not None:
-            print(self.team_widgets)
-            for i in self.team_widgets:
-                self.my_widget = i
-                self.my_widget.btn_Team.clicked.connect(self.click)
-
-        self.id = 1
+        self.click_team_widget()
 
         self.action_New.triggered.connect(lambda: self.create_new(self.v_Layout_frame_items))  # button "New" menu"File"
         self.action_Open.triggered.connect(lambda: self.open_file())  # button "Open" menu "File"
@@ -46,7 +41,13 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
         self.btn_Logo_Scene.clicked.connect(self.logo_scene)  # button "Logo/Scene"
 
-    def click(self):
+    def click_team_widget(self):
+        if self.team_widgets is not None:
+            for i in self.team_widgets:
+                self.my_widget = i
+                self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
+
+    def click_team_widget_btn(self):
         sender = self.sender()
         self.select_team.update({int(sender.text()): sender.isChecked()})
 
@@ -115,6 +116,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.teams_properties = [0]
         self.team_widgets = []
+        self.select_team.clear()
 
         self.btn_Remove_Team.setEnabled(False)
         self.btn_Move_to_Pos.setEnabled(False)
@@ -126,7 +128,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         # self.team_widgets = []
 
     def open_file(self, path_op_preset=None):
-        # self.create_new(self.v_Layout_frame_items)
+        self.create_new(self.v_Layout_frame_items)
         try:
             if path_op_preset is None:
                 path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
@@ -144,13 +146,14 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 index = str(self.v_Layout_frame_items.count() + 1)
                 self.team = Widget_Team(index, i)
                 self.v_Layout_frame_items.addWidget(self.team)
-                self.team_widgets.append(self.team)
+                self.team_widgets.append(self.team)  # создаем список с виджетами команд
 
             list_str[0] = int(list_str[0])
             self.teams_properties = list_str
 
         except IndexError:
             pass
+        self.click_team_widget()
 
     def save_file(self, teams_properties, path_sv_preset=None):
         if path_sv_preset is None:
@@ -162,8 +165,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         try:
             with open(path_sv_preset, "w") as f:
                 for line in teams_properties:
-                    f.write(line)
-                    f.write('\n')
+                    f.write(f'{line}\n')
         except FileNotFoundError:
             pass
 
@@ -193,29 +195,26 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.pref.interface_lang()
 
         # OK
-        self.pref.btn_ok.clicked.connect(self.pref_check)  # button OK
+        self.pref.btn_ok.clicked.connect(self.preferences_ok)  # button OK
         self.pref.btn_ok.setAutoDefault(True)
 
         self.pref.btn_cancel.clicked.connect(self.pref.pref_cancel)  # button CANCEL
 
-    def pref_check(self):
+    def preferences_ok(self):
         try:
             if self.player_1 and self.player_2:
-                self.pref_ok(self.player_1, self.player_2)
+                self.pref.save_preferences()
+
+                self.player_1.video.close()
+                self.player_2.video.close()
+
+                self.player_1, self.player_2 = start_player()  # func dll.start_player
+                self.pref.close()
+
         except AttributeError:
             self.pref.save_preferences()
             self.player_1, self.player_2 = start_player()  # func dll.start_player
             self.pref.close()
-
-    def pref_ok(self, pl_1, pl_2):
-        self.pref.save_preferences()
-
-        pl_1.video.close()
-        pl_2.video.close()
-
-        self.player_1, self.player_2 = start_player()  # func dll.start_player
-
-        self.pref.close()
 
     def about(self):
         self.About = Ui_About()  # class UI_RATING.Ui_About
@@ -228,12 +227,12 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.add_team.btn_brow_image.clicked.connect(self.add_team.add_team_brow_img)  # button "Browse..." Item Image
 
-        self.add_team.btn_ok.clicked.connect(self.add_team_ok)  # button OK
+        self.add_team.btn_ok.clicked.connect(self.add_new_team_ok)  # button OK
         self.add_team.btn_ok.setAutoDefault(True)
 
         self.add_team.btn_cancel.clicked.connect(self.add_team.add_cancel)  # button
 
-    def add_team_ok(self):
+    def add_new_team_ok(self):
         prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText()]
         index = str(self.v_Layout_frame_items.count() + 1)
         self.team = Widget_Team(index, self.add_team.line_text.displayText())
@@ -253,20 +252,24 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         print("Swap")
 
     def move_team(self):
-        print("Move")
+        pass
+        # print(self.select_team)
+
+        # print(sender.isChecked())
+        # self.select_team.update({int(sender.text()): sender.isChecked()})
 
     def logo_scene(self):
         try:
             if self.player_1 and self.player_2:
-                if self.id == 1:
+                if self.logo_or_scene == 1:
                     self.player_2.video.hide()
                     self.player_1.video.show()
-                    self.id -= 1
+                    self.logo_or_scene -= 1
                     self.btn_Logo_Scene.setText("S C E N E")
-                elif self.id == 0:
+                elif self.logo_or_scene == 0:
                     self.player_1.video.hide()
                     self.player_2.video.show()
-                    self.id += 1
+                    self.logo_or_scene += 1
                     self.btn_Logo_Scene.setText("L O G O")
         except AttributeError:
             pass

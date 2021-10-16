@@ -144,9 +144,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         pass
 
     # TAB COMMON
-    def last_session(self):
-        pass
-
     def interface_lang(self):  # выбор языка интерфейса
         path = "lang"
         self.language = filter(lambda x: x.lower().endswith(('.qm',)), os.listdir(path))
@@ -155,19 +152,18 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
     # OK
     def save_preferences(self):
         with open("reference.reg", "w") as f:
-            print("Use Internal Video Player", "=", '"' + str(self.check_box_player.isChecked()) + '"', file=f)
-            print("Pause Background When Animating", "=", '"' + str(self.check_box_pause.isChecked()) + '"', file=f)
-            print("Use Video Background", "=", '"' + str(self.radio_btn_video_back.isChecked()) + '"', file=f)
-            print("Use Image Background", "=", '"' + str(self.radio_btn_image_back.isChecked()) + '"', file=f)
-            print("Background Video File Name", "=", '"' + str(self.line_back_video.displayText()) + '"', file=f)
-            print("Background Image File Name", "=", '"' + str(self.line_back_image.displayText()) + '"', file=f)
-            print("Logo Video File Name", "=", '"' + str(self.line_logo_video.displayText()) + '"', file=f)
-            print("Margin Bottom", "=", '"' + str(self.spin_box_top.value()) + '"', file=f)
-            print("Margin Top", "=", '"' + str(self.spin_box_bottom.value()) + '"', file=f)
-            print("AnimationDuration", "=", '"' + str(self.line_duration.displayText()) + '"', file=f)
-            print("RestoreLastSession", "=", '"' + str(self.check_last_session.isChecked()) + '"', file=f)
-            print("Language", "=", '"' + str(self.comboBox_language.currentText()) + '"', file=f)
-        f.close()
+            f.write(f'Use Internal Video Player = "{str(self.check_box_player.isChecked())}"\n')
+            f.write(f'Pause Background When Animating = "{str(self.check_box_pause.isChecked())}"\n')
+            f.write(f'Use Video Background = "{str(self.radio_btn_video_back.isChecked())}"\n')
+            f.write(f'Use Image Background = "{str(self.radio_btn_image_back.isChecked())}"\n')
+            f.write(f'Background Video File Name = "{str(self.line_back_video.displayText())}"\n')
+            f.write(f'Background Image File Name = "{str(self.line_back_image.displayText())}"\n')
+            f.write(f'Logo Video File Name = "{str(self.line_logo_video.displayText())}"\n')
+            f.write(f'Margin Bottom = "{str(self.spin_box_top.value())}"\n')
+            f.write(f'Margin Top = "{str(self.spin_box_bottom.value())}"\n')
+            f.write(f'AnimationDuration = "{str(self.line_duration.displayText())}"\n')
+            f.write(f'RestoreLastSession = "{str(self.check_last_session.isChecked())}"\n')
+            f.write(f'Language = "{str(self.comboBox_language.currentText())}"\n')
 
     def pref_cancel(self):
         self.close()

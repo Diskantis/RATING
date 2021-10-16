@@ -8,7 +8,7 @@ class Ui_MainWindow(object):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 600)
-        MainWindow.setGeometry(QtCore.QRect(1920+660, 240, 600, 600))
+        MainWindow.setGeometry(QtCore.QRect(660+600, 240, 600, 600))
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
         # self.MainWindow.setWindowIcon(QIcon('Resource/img/euro.png'))
         MainWindow.setStyleSheet("background-color: rgb(78, 79, 84);")
