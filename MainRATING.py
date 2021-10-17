@@ -54,16 +54,17 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         def has_low_price(price):
             return self.select_team[price] is True
 
-        check_true = list(filter(has_low_price, self.select_team.keys()))
-        if len(check_true) == 2:
+        self.check_true = list(filter(has_low_price, self.select_team.keys()))
+
+        if len(self.check_true) == 2:
             self.btn_Remove_Team.setEnabled(True)
             self.btn_Move_to_Pos.setEnabled(False)
             self.btn_Swap_Teams.setEnabled(True)
-        elif len(check_true) == 1:
+        elif len(self.check_true) == 1:
             self.btn_Remove_Team.setEnabled(True)
             self.btn_Move_to_Pos.setEnabled(True)
             self.btn_Swap_Teams.setEnabled(False)
-        elif len(check_true) > 2:
+        elif len(self.check_true) > 2:
             self.btn_Remove_Team.setEnabled(True)
             self.btn_Move_to_Pos.setEnabled(False)
             self.btn_Swap_Teams.setEnabled(False)
@@ -242,21 +243,51 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
         self.teams_properties[0] += 1
         self.teams_properties += prop
-        print(self.teams_properties)
 
     def remove_team(self):
-        print("Remove")
-        # removeItem()
+        pos = list(self.select_team.keys())
+        print(pos)
+        # for i in pos:
+        #     team = self.v_Layout_frame_items.itemAt(i-1).widget()
+        #     self.v_Layout_frame_items.removeWidget(team)
+        #     pos -= pos[0]
 
     def swap_teams(self):
-        print("Swap")
+        # print(self.select_team)
+        # pos_1, pos_2 = list(self.select_team.keys())  # 2 3
+        #
+        # # team_1 = self.v_Layout_frame_items.itemAt(pos_1).widget()  # pos 2
+        # team_2 = self.v_Layout_frame_items.itemAt(pos_2).widget()  # pos 3
+        # # team_replace = self.v_Layout_frame_items.replaceWidget(team_1, team_2)
+        # self.v_Layout_frame_items.insertWidget(pos_1, team_2.widget())
+
+        # if team_replace is not None:
+        # #     # n = self.v_Layout_frame_items.count() - 5
+        #     self.v_Layout_frame_items.insertWidget(pos_2, team_replace.widget())
+        # else:
+        #     self.v_Layout_frame_items.addWidget(team_2)
+        pass
 
     def move_team(self):
-        pass
-        # print(self.select_team)
+        pos = list(self.select_team.keys())[0]
+        index = int(self.lineEdit_Pos.displayText())
+        team_1 = self.v_Layout_frame_items.itemAt(pos - 1).widget()
+        team_2 = self.v_Layout_frame_items.itemAt(index-1).widget()
+        team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)
+        team_2.btn_Team.setText(str(index + 1))
+        self.v_Layout_frame_items.insertWidget(index, team_replace.widget())
+        team_1.btn_Team.setText(str(index))
+        team_1.btn_Team.setCheckable(False)
+        self.btn_Remove_Team.setEnabled(False)
+        self.btn_Move_to_Pos.setEnabled(False)
+        self.btn_Swap_Teams.setEnabled(False)
+        self.lineEdit_Pos.setText("")
+        self.select_team.clear()
 
-        # print(sender.isChecked())
-        # self.select_team.update({int(sender.text()): sender.isChecked()})
+        print(self.select_team)
+        print(f'{pos} => {index}')
+        print(team_1.label_name_team.text())
+        print(team_2.label_name_team.text())
 
     def logo_scene(self):
         try:
