@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
-from DLL_RATING import read_reference, start_player, Preference, Add_Team, Widget_Team
+from DLL_RATING import read_reference, start_player, Preference, Add_Team, Widget_Team, team_widgets, clear_layout
 
 
 class MainRATING(QMainWindow, Ui_MainWindow):
@@ -49,7 +49,10 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
     def click_team_widget_btn(self):
         sender = self.sender()
-        self.select_team.update({int(sender.text()): sender.isChecked()})
+        if sender.isChecked() is False:
+            self.select_team.pop(int(sender.text()), None)
+        else:
+            self.select_team.update({int(sender.text()): sender.isChecked()})
 
         def has_low_price(price):
             return self.select_team[price] is True
@@ -106,14 +109,8 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         return self.pref.check_last_session.isChecked()
 
     def create_new(self, layout):
-        if layout is not None:
-            while layout.count():
-                item = layout.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
-                else:
-                    self.create_new(item.layout())
+
+        clear_layout(layout)
 
         self.teams_properties = [0]
         self.team_widgets = []
@@ -122,11 +119,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Remove_Team.setEnabled(False)
         self.btn_Move_to_Pos.setEnabled(False)
         self.btn_Swap_Teams.setEnabled(False)
-
-        # self.teams_properties = [0]
-        # for wid in self.team_widgets:
-        #     wid.setParent(None)
-        # self.team_widgets = []
 
     def open_file(self, path_op_preset=None):
         self.create_new(self.v_Layout_frame_items)
@@ -143,17 +135,14 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                     line = line.strip("\n")
                     list_str.append(line)
 
-            for i in list_str[2:len(list_str) + 1:2]:
-                index = str(self.v_Layout_frame_items.count() + 1)
-                self.team = Widget_Team(index, i)
-                self.v_Layout_frame_items.addWidget(self.team)
-                self.team_widgets.append(self.team)  # создаем список с виджетами команд
-
             list_str[0] = int(list_str[0])
             self.teams_properties = list_str
 
+            self.team_widgets = team_widgets(list_str, self.v_Layout_frame_items)
+
         except IndexError:
             pass
+
         self.click_team_widget()
 
     def save_file(self, teams_properties, path_sv_preset=None):
@@ -246,11 +235,25 @@ class MainRATING(QMainWindow, Ui_MainWindow):
 
     def remove_team(self):
         pos = list(self.select_team.keys())
-        print(pos)
-        # for i in pos:
-        #     team = self.v_Layout_frame_items.itemAt(i-1).widget()
-        #     self.v_Layout_frame_items.removeWidget(team)
-        #     pos -= pos[0]
+        pos.sort(reverse=True)
+        for i in pos:
+            self.team_widgets.pop(i-1)
+            self.teams_properties.pop(i*2)
+            self.teams_properties.pop(i*2-1)
+            self.teams_properties[0] -= 1
+
+            team = self.v_Layout_frame_items.itemAt(i-1).widget()
+            self.v_Layout_frame_items.removeWidget(team)
+
+        clear_layout(self.v_Layout_frame_items)
+        self.team_widgets = team_widgets(self.teams_properties, self.v_Layout_frame_items)
+
+        self.select_team.clear()
+        self.click_team_widget()
+
+        self.btn_Remove_Team.setEnabled(False)
+        self.btn_Swap_Teams.setEnabled(False)
+        self.btn_Move_to_Pos.setEnabled(False)
 
     def swap_teams(self):
         # print(self.select_team)
@@ -269,25 +272,33 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         pass
 
     def move_team(self):
-        pos = list(self.select_team.keys())[0]
-        index = int(self.lineEdit_Pos.displayText())
-        team_1 = self.v_Layout_frame_items.itemAt(pos - 1).widget()
-        team_2 = self.v_Layout_frame_items.itemAt(index-1).widget()
-        team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)
-        team_2.btn_Team.setText(str(index + 1))
-        self.v_Layout_frame_items.insertWidget(index, team_replace.widget())
-        team_1.btn_Team.setText(str(index))
-        team_1.btn_Team.setCheckable(False)
-        self.btn_Remove_Team.setEnabled(False)
-        self.btn_Move_to_Pos.setEnabled(False)
-        self.btn_Swap_Teams.setEnabled(False)
-        self.lineEdit_Pos.setText("")
-        self.select_team.clear()
-
-        print(self.select_team)
-        print(f'{pos} => {index}')
-        print(team_1.label_name_team.text())
-        print(team_2.label_name_team.text())
+        # pos = list(self.select_team.keys())[0]  # инедкс виджета выбраного для перемещения
+        # index = int(self.lineEdit_Pos.displayText())  # номер позиции куда перемещаем виджет
+        # team_1 = self.v_Layout_frame_items.itemAt(pos - 1).widget()  # виджет выбраный для перемещения
+        # team_2 = self.v_Layout_frame_items.itemAt(index-1).widget()  # виджет на место которого будем пермещать
+        # ищем виджет (team_2) и заменяем его на (team_1)
+        # team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)
+        # asd = team_replace.widget()
+        # print(asd.label_name_team.text())
+        for i in range(self.v_Layout_frame_items.count()):
+            a = self.v_Layout_frame_items.itemAt(i)
+            a = a.widget()
+            # print(a.btn_Team.text(), a.label_name_team.text())
+        # team_2.btn_Team.setText(str(index + 1))
+        # self.v_Layout_frame_items.insertWidget(index, team_replace.widget())
+        # team_1.btn_Team.setText(str(index))
+        # # team_1.btn_Team.setChecked(False)
+        #
+        # self.btn_Remove_Team.setEnabled(False)
+        # self.btn_Move_to_Pos.setEnabled(False)
+        # self.btn_Swap_Teams.setEnabled(False)
+        # self.lineEdit_Pos.setText("")
+        # # self.select_team.clear()
+        #
+        # print(self.select_team)
+        # print(f'{pos} => {index}')
+        # print(team_1.label_name_team.text())
+        # print(team_2.label_name_team.text())
 
     def logo_scene(self):
         try:

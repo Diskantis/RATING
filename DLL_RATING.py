@@ -12,6 +12,27 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
 from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team
 
 
+def clear_layout(layout):
+    if layout is not None:
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                clear_layout(item.layout())
+
+
+def team_widgets(list_str, layout):
+    widgets = []
+    for i in list_str[2:len(list_str) + 1:2]:
+        index = str(layout.count() + 1)
+        team = Widget_Team(index, i)
+        layout.addWidget(team)
+        widgets.append(team)  # создаем список с виджетами команд
+    return widgets
+
+
 def read_reference(file_name):
     list_str = ""
     with open(file_name, "r") as f:
