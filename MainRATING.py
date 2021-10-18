@@ -160,7 +160,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
             pass
 
     def exit(self):
-        self.save_file(self.teams_properties, path_sv_preset="saves/autosave.sav")
+        # self.save_file(self.teams_properties, path_sv_preset="saves/autosave.sav")
         try:
             if self.player_1 and self.player_2:
                 self.player_1.close()
@@ -256,49 +256,53 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.btn_Move_to_Pos.setEnabled(False)
 
     def swap_teams(self):
-        # print(self.select_team)
-        # pos_1, pos_2 = list(self.select_team.keys())  # 2 3
-        #
-        # # team_1 = self.v_Layout_frame_items.itemAt(pos_1).widget()  # pos 2
-        # team_2 = self.v_Layout_frame_items.itemAt(pos_2).widget()  # pos 3
-        # # team_replace = self.v_Layout_frame_items.replaceWidget(team_1, team_2)
-        # self.v_Layout_frame_items.insertWidget(pos_1, team_2.widget())
+        index_1, index_2 = list(self.select_team.keys())  # инедксы виджетов выбраных для перемещения
+        print(f'index_1 {index_1-1} = {index_2-1} index_2')
+        print(f'index_1 {index_1} = {index_2} index_2')
 
-        # if team_replace is not None:
-        # #     # n = self.v_Layout_frame_items.count() - 5
-        #     self.v_Layout_frame_items.insertWidget(pos_2, team_replace.widget())
-        # else:
-        #     self.v_Layout_frame_items.addWidget(team_2)
-        pass
+        team_1 = self.v_Layout_frame_items.itemAt(index_1-1).widget()  # виджет выбраный для перемещения
+        team_2 = self.v_Layout_frame_items.itemAt(index_2-1).widget()  # виджет выбраный для перемещения
+
+        team_replace_1 = self.v_Layout_frame_items.replaceWidget(team_2, team_1)  # Item с виджетом team_2
+        self.v_Layout_frame_items.insertWidget(index_1+2, team_replace_1.widget())  # вставляем виджет team_2
+        team_replace_2 = self.v_Layout_frame_items.replaceWidget(team_2, team_1)  # Item с виджетом team_2
+        self.v_Layout_frame_items.insertWidget(index_1-1, team_replace_2.widget())  # вставляем виджет team_2
+
+        # доделать перемещения между 1 и последним
 
     def move_team(self):
-        # pos = list(self.select_team.keys())[0]  # инедкс виджета выбраного для перемещения
-        # index = int(self.lineEdit_Pos.displayText())  # номер позиции куда перемещаем виджет
-        # team_1 = self.v_Layout_frame_items.itemAt(pos - 1).widget()  # виджет выбраный для перемещения
-        # team_2 = self.v_Layout_frame_items.itemAt(index-1).widget()  # виджет на место которого будем пермещать
-        # ищем виджет (team_2) и заменяем его на (team_1)
-        # team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)
-        # asd = team_replace.widget()
-        # print(asd.label_name_team.text())
-        for i in range(self.v_Layout_frame_items.count()):
-            a = self.v_Layout_frame_items.itemAt(i)
-            a = a.widget()
-            # print(a.btn_Team.text(), a.label_name_team.text())
-        # team_2.btn_Team.setText(str(index + 1))
-        # self.v_Layout_frame_items.insertWidget(index, team_replace.widget())
-        # team_1.btn_Team.setText(str(index))
-        # # team_1.btn_Team.setChecked(False)
-        #
-        # self.btn_Remove_Team.setEnabled(False)
-        # self.btn_Move_to_Pos.setEnabled(False)
-        # self.btn_Swap_Teams.setEnabled(False)
-        # self.lineEdit_Pos.setText("")
-        # # self.select_team.clear()
-        #
-        # print(self.select_team)
-        # print(f'{pos} => {index}')
-        # print(team_1.label_name_team.text())
-        # print(team_2.label_name_team.text())
+        index = (list(self.select_team.keys())[0]) - 1  # инедкс виджета выбраного для перемещения
+        position = (int(self.lineEdit_Pos.displayText()))-2  # номер позиции куда перемещаем виджет
+
+        team_1 = self.v_Layout_frame_items.itemAt(index).widget()  # виджет выбраный для перемещения
+
+        if position == -1:
+            pass
+        else:
+            team_2 = self.v_Layout_frame_items.itemAt(position).widget()  # виджет на место которого будет пермещение
+            # ищем виджет (team_2) и заменяем его на (team_1)
+            team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)  # Item с виджетом team_2
+            self.v_Layout_frame_items.insertWidget(position, team_replace.widget())  # вставляем виджет team_2
+
+        team_w = self.team_widgets.pop(index)
+        self.team_widgets.insert(position+1, team_w)
+
+        team_p1 = self.teams_properties.pop((index+1) * 2)
+        team_p2 = self.teams_properties.pop((index+1) * 2-1)
+        self.teams_properties.insert((position+2) * 2-1, team_p1)
+        self.teams_properties.insert((position+2) * 2-1, team_p2)
+
+        clear_layout(self.v_Layout_frame_items)
+        self.team_widgets = team_widgets(self.teams_properties, self.v_Layout_frame_items)
+
+        self.select_team.clear()
+        self.click_team_widget()
+
+        self.lineEdit_Pos.setText("")
+
+        self.btn_Remove_Team.setEnabled(False)
+        self.btn_Swap_Teams.setEnabled(False)
+        self.btn_Move_to_Pos.setEnabled(False)
 
     def logo_scene(self):
         try:
