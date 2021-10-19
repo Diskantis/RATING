@@ -100,7 +100,7 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
                 pass
-                # self.player_1, self.player_2 = start_player()
+                self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()

@@ -55,15 +55,15 @@ def start_player():
     if val[2]:
         player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
-        return player_1, player_2
+        return player_1, player_2  #, image_rating
     elif val[3]:
-        player_1 = ImagePlayer("Image Background", val[5])
+        player_1 = ImagePlayer("Image Background", val[5])  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
         return player_1, player_2
 
 
 class VideoPlayer:
-    def __init__(self, name, path):
+    def __init__(self, name, path=None):
         self.video = QVideoWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
@@ -73,14 +73,15 @@ class VideoPlayer:
         self.video.move(10, 10)
         self.video.setFixedSize(800, 600)
 
-        self.playlist = QMediaPlaylist()
-        self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
-        self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
+        if path is not None:
+            self.playlist = QMediaPlaylist()
+            self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
+            self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
 
-        self.player = QMediaPlayer()
-        self.player.setVideoOutput(self.video)
-        self.player.setPlaylist(self.playlist)
-        self.player.play()
+            self.player = QMediaPlayer()
+            self.player.setVideoOutput(self.video)
+            self.player.setPlaylist(self.playlist)
+            self.player.play()
 
         self.video.show()
 
@@ -89,7 +90,7 @@ class VideoPlayer:
 
 
 class ImagePlayer:
-    def __init__(self, name, path):
+    def __init__(self, name, path=None):
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
@@ -103,9 +104,10 @@ class ImagePlayer:
         layout_box.setContentsMargins(0, 0, 0, 0)
         layout_box.addWidget(self.image1)
 
-        pixmap1 = QPixmap(path)
-        pixmap1 = pixmap1.scaledToWidth(self.video.width())
-        self.image1.setPixmap(pixmap1)
+        if path is not None:
+            pixmap1 = QPixmap(path)
+            pixmap1 = pixmap1.scaledToWidth(self.video.width())
+            self.image1.setPixmap(pixmap1)
 
         self.video.show()
 

@@ -8,9 +8,10 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 600)
-        MainWindow.setGeometry(QtCore.QRect(660+1600, 240, 600, 600))
-        MainWindow.setMinimumSize(QtCore.QSize(600, 600))
+        MainWindow.resize(600, 660)
+        MainWindow.setGeometry(QtCore.QRect(660, 240, 600, 660))
+        MainWindow.setMinimumSize(QtCore.QSize(600, 660))
+        MainWindow.setMaximumSize(QtCore.QSize(600, 16777215))
         MainWindow.setWindowIcon(QIcon('res/logo.png'))
         MainWindow.setStyleSheet("background-color: rgb(78, 79, 84);")
 
@@ -27,7 +28,7 @@ class Ui_MainWindow(object):
         self.v_Layout_centralwidget.setContentsMargins(10, 0, 10, 10)
         self.v_Layout_centralwidget.setObjectName("verticalLayout")
 
-        # окошко группа виджетов команд
+        # рамочка группы виджетов команд
         self.frame_grb_items = QtWidgets.QFrame(self.centralwidget)
         self.frame_grb_items.setMinimumSize(QtCore.QSize(580, 450))
         self.frame_grb_items.setStyleSheet("QFrame {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
@@ -45,7 +46,6 @@ class Ui_MainWindow(object):
         # виджеты команд
         self.frame_items = QtWidgets.QFrame(self.frame_grb_items)
         self.frame_items.setMinimumSize(QtCore.QSize(560, 0))
-        self.frame_items.setMaximumSize(QtCore.QSize(560, 16777215))
         self.frame_items.setStyleSheet("QFrame {border: 0px solid;}")
         self.frame_items.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_items.setObjectName("frame_items")
@@ -733,7 +733,6 @@ class Ui_Widget_Team(object):
                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
-
         self.btn_Team.setObjectName("btn_Team")
         self.btn_Team.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.v_Layout_widget_Team.addWidget(self.btn_Team)
@@ -746,8 +745,8 @@ class Ui_Widget_Team(object):
         self.label_name_team.setFont(font)
         self.label_name_team.setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgb(209, 209, 217);")
         self.label_name_team.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_name_team.setObjectName("label_text")
-        self.v_Layout_widget_Team.addWidget(self.btn_Team)
+        self.label_name_team.setObjectName("label_name_team")
+        # self.v_Layout_widget_Team.addWidget(self.btn_Team)
 
         self.menuTeam = QtWidgets.QMenu(Widget_Team)
         font = QtGui.QFont()
