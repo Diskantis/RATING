@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QIcon
 
 
 class Ui_MainWindow(object):
@@ -10,7 +11,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(600, 600)
         MainWindow.setGeometry(QtCore.QRect(660+1600, 240, 600, 600))
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
-        # self.MainWindow.setWindowIcon(QIcon('Resource/img/euro.png'))
+        MainWindow.setWindowIcon(QIcon('res/logo.png'))
         MainWindow.setStyleSheet("background-color: rgb(78, 79, 84);")
 
         font = QtGui.QFont()
@@ -724,6 +725,7 @@ class Ui_Widget_Team(object):
         font.setPointSize(12)
         font.setBold(True)
         self.btn_Team.setFont(font)
+        self.btn_Team.isChecked()
         self.btn_Team.setCheckable(True)
         self.btn_Team.setStyleSheet("QPushButton {color: rgb(0, 0, 190); text-align: left; padding: 0 0 0 2em ;} "
                                     "QPushButton:checked {border-radius: 4px; color: rgb(244, 202, 22); "
