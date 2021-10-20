@@ -7,10 +7,11 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
-from DLL_RATING import read_reference, start_player, Preference, Add_Team, Widget_Team, team_widgets, clear_layout
+from DLL_RATING import clear_layout, team_widgets, team_widgets_rat, read_reference, start_player,\
+    ImagePlayer, Preference, Add_Team, Widget_Team_Button, Widget_Team_Rating
 
 
-class MainRATING(QMainWindow, Ui_MainWindow):
+class MainRATING(QMainWindow, Ui_MainWindow, ):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -22,6 +23,8 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         self.logo_or_scene = 1
 
         self.on_last_session = self.load_def_ref()
+        self.image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
+        self.image_rating.video.hide()
 
         if self.on_last_session:
             self.open_file("saves/autosave.sav")
@@ -99,7 +102,6 @@ class MainRATING(QMainWindow, Ui_MainWindow):
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-                pass
                 self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
@@ -139,8 +141,9 @@ class MainRATING(QMainWindow, Ui_MainWindow):
             self.teams_properties = list_str
 
             self.team_widgets = team_widgets(list_str, self.v_Layout_frame_items)
+            self.team_widgets_rat = team_widgets_rat(list_str, self.image_rating.v_Layout_grb_items)
 
-        except IndexError:
+        except (IndexError, FileNotFoundError):
             pass
 
         self.click_team_widget()
@@ -156,14 +159,15 @@ class MainRATING(QMainWindow, Ui_MainWindow):
             with open(path_sv_preset, "w") as f:
                 for line in teams_properties:
                     f.write(f'{line}\n')
-        except FileNotFoundError:
+        except (IndexError, FileNotFoundError):
             pass
 
     def exit(self):
         self.save_file(self.teams_properties, path_sv_preset="saves/autosave.sav")
         try:
-            if self.player_1 and self.player_2:
+            if self.player_1 and self.image_rating and self.player_2:
                 self.player_1.close()
+                self.image_rating.close()
                 self.player_2.close()
                 self.close()
         except AttributeError:
@@ -226,8 +230,11 @@ class MainRATING(QMainWindow, Ui_MainWindow):
         if self.add_team.line_image.displayText() and self.add_team.line_text.displayText():
             prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText()]
             index = str(self.v_Layout_frame_items.count() + 1)
-            self.team = Widget_Team(index, self.add_team.line_text.displayText())
+            self.team = Widget_Team_Button(index, self.add_team.line_text.displayText())
             self.v_Layout_frame_items.addWidget(self.team)
+
+            self.team_rat = Widget_Team_Rating(self.add_team.line_image.displayText())
+            self.image_rating.v_Layout_grb_items.addWidget(self.team_rat)
 
             self.add_team.close()
 
@@ -331,16 +338,18 @@ class MainRATING(QMainWindow, Ui_MainWindow):
     def logo_scene(self):
         try:
             if self.player_1 and self.player_2:
-                if self.logo_or_scene == 1:
-                    self.player_2.video.hide()
-                    self.player_1.video.show()
-                    self.logo_or_scene -= 1
-                    self.btn_Logo_Scene.setText("S C E N E")
-                elif self.logo_or_scene == 0:
+                if self.logo_or_scene == 0:
                     self.player_1.video.hide()
+                    self.image_rating.video.hide()
                     self.player_2.video.show()
                     self.logo_or_scene += 1
                     self.btn_Logo_Scene.setText("L O G O")
+                elif self.logo_or_scene == 1:
+                    self.player_2.video.hide()
+                    self.player_1.video.show()
+                    self.image_rating.video.show()
+                    self.logo_or_scene -= 1
+                    self.btn_Logo_Scene.setText("R A T I N G")
         except AttributeError:
             pass
 

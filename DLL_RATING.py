@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import ast
 import os
 import re
@@ -7,9 +8,9 @@ from PyQt5.QtCore import QUrl, Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QFileDialog, QLabel, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team
+from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team, Ui_Widget_Team_Rating
 
 
 def clear_layout(layout):
@@ -27,7 +28,16 @@ def team_widgets(list_str, layout):
     widgets = []
     for i in list_str[2:len(list_str) + 1:2]:
         index = str(layout.count() + 1)
-        team = Widget_Team(index, i)
+        team = Widget_Team_Button(index, i)
+        layout.addWidget(team)
+        widgets.append(team)  # создаем список с виджетами команд
+    return widgets
+
+
+def team_widgets_rat(list_str, layout):
+    widgets = []
+    for i in list_str[1:len(list_str) + 1:2]:
+        team = Widget_Team_Rating(i)
         layout.addWidget(team)
         widgets.append(team)  # создаем список с виджетами команд
     return widgets
@@ -43,7 +53,7 @@ def read_reference(file_name):
     def real_type(value):  # изменяет тип данных в зависимости от их типа (str -> bool, str -> int или float)
         try:
             return ast.literal_eval(value)
-        except:
+        except (ValueError, SyntaxError):
             return value
 
     list_data = [real_type(i) for i in list_str]
@@ -54,12 +64,14 @@ def start_player():
     val = read_reference("reference.reg")
     if val[2]:
         player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
+        # image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
-        return player_1, player_2  #, image_rating
+        return player_1, player_2  # image_rating,
     elif val[3]:
         player_1 = ImagePlayer("Image Background", val[5])  # class dll.ImagePlayer
+        # image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
-        return player_1, player_2
+        return player_1, player_2  # image_rating,
 
 
 class VideoPlayer:
@@ -67,11 +79,11 @@ class VideoPlayer:
         self.video = QVideoWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        # self.video.move(1920, 0)
-        # self.video.setFixedSize(1920, 1080)
-        # self.video.setFullScreen(True)
-        self.video.move(10, 10)
-        self.video.setFixedSize(800, 600)
+        self.video.move(1920, 0)
+        self.video.setFixedSize(1920, 1080)
+        self.video.setFullScreen(True)
+        # self.video.move(10 + 1920, 10)
+        # self.video.resize(800, 600)
 
         if path is not None:
             self.playlist = QMediaPlaylist()
@@ -85,29 +97,47 @@ class VideoPlayer:
 
         self.video.show()
 
+    def pause(self):
+        self.player.pause()
+
     def close(self):
         self.video.close()
 
 
 class ImagePlayer:
     def __init__(self, name, path=None):
+
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        # self.video.move(1920, 0)
-        # self.video.resize(1920, 1080)
-        self.video.move(10, 10)
-        self.video.resize(800, 600)
+        self.video.resize(1920, 1080)
+        self.video.move(1920, 0)
+        # self.video.resize(800, 600)
+        # self.video.move(10 + 1920, 10)
+        self.video.setObjectName("ImageRating")
 
-        self.image1 = QLabel()
-        layout_box = QHBoxLayout(self.video)
-        layout_box.setContentsMargins(0, 0, 0, 0)
-        layout_box.addWidget(self.image1)
+        if path is None:
+            self.video.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+            self.video.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+            self.video.activateWindow()
+
+            self.video.setMinimumSize(QtCore.QSize(1920, 1080))
+
+            # слой вертекального выравнивания группы виджетов команд
+            self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_grb_items.setObjectName("v_Layout_grb_items")
 
         if path is not None:
+            # слой вертекального выравнивания Центрального виджета (всего окна)
+            self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_centralwidget.setContentsMargins(0, 0, 0, 0)
+            self.v_Layout_centralwidget.setObjectName("verticalLayout")
+
+            self.image1 = QLabel()
             pixmap1 = QPixmap(path)
             pixmap1 = pixmap1.scaledToWidth(self.video.width())
             self.image1.setPixmap(pixmap1)
+            self.v_Layout_centralwidget.addWidget(self.image1)
 
         self.video.show()
 
@@ -211,11 +241,11 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         self.close()
 
 
-class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
+class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team):
     clicked = pyqtSignal()
 
     def __init__(self, index, name):
-        super(Widget_Team, self).__init__()
+        super(Widget_Team_Button, self).__init__()
 
         self.setupUi(self)
 
@@ -261,3 +291,17 @@ class Widget_Team(QtWidgets.QWidget, Ui_Widget_Team):
 
     def remove_team(self):
         pass
+
+
+class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
+    def __init__(self, path):
+        super(Widget_Team_Rating, self).__init__()
+
+        self.setupUi(self)
+
+        pixmap1 = QPixmap(path)
+        pixmap1 = pixmap1.scaledToWidth(1000)
+        self.image.setAlignment(QtCore.Qt.AlignCenter)
+        self.image.setPixmap(pixmap1)
+
+

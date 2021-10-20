@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 
 
 class Ui_MainWindow(object):
@@ -9,7 +9,7 @@ class Ui_MainWindow(object):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 660)
-        MainWindow.setGeometry(QtCore.QRect(660, 240, 600, 660))
+        MainWindow.setGeometry(QtCore.QRect(660+460, 240, 600, 660))
         MainWindow.setMinimumSize(QtCore.QSize(600, 660))
         MainWindow.setMaximumSize(QtCore.QSize(600, 16777215))
         MainWindow.setWindowIcon(QIcon('res/logo.png'))
@@ -186,9 +186,9 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
 
         self.action_New = QtWidgets.QAction(MainWindow)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("res/Schetchiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.action_New.setIcon(icon)
+        # icon = QtGui.QIcon()
+        # icon.addPixmap(QtGui.QPixmap("res/Schetchiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.action_New.setIcon(icon)
         self.action_New.setObjectName("actionNew")
 
         self.action_Open = QtWidgets.QAction(MainWindow)
@@ -226,12 +226,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", 'TEAM RATING "WHAT? WHERE? WHEN?"'))
+        MainWindow.setWindowTitle(_translate("MainWindow", 'TEAM RANKING "WHAT? WHERE? WHEN?"'))
         self.btn_Add_Team.setText(_translate("MainWindow", "Add Team", ))
         self.btn_Remove_Team.setText(_translate("MainWindow", "Remove Team"))
         self.btn_Swap_Teams.setText(_translate("MainWindow", "Swap Teams"))
         self.btn_Move_to_Pos.setText(_translate("MainWindow", "Move to Position №"))
-        self.btn_Logo_Scene.setText(_translate("MainWindow", "L O G O / S C E N E"))
+        self.btn_Logo_Scene.setText(_translate("MainWindow", "L O G O / R A T I N G"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuOptions.setTitle(_translate("MainWindow", "Options"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
@@ -761,3 +761,11 @@ class Ui_Widget_Team(object):
         self.pos_offset = self.menuTeam.addAction("Set position offset")
         self.menuTeam.addSeparator()
         self.rem_team = self.menuTeam.addAction("Remove")
+
+
+class Ui_Widget_Team_Rating(object):
+    def setupUi(self, Widget_Team_Rating):
+
+        self.image = QtWidgets.QLabel(Widget_Team_Rating)
+        self.image.setAlignment(QtCore.Qt.AlignCenter)
+        self.image.setObjectName("label")
