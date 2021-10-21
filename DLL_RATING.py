@@ -4,13 +4,13 @@ import os
 import re
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QUrl, Qt, pyqtSignal
+from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team, Ui_Widget_Team_Rating
+from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating
 
 
 def clear_layout(layout):
@@ -64,14 +64,12 @@ def start_player():
     val = read_reference("reference.reg")
     if val[2]:
         player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
-        # image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
-        return player_1, player_2  # image_rating,
+        return player_1, player_2
     elif val[3]:
         player_1 = ImagePlayer("Image Background", val[5])  # class dll.ImagePlayer
-        # image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
-        return player_1, player_2  # image_rating,
+        return player_1, player_2
 
 
 class VideoPlayer:
@@ -110,6 +108,7 @@ class ImagePlayer:
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
+        self.video.setMinimumSize(QtCore.QSize(1920, 1080))
         self.video.resize(1920, 1080)
         self.video.move(1920, 0)
         # self.video.resize(800, 600)
@@ -121,23 +120,21 @@ class ImagePlayer:
             self.video.setAttribute(QtCore.Qt.WA_TranslucentBackground)
             self.video.activateWindow()
 
-            self.video.setMinimumSize(QtCore.QSize(1920, 1080))
-
             # слой вертекального выравнивания группы виджетов команд
-            self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.video)
-            self.v_Layout_grb_items.setObjectName("v_Layout_grb_items")
+            self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
 
         if path is not None:
             # слой вертекального выравнивания Центрального виджета (всего окна)
-            self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.video)
-            self.v_Layout_centralwidget.setContentsMargins(0, 0, 0, 0)
-            self.v_Layout_centralwidget.setObjectName("verticalLayout")
+            self.v_Layout_video = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_video.setContentsMargins(0, 0, 0, 0)
+            self.v_Layout_video.setObjectName("v_Layout_video")
 
             self.image1 = QLabel()
             pixmap1 = QPixmap(path)
             pixmap1 = pixmap1.scaledToWidth(self.video.width())
             self.image1.setPixmap(pixmap1)
-            self.v_Layout_centralwidget.addWidget(self.image1)
+            self.v_Layout_video.addWidget(self.image1)
 
         self.video.show()
 
@@ -241,9 +238,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         self.close()
 
 
-class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team):
-    clicked = pyqtSignal()
-
+class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     def __init__(self, index, name):
         super(Widget_Team_Button, self).__init__()
 
@@ -260,16 +255,28 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team):
         self.pos_offset.triggered.connect(self.position_offset)
         self.rem_team.triggered.connect(self.remove_team)
 
+    # def mousePressEvent(self, event):
+    #     button = event.button()
+    #     if button == Qt.Qt.RightButton:
+    #         print("Right button click!")
+    #
+    #     elif button == Qt.Qt.LeftButton:
+    #         print("Left button click!")
+    #
+    #     return Qt.QPushButton.mousePressEvent(self, event)
+
     def show_context_menu(self, point):
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
 
     def edit_team(self):
-        self.edit_team = Add_Team()
-        self.edit_team.setWindowTitle("Edit team")
-        self.edit_team.show()
-
-        self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
-
+        pass
+        # print(self.label_name_team.text())
+        # self.edit_team = Add_Team()
+        # self.edit_team.setWindowTitle("Edit team")
+        # self.edit_team.show()
+        #
+        # self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
+        #
         # def add_check(self):
         #     try:
         #         if self.team:
@@ -301,7 +308,5 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
 
         pixmap1 = QPixmap(path)
         pixmap1 = pixmap1.scaledToWidth(1000)
-        self.image.setAlignment(QtCore.Qt.AlignCenter)
-        self.image.setPixmap(pixmap1)
-
-
+        self.image_team.setPixmap(pixmap1)
+        self.image_team.setAlignment(QtCore.Qt.AlignCenter)

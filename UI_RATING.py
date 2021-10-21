@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 
 
 class Ui_MainWindow(object):
@@ -29,27 +29,28 @@ class Ui_MainWindow(object):
         self.v_Layout_centralwidget.setObjectName("verticalLayout")
 
         # рамочка группы виджетов команд
-        self.frame_grb_items = QtWidgets.QFrame(self.centralwidget)
-        self.frame_grb_items.setMinimumSize(QtCore.QSize(580, 450))
-        self.frame_grb_items.setStyleSheet("QFrame {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
-        self.frame_grb_items.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_grb_items.setObjectName("frame_items")
+        self.frame_grb_items_btn = QtWidgets.QFrame(self.centralwidget)
+        self.frame_grb_items_btn.setMinimumSize(QtCore.QSize(580, 450))
+        self.frame_grb_items_btn.setStyleSheet("QFrame {border-radius: 5px; "
+                                               "border: 1px solid rgba(209, 209, 217, 240);}")
+        self.frame_grb_items_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_grb_items_btn.setObjectName("frame_items")
 
         # слой вертекального выравнивания группы виджетов команд
-        self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_grb_items)
-        self.v_Layout_grb_items.setObjectName("v_Layout_grb_items")
+        self.v_Layout_grb_items_btn = QtWidgets.QVBoxLayout(self.frame_grb_items_btn)
+        self.v_Layout_grb_items_btn.setObjectName("v_Layout_grb_items")
 
         # верхиний толкатель группы
         spacerItem_TOP = QtWidgets.QSpacerItem(20, 185, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.v_Layout_grb_items.addItem(spacerItem_TOP)
+        self.v_Layout_grb_items_btn.addItem(spacerItem_TOP)
 
         # виджеты команд
-        self.frame_items = QtWidgets.QFrame(self.frame_grb_items)
+        self.frame_items = QtWidgets.QFrame(self.frame_grb_items_btn)
         self.frame_items.setMinimumSize(QtCore.QSize(560, 0))
         self.frame_items.setStyleSheet("QFrame {border: 0px solid;}")
         self.frame_items.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_items.setObjectName("frame_items")
-        self.v_Layout_grb_items.addWidget(self.frame_items)
+        self.v_Layout_grb_items_btn.addWidget(self.frame_items)
 
         # слой вертекального выравнивания группы виджетов команд
         self.v_Layout_frame_items = QtWidgets.QVBoxLayout(self.frame_items)
@@ -59,35 +60,35 @@ class Ui_MainWindow(object):
 
         # нижний толкатель группы
         spacerItem_BOT = QtWidgets.QSpacerItem(20, 185, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.v_Layout_grb_items.addItem(spacerItem_BOT)
+        self.v_Layout_grb_items_btn.addItem(spacerItem_BOT)
 
         # прикрепляет группу виджетов к слою центрального виджета
-        self.v_Layout_centralwidget.addWidget(self.frame_grb_items)
+        self.v_Layout_centralwidget.addWidget(self.frame_grb_items_btn)
 
         # фрэйм с кнопками (Add Item, Remove Team, Swap Teams, Move to Position)
-        self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setMinimumSize(QtCore.QSize(0, 50))
-        self.frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.frame.setStyleSheet("QFrame {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
-        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame.setObjectName("frame")
+        self.frame_btn = QtWidgets.QFrame(self.centralwidget)
+        self.frame_btn.setMinimumSize(QtCore.QSize(0, 50))
+        self.frame_btn.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.frame_btn.setStyleSheet("QFrame {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);}")
+        self.frame_btn.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_btn.setObjectName("frame_btn")
 
         # слой горизонтального выравнивания фрэйма с кнопками
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.h_Layout_frame_btn = QtWidgets.QHBoxLayout(self.frame_btn)
+        self.h_Layout_frame_btn.setObjectName("h_Layout_frame_btn")
 
         # кнопка добавления команды
-        self.btn_Add_Team = QtWidgets.QPushButton(self.frame)
+        self.btn_Add_Team = QtWidgets.QPushButton(self.frame_btn)
         self.btn_Add_Team.setGeometry(QtCore.QRect(0, 480, 100, 30))
         self.btn_Add_Team.setMinimumSize(QtCore.QSize(100, 30))
         self.btn_Add_Team.setMaximumSize(QtCore.QSize(100, 30))
         self.btn_Add_Team.setFont(font)
         self.btn_Add_Team.setStyleSheet("color: rgb(209, 209, 217);")
         self.btn_Add_Team.setObjectName("btn_Add_Item")
-        self.horizontalLayout.addWidget(self.btn_Add_Team)
+        self.h_Layout_frame_btn.addWidget(self.btn_Add_Team)
 
         # кнопка удаления команды
-        self.btn_Remove_Team = QtWidgets.QPushButton(self.frame)
+        self.btn_Remove_Team = QtWidgets.QPushButton(self.frame_btn)
         self.btn_Remove_Team.setEnabled(False)
         self.btn_Remove_Team.setMinimumSize(QtCore.QSize(120, 30))
         self.btn_Remove_Team.setMaximumSize(QtCore.QSize(120, 30))
@@ -95,13 +96,13 @@ class Ui_MainWindow(object):
         self.btn_Remove_Team.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
                                            ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Remove_Team.setObjectName("btn_Remove_Item")
-        self.horizontalLayout.addWidget(self.btn_Remove_Team)
+        self.h_Layout_frame_btn.addWidget(self.btn_Remove_Team)
 
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
+        self.h_Layout_frame_btn.addItem(spacerItem)
 
         # кнопка взаимного перемещения команд
-        self.btn_Swap_Teams = QtWidgets.QPushButton(self.frame)
+        self.btn_Swap_Teams = QtWidgets.QPushButton(self.frame_btn)
         self.btn_Swap_Teams.setEnabled(False)
         self.btn_Swap_Teams.setMinimumSize(QtCore.QSize(110, 30))
         self.btn_Swap_Teams.setMaximumSize(QtCore.QSize(110, 30))
@@ -109,10 +110,10 @@ class Ui_MainWindow(object):
         self.btn_Swap_Teams.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
                                           ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Swap_Teams.setObjectName("btn_Swap_Items")
-        self.horizontalLayout.addWidget(self.btn_Swap_Teams)
+        self.h_Layout_frame_btn.addWidget(self.btn_Swap_Teams)
 
         # кнопка перемещения команды на позицию
-        self.btn_Move_to_Pos = QtWidgets.QPushButton(self.frame)
+        self.btn_Move_to_Pos = QtWidgets.QPushButton(self.frame_btn)
         self.btn_Move_to_Pos.setEnabled(False)
         self.btn_Move_to_Pos.setGeometry(QtCore.QRect(380, 480, 160, 30))
         self.btn_Move_to_Pos.setMinimumSize(QtCore.QSize(160, 30))
@@ -121,10 +122,10 @@ class Ui_MainWindow(object):
         self.btn_Move_to_Pos.setStyleSheet(":enabled { color: rgb(209, 209, 217);}"
                                            ":disabled { color: rgba(209, 209, 217, 100);}")
         self.btn_Move_to_Pos.setObjectName("btn_Move_to_Pos")
-        self.horizontalLayout.addWidget(self.btn_Move_to_Pos)
+        self.h_Layout_frame_btn.addWidget(self.btn_Move_to_Pos)
 
         # окошко с номером позиции на которую должна переместиться команда
-        self.lineEdit_Pos = QtWidgets.QLineEdit(self.frame)
+        self.lineEdit_Pos = QtWidgets.QLineEdit(self.frame_btn)
         self.lineEdit_Pos.setGeometry(QtCore.QRect(550, 480, 40, 30))
         self.lineEdit_Pos.setMinimumSize(QtCore.QSize(40, 30))
         self.lineEdit_Pos.setMaximumSize(QtCore.QSize(40, 30))
@@ -140,25 +141,25 @@ class Ui_MainWindow(object):
                                         "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
         self.lineEdit_Pos.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_Pos.setObjectName("lineEdit")
-        self.horizontalLayout.addWidget(self.lineEdit_Pos)
+        self.h_Layout_frame_btn.addWidget(self.lineEdit_Pos)
 
-        self.v_Layout_centralwidget.addWidget(self.frame)
+        self.v_Layout_centralwidget.addWidget(self.frame_btn)
 
         # кнопка переключения между ЛОГО и РЕЙТИНГОМ
-        self.btn_Logo_Scene = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_Logo_Scene.setGeometry(QtCore.QRect(10, 520, 580, 40))
-        self.btn_Logo_Scene.setMinimumSize(QtCore.QSize(580, 40))
-        self.btn_Logo_Scene.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.btn_Logo_Scene.setFont(font)
-        self.btn_Logo_Scene.setCheckable(True)
-        self.btn_Logo_Scene.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
-                                          "QPushButton:checked {border-radius: 4px; color: rgb(209, 209, 217); "
-                                          "border: 1px solid rgba(50, 50, 50, 240); "
-                                          "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                                          "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                                          "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
-        self.btn_Logo_Scene.setObjectName("pushButton")
-        self.v_Layout_centralwidget.addWidget(self.btn_Logo_Scene)
+        self.btn_Logo_Rating = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_Logo_Rating.setGeometry(QtCore.QRect(10, 520, 580, 40))
+        self.btn_Logo_Rating.setMinimumSize(QtCore.QSize(580, 40))
+        self.btn_Logo_Rating.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.btn_Logo_Rating.setFont(font)
+        self.btn_Logo_Rating.setCheckable(True)
+        self.btn_Logo_Rating.setStyleSheet("QPushButton {color: rgb(209, 209, 217);}"
+                                           "QPushButton:checked {border-radius: 4px; color: rgb(209, 209, 217); "
+                                           "border: 1px solid rgba(50, 50, 50, 240); "
+                                           "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                           "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                           "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255))}")
+        self.btn_Logo_Rating.setObjectName("pushButton")
+        self.v_Layout_centralwidget.addWidget(self.btn_Logo_Rating)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -186,9 +187,6 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
 
         self.action_New = QtWidgets.QAction(MainWindow)
-        # icon = QtGui.QIcon()
-        # icon.addPixmap(QtGui.QPixmap("res/Schetchiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # self.action_New.setIcon(icon)
         self.action_New.setObjectName("actionNew")
 
         self.action_Open = QtWidgets.QAction(MainWindow)
@@ -231,7 +229,7 @@ class Ui_MainWindow(object):
         self.btn_Remove_Team.setText(_translate("MainWindow", "Remove Team"))
         self.btn_Swap_Teams.setText(_translate("MainWindow", "Swap Teams"))
         self.btn_Move_to_Pos.setText(_translate("MainWindow", "Move to Position №"))
-        self.btn_Logo_Scene.setText(_translate("MainWindow", "L O G O / R A T I N G"))
+        self.btn_Logo_Rating.setText(_translate("MainWindow", "L O G O / R A T I N G"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuOptions.setTitle(_translate("MainWindow", "Options"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
@@ -711,7 +709,7 @@ class Ui_Add_Team(object):
         self.btn_ok.setText(_translate("Preference", "OK"))
 
 
-class Ui_Widget_Team(object):
+class Ui_Widget_Team_Button(object):
     def setupUi(self, Widget_Team):
         # слой вертекального выравнивания виджета команды
         self.v_Layout_widget_Team = QtWidgets.QVBoxLayout(Widget_Team)
@@ -766,6 +764,6 @@ class Ui_Widget_Team(object):
 class Ui_Widget_Team_Rating(object):
     def setupUi(self, Widget_Team_Rating):
 
-        self.image = QtWidgets.QLabel(Widget_Team_Rating)
-        self.image.setAlignment(QtCore.Qt.AlignCenter)
-        self.image.setObjectName("label")
+        self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
+        self.image_team.setAlignment(QtCore.Qt.AlignCenter)
+        self.image_team.setObjectName("label")
