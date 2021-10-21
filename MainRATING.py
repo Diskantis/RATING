@@ -122,6 +122,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
+                # pass
                 self.player_1, self.player_2 = start_player()
             else:
                 self.pref.line_back_video.clear()
@@ -232,7 +233,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 self.player_1.video.close()
                 self.player_2.video.close()
 
+                val = read_reference("reference.reg")
+                self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
                 self.player_1, self.player_2 = start_player()  # func dll.start_player
+
                 self.pref.close()
 
         except AttributeError:

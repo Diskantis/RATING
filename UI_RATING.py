@@ -428,6 +428,8 @@ class Ui_Preference(object):
 
         self.spin_box_top = QtWidgets.QSpinBox(self.grp_margins)
         self.spin_box_top.setGeometry(QtCore.QRect(65, 30, 278, 30))
+        self.spin_box_top.setDisplayIntegerBase(10)
+        self.spin_box_top.setMaximum(999)
         self.spin_box_top.setFont(font)
         self.spin_box_top.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
                                         "border: 1px solid rgba(50, 50, 50, 240); "
@@ -438,6 +440,8 @@ class Ui_Preference(object):
 
         self.spin_box_bottom = QtWidgets.QSpinBox(self.grp_margins)
         self.spin_box_bottom.setGeometry(QtCore.QRect(65, 70, 278, 30))
+        self.spin_box_bottom.setDisplayIntegerBase(10)
+        self.spin_box_bottom.setMaximum(999)
         self.spin_box_bottom.setFont(font)
         self.spin_box_bottom.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
                                            "border: 1px solid rgba(50, 50, 50, 240); "

@@ -121,6 +121,7 @@ class ImagePlayer:
 
             # слой вертекального выравнивания группы виджетов команд
             self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_grb_items_rat.setContentsMargins(0, 0, 0, 0)
             self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
 
         if path is not None:
@@ -186,8 +187,9 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             pass
 
     # TAB SCENE
-    def margins(self):
-        pass
+    def margins(self, top, bottom):
+        margins_team_rat = self.v_Layout_video.setContentsMargins(0, top, 0, bottom)
+        return margins_team_rat
 
     def animation(self):
         pass
@@ -208,8 +210,8 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
             f.write(f'Background Video File Name = "{str(self.line_back_video.displayText())}"\n')
             f.write(f'Background Image File Name = "{str(self.line_back_image.displayText())}"\n')
             f.write(f'Logo Video File Name = "{str(self.line_logo_video.displayText())}"\n')
-            f.write(f'Margin Bottom = "{str(self.spin_box_top.value())}"\n')
-            f.write(f'Margin Top = "{str(self.spin_box_bottom.value())}"\n')
+            f.write(f'Margin Top = "{str(self.spin_box_top.value())}"\n')
+            f.write(f'Margin Bottom = "{str(self.spin_box_bottom.value())}"\n')
             f.write(f'AnimationDuration = "{str(self.line_duration.displayText())}"\n')
             f.write(f'RestoreLastSession = "{str(self.check_last_session.isChecked())}"\n')
             f.write(f'Language = "{str(self.comboBox_language.currentText())}"\n')
