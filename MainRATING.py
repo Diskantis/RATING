@@ -24,6 +24,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.logo_or_scene = 1
 
         self.on_last_session = self.load_def_ref()
+
         self.image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
         self.image_rating.video.hide()
 
@@ -41,14 +42,14 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.btn_Remove_Team.clicked.connect(self.remove_team)  # button "Add Item"
         self.btn_Swap_Teams.clicked.connect(self.swap_teams)  # button "Add Item"
         self.btn_Move_to_Pos.clicked.connect(self.move_team)  # button "Add Item"
-        self.btn_Logo_Rating.clicked.connect(self.logo_rating)  # button "Logo/Scene"
+        self.btn_Logo_Rating.clicked.connect(self.logo_rating)  # button "Logo/Rating"
 
     def click_team_widget(self):
         if self.team_widgets_btn is not None:
             for i in self.team_widgets_btn:
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
-                # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
+                self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
                 # self.my_widget.edt_team.triggered.connect(self.menuWidget)
                 # self.my_widget.itm_scale.triggered.connect(self.menuWidget)
                 # self.my_widget.pos_scale.triggered.connect(self.menuWidget)

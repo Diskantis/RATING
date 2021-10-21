@@ -15,12 +15,16 @@ class ImageRating(QtWidgets.QWidget):
         self.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setMinimumSize(QtCore.QSize(1920, 1080))
         self.resize(1920, 1080)
         self.move(1920, 0)
 
+        # Центральный виджет (все окно)
+        self.centralwidget = QtWidgets.QWidget(self)
+        self.centralwidget.setMinimumSize(QtCore.QSize(1920, 1080))
+        self.centralwidget.setObjectName("centralwidget")
+
         # слой вертекального выравнивания Центрального виджета (всего окна)
-        self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self)
+        self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
         self.v_Layout_centralwidget.setObjectName("verticalLayout")
 
         self.image1 = QtWidgets.QLabel()

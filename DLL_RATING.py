@@ -108,7 +108,6 @@ class ImagePlayer:
         self.video = QWidget()
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        self.video.setMinimumSize(QtCore.QSize(1920, 1080))
         self.video.resize(1920, 1080)
         self.video.move(1920, 0)
         # self.video.resize(800, 600)
@@ -309,4 +308,3 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
         pixmap1 = QPixmap(path)
         pixmap1 = pixmap1.scaledToWidth(1000)
         self.image_team.setPixmap(pixmap1)
-        self.image_team.setAlignment(QtCore.Qt.AlignCenter)

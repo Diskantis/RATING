@@ -764,6 +764,11 @@ class Ui_Widget_Team_Button(object):
 class Ui_Widget_Team_Rating(object):
     def setupUi(self, Widget_Team_Rating):
 
+        self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(Widget_Team_Rating)
+        self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
+        self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
+
         self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
         self.image_team.setAlignment(QtCore.Qt.AlignCenter)
-        self.image_team.setObjectName("label")
+        self.image_team.setObjectName("image_team")
+        self.v_Layout_widget_team_rating.addWidget(self.image_team)
