@@ -48,26 +48,27 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             for i in self.team_widgets_btn:
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
-                self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
+                # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
                 # self.my_widget.edt_team.triggered.connect(self.menuWidget)
                 # self.my_widget.itm_scale.triggered.connect(self.menuWidget)
                 # self.my_widget.pos_scale.triggered.connect(self.menuWidget)
                 # self.my_widget.pos_offset.triggered.connect(self.menuWidget)
                 # self.my_widget.rem_team.triggered.connect(self.menuWidget)
 
-    # def menuWidget(self):
-    #     print(self.select_team)
-    #     sender = self.sender()
-    #     if sender.text() == "Edit":
-    #         print("Edit")
-    #     elif sender.text() == "Set item scale":
-    #         print("Set item scale")
-    #     elif sender.text() == "Set position scale":
-    #         print("Set position scale")
-    #     elif sender.text() == "Set position offset":
-    #         print("Set position offset")
-    #     elif sender.text() == "Remove":
-    #         print("Remove")
+    def menuWidget(self):
+        # print(self.select_team)
+        # sender = self.sender()
+        # if sender.text() == "Edit":
+        #     print("Edit")
+        # elif sender.text() == "Set item scale":
+        #     print("Set item scale")
+        # elif sender.text() == "Set position scale":
+        #     print("Set position scale")
+        # elif sender.text() == "Set position offset":
+        #     print("Set position offset")
+        # elif sender.text() == "Remove":
+        #     print("Remove")
+        pass
 
     def click_team_widget_btn(self):
         sender = self.sender()
@@ -80,7 +81,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             return self.select_team[price] is True
 
         check_true = list(filter(has_low_price, self.select_team.keys()))
-        print(check_true)
+
         if len(check_true) == 2:
             self.btn_Remove_Team.setEnabled(True)
             self.btn_Move_to_Pos.setEnabled(False)
@@ -166,13 +167,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         except (IndexError, FileNotFoundError):
             pass
-
-        # print(self.teams_properties)
-        # print(self.team_widgets_btn)
-        # print(self.team_widgets_rat)
-        # print(self.select_team)
-        # print(self.v_Layout_frame_items.count())
-        # print(self.image_rating.v_Layout_grb_items_rat.count())
 
         self.click_team_widget()
 
@@ -316,13 +310,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.click_team_widget()
 
-        print(self.teams_properties)
-        print(self.team_widgets_btn)
-        print(self.team_widgets_rat)
-        print(self.select_team)
-        print(self.v_Layout_frame_items.count())
-        print(self.image_rating.v_Layout_grb_items_rat.count())
-
     def swap_teams(self):
         pos = list(self.select_team.keys())
         pos.sort(reverse=True)
@@ -440,7 +427,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         except AttributeError:
             pass
 
-    # def mousePressEvent(self, event):
+    def mousePressEvent(self, event):
+        pass
         #     button = event.button()
         #     if button == Qt.Qt.RightButton:
         #         print("Right button click!")
@@ -473,3 +461,10 @@ def application():
 
 if __name__ == "__main__":
     application()
+
+# print(self.teams_properties)
+# print(self.team_widgets_btn)
+# print(self.team_widgets_rat)
+# print(self.select_team)
+# print(self.v_Layout_frame_items.count())
+# print(self.image_rating.v_Layout_grb_items_rat.count())

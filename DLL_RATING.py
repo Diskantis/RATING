@@ -256,26 +256,15 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         self.pos_offset.triggered.connect(self.position_offset)
         self.rem_team.triggered.connect(self.remove_team)
 
-    # def mousePressEvent(self, event):
-    #     button = event.button()
-    #     if button == Qt.Qt.RightButton:
-    #         print("Right button click!")
-    #
-    #     elif button == Qt.Qt.LeftButton:
-    #         print("Left button click!")
-    #
-    #     return Qt.QPushButton.mousePressEvent(self, event)
-
     def show_context_menu(self, point):
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
 
     def edit_team(self):
-        pass
-        # print(self.label_name_team.text())
-        # self.edit_team = Add_Team()
-        # self.edit_team.setWindowTitle("Edit team")
-        # self.edit_team.show()
-        #
+
+        self.edit_team = Add_Team()
+        self.edit_team.setWindowTitle("Edit team")
+        self.edit_team.show()
+
         # self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
         #
         # def add_check(self):
@@ -289,6 +278,7 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         #         self.add_team.close()
 
     def item_scale(self):
+        # pixmap1 = pixmap1.scaledToWidth(1000)
         pass
 
     def position_scale(self):
@@ -308,5 +298,5 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
         self.setupUi(self)
 
         pixmap1 = QPixmap(path)
-        pixmap1 = pixmap1.scaledToWidth(1000)
+        # pixmap1 = pixmap1.scaledToWidth(1000)
         self.image_team.setPixmap(pixmap1)
