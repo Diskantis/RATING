@@ -21,12 +21,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team_widgets_btn = []  # список виджетов команд с кнопками
         self.team_widgets_rat = []  # список виджетов команд с банерами
         self.select_team = {}
-        self.logo_or_scene = 1
+        self.logo_or_scene = 0
 
         self.on_last_session = self.load_def_ref()
 
         self.image_rating = ImagePlayer("Team Ranking")  # class dll.ImagePlayer
-        self.image_rating.video.hide()
 
         if self.on_last_session:
             self.open_file("saves/autosave.sav")
@@ -118,12 +117,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.pref.comboBox_language.setCurrentText(cmb_lng)
 
         try:
-            if self.player_1 and self.player_2:
+            if self.player_1 or self.player_2:
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-                # pass
-                self.player_1, self.player_2 = start_player()
+                self.player_1, self.player_2 = start_player()  # func dll.start_player
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
@@ -217,7 +215,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.pref.btn_lg_brow_vid.clicked.connect(self.pref.lg_brow_vid)  # button "Browse..." Logo Video file
 
         # TAB COMMON
-        self.pref.interface_lang()
+        self.pref.interface_lang()  # comboBox с выбором языка программы
 
         # OK
         self.pref.btn_ok.clicked.connect(self.preferences_ok)  # button OK
@@ -227,15 +225,22 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def preferences_ok(self):
         try:
-            if self.player_1 and self.player_2:
-                self.pref.save_preferences()
+            if self.player_1 and self.player_2:  # если плеера запущены
+                self.pref.save_preferences()  # сохраняем параметры
 
-                self.player_1.video.close()
-                self.player_2.video.close()
+                self.player_1.video.close()  # закрываем плеер
+                self.player_2.video.close()  # закрываем плеер
 
-                val = read_reference("reference.reg")
+                self.player_1, self.player_2 = start_player()  # запускаем плеера с новыми параметрами
+
+                val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
                 self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
-                self.player_1, self.player_2 = start_player()  # func dll.start_player
+                self.image_rating.video.activateWindow()  # делает окно рейтинга активным
+
+                if self.logo_or_scene == 1:  # если кнопка Logo/Rating была в положение Logo меняет на Rating
+                    self.logo_or_scene -= 1
+                    self.btn_Logo_Rating.setChecked(False)
+                    self.btn_Logo_Rating.setText("R A T I N G")
 
                 self.pref.close()
 
@@ -402,15 +407,12 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         try:
             if self.player_1 and self.player_2:
                 if self.logo_or_scene == 0:
-                    self.player_1.video.hide()
-                    self.image_rating.video.hide()
-                    self.player_2.video.show()
+                    self.player_2.video.activateWindow()
                     self.logo_or_scene += 1
                     self.btn_Logo_Rating.setText("L O G O")
                 elif self.logo_or_scene == 1:
-                    self.player_2.video.hide()
-                    self.player_1.video.show()
-                    self.image_rating.video.show()
+                    self.player_1.video.activateWindow()
+                    self.image_rating.video.activateWindow()
                     self.logo_or_scene -= 1
                     self.btn_Logo_Rating.setText("R A T I N G")
         except AttributeError:

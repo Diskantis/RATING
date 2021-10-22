@@ -63,12 +63,12 @@ def read_reference(file_name):
 def start_player():
     val = read_reference("reference.reg")
     if val[2]:
-        player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
+        player_1 = VideoPlayer("Video Background", val[4])  # class dll.VideoPlayer
         return player_1, player_2
     elif val[3]:
-        player_1 = ImagePlayer("Image Background", val[5])  # class dll.ImagePlayer
         player_2 = VideoPlayer("Video Logo", val[6])  # class dll.VideoPlayer
+        player_1 = ImagePlayer("Image Background", val[5])  # class dll.ImagePlayer
         return player_1, player_2
 
 
