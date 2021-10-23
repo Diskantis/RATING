@@ -4,7 +4,7 @@ import sys
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from PyQt5.QtCore import QTranslator
+from PyQt5.QtCore import QTranslator, Qt
 
 from UI_RATING import Ui_MainWindow, Ui_About
 from DLL_RATING import clear_layout, team_widgets, team_widgets_rat, read_reference, start_player, \
@@ -46,11 +46,12 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def click_team_widget(self):
         if self.team_widgets_btn is not None:
             for i in self.team_widgets_btn:
+                print(i)
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
                 # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
                 # self.my_widget.edt_team.triggered.connect(self.menuWidget)
-                # self.my_widget.itm_scale.triggered.connect(self.menuWidget)
+                self.my_widget.itm_scale.triggered.connect(self.item_scale)
                 # self.my_widget.pos_scale.triggered.connect(self.menuWidget)
                 # self.my_widget.pos_offset.triggered.connect(self.menuWidget)
                 # self.my_widget.rem_team.triggered.connect(self.menuWidget)
@@ -70,8 +71,20 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         #     print("Remove")
         pass
 
+    def item_scale(self):
+
+        pass
+        # print(widget.btn_Team.text())
+        # sender = self.sender()
+        # print(sender.text())
+        # self.widget = widget
+        # self.widget.pixmap1.scaledToWidth(1500)
+
+        # pass
+
     def click_team_widget_btn(self):
         sender = self.sender()
+        print(sender.text())
         if sender.isChecked() is False:
             self.select_team.pop(int(sender.text()), None)
         else:
@@ -426,17 +439,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                     self.btn_Logo_Rating.setText("R A T I N G")
         except AttributeError:
             pass
-
-    def mousePressEvent(self, event):
-        pass
-        #     button = event.button()
-        #     if button == Qt.Qt.RightButton:
-        #         print("Right button click!")
-        #     elif button == Qt.Qt.LeftButton:
-        #         print("Left button click!")
-        #
-        # def mouseReleaseEvent(self, event):
-        #     pass
 
     def closeEvent(self, event):
         self.exit()
