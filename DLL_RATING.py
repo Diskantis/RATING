@@ -78,11 +78,11 @@ class VideoPlayer:
         self.video.setObjectName("VideoPlayer")
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        # self.video.move(1920, 0)
-        # self.video.setFixedSize(1920, 1080)
-        # self.video.setFullScreen(True)
-        self.video.resize(749, 421)
-        self.video.move(1100, 10)
+        self.video.move(1920, 0)
+        self.video.setFixedSize(1920, 1080)
+        self.video.setFullScreen(True)
+        # self.video.resize(749, 421)
+        # self.video.move(1100, 10)
 
         if path is not None:
             self.playlist = QMediaPlaylist()
@@ -110,10 +110,10 @@ class ImagePlayer:
         self.video.setObjectName("ImageRating")
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        # self.video.resize(1920, 1080)
-        # self.video.move(1920, 0)
-        self.video.resize(749, 421)
-        self.video.move(1100, 10)
+        self.video.resize(1920, 1080)
+        self.video.move(1920, 0)
+        # self.video.resize(749, 421)
+        # self.video.move(1100, 10)
 
         if path is None:
             self.video.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -249,7 +249,7 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         # # кнопка с названием команды
         self.btn_Team.setText(index)
         self.label_name_team.setText(name)
-        self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
+        # self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
 
         # self.edt_team.triggered.connect(self.edit_team)
         # self.itm_scale.triggered.connect(self.item_scale)
@@ -260,17 +260,15 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     def show_context_menu(self, point):
         sender = self.sender()
         print(sender.text())
-
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
 
     def edit_team(self):
-
         self.edit_team = Add_Team()
         self.edit_team.setWindowTitle("Edit team")
         self.edit_team.show()
 
-        # self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
-        #
+        self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
+
         # def add_check(self):
         #     try:
         #         if self.team:
@@ -283,10 +281,6 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
 
     def item_scale(self):
         pass
-    #     sender = self.sender()
-    #     print(sender.text())
-    #     # self.pixmap1.scaledToWidth(1500)
-    #     # pass
 
     def position_scale(self):
         pass
@@ -297,10 +291,10 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     def remove_team(self):
         pass
 
-    def mousePressEvent(self, event):
-        button = event.button()
-        if button == Qt.RightButton:
-            print("Right button click!")
+    # def mousePressEvent(self, event):
+    #     button = event.button()
+    #     if button == Qt.RightButton:
+    #         print("Right button click!")
         # elif button == Qt.LeftButton:
         #     print("Left button click!")
 
@@ -312,5 +306,5 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
         self.setupUi(self)
 
         self.pixmap1 = QPixmap(path)
-        self.pixmap1 = self.pixmap1.scaledToWidth(400)
+        # self.pixmap1 = self.pixmap1.scaledToWidth(400)
         self.image_team.setPixmap(self.pixmap1)

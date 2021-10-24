@@ -46,45 +46,17 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def click_team_widget(self):
         if self.team_widgets_btn is not None:
             for i in self.team_widgets_btn:
-                print(i)
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
-                # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
+                self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
                 # self.my_widget.edt_team.triggered.connect(self.menuWidget)
-                self.my_widget.itm_scale.triggered.connect(self.item_scale)
+                # self.my_widget.itm_scale.triggered.connect(self.item_scale)
                 # self.my_widget.pos_scale.triggered.connect(self.menuWidget)
                 # self.my_widget.pos_offset.triggered.connect(self.menuWidget)
                 # self.my_widget.rem_team.triggered.connect(self.menuWidget)
 
-    def menuWidget(self):
-        # print(self.select_team)
-        # sender = self.sender()
-        # if sender.text() == "Edit":
-        #     print("Edit")
-        # elif sender.text() == "Set item scale":
-        #     print("Set item scale")
-        # elif sender.text() == "Set position scale":
-        #     print("Set position scale")
-        # elif sender.text() == "Set position offset":
-        #     print("Set position offset")
-        # elif sender.text() == "Remove":
-        #     print("Remove")
-        pass
-
-    def item_scale(self):
-
-        pass
-        # print(widget.btn_Team.text())
-        # sender = self.sender()
-        # print(sender.text())
-        # self.widget = widget
-        # self.widget.pixmap1.scaledToWidth(1500)
-
-        # pass
-
     def click_team_widget_btn(self):
         sender = self.sender()
-        print(sender.text())
         if sender.isChecked() is False:
             self.select_team.pop(int(sender.text()), None)
         else:
