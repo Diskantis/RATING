@@ -48,8 +48,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             for i in self.team_widgets_btn:
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
-                self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
-                self.my_widget.edt_team.triggered.connect(self.my_widget.edit_team)
+                # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
+                # self.my_widget.edt_team.triggered.connect(lambda: self.my_widget.edit_team(self.teams_properties))
                 # self.itm_scale.triggered.connect(self.item_scale)
                 # self.pos_scale.triggered.connect(self.position_scale)
                 # self.pos_offset.triggered.connect(self.position_offset)
@@ -146,8 +146,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.teams_properties = list_str
 
-            self.team_widgets_btn = team_widgets(list_str, self.v_Layout_frame_items)
-            self.team_widgets_rat = team_widgets_rat(list_str, self.image_rating.v_Layout_grb_items_rat)
+            self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
+            self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
 
         except (IndexError, FileNotFoundError):
             pass
