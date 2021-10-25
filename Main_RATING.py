@@ -4,7 +4,7 @@ import sys
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from PyQt5.QtCore import QTranslator, Qt
+from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
 from DLL_RATING import clear_layout, team_widgets, team_widgets_rat, read_reference, start_player, \
@@ -17,7 +17,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.setupUi(self)  # class UI_RATING.Ui_MainWindow
 
-        self.teams_properties = [0]  # список с параметрами команд кол. команд + (путь к файлу банера и имя команды)
+        self.teams_properties = []  # список с параметрами команд кол. команд + (путь к файлу банера и имя команды)
         self.team_widgets_btn = []  # список виджетов команд с кнопками
         self.team_widgets_rat = []  # список виджетов команд с банерами
         self.select_team = {}
@@ -49,11 +49,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 self.my_widget = i
                 self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
                 self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
-                # self.my_widget.edt_team.triggered.connect(self.menuWidget)
-                # self.my_widget.itm_scale.triggered.connect(self.item_scale)
-                # self.my_widget.pos_scale.triggered.connect(self.menuWidget)
-                # self.my_widget.pos_offset.triggered.connect(self.menuWidget)
-                # self.my_widget.rem_team.triggered.connect(self.menuWidget)
+                self.my_widget.edt_team.triggered.connect(self.my_widget.edit_team)
+                # self.itm_scale.triggered.connect(self.item_scale)
+                # self.pos_scale.triggered.connect(self.position_scale)
+                # self.pos_offset.triggered.connect(self.position_offset)
+                # self.rem_team.triggered.connect(self.remove_team)
 
     def click_team_widget_btn(self):
         sender = self.sender()
@@ -144,7 +144,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                     line = line.strip("\n")
                     list_str.append(line)
 
-            list_str[0] = int(list_str[0])
             self.teams_properties = list_str
 
             self.team_widgets_btn = team_widgets(list_str, self.v_Layout_frame_items)
@@ -161,7 +160,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                                                          filter="*.sav")[0]
         else:
             path_sv_preset = path_sv_preset
-        teams_properties[0] = str(teams_properties[0])
         try:
             with open(path_sv_preset, "w") as f:
                 for line in teams_properties:
@@ -258,7 +256,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.add_team.close()
 
-            self.teams_properties[0] += 1
             self.teams_properties += prop
 
             self.team_widgets_btn.append(self.team)
@@ -270,15 +267,16 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos = list(self.select_team.keys())
         pos.sort(reverse=True)
         for i in pos:
-            self.team_widgets_btn.pop(i - 1)
-            self.teams_properties.pop(i * 2)
-            self.teams_properties.pop(i * 2 - 1)
-            self.teams_properties[0] -= 1
+            self.team_widgets_btn.pop(i-1)
+            self.team_widgets_rat.pop(i-1)
+            self.teams_properties.pop((i-1) * 2)
+            self.teams_properties.pop((i-1) * 2)
 
             team_btn = self.v_Layout_frame_items.itemAt(i - 1).widget()  # удаляет виджет с кнопкой
             self.v_Layout_frame_items.removeWidget(team_btn)
 
             team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i - 1).widget()  # удаляет виджет с банером
+            team_rat.deleteLater()
             self.image_rating.v_Layout_grb_items_rat.removeWidget(team_rat)
 
         clear_layout(self.v_Layout_frame_items)
@@ -300,11 +298,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos.sort(reverse=True)
         index_1, index_2 = pos  # инедксы виджетов выбраных для перемещения
 
-        team_1 = self.v_Layout_frame_items.itemAt(index_1 - 1).widget()  # виджет выбраный для перемещения
-        team_2 = self.v_Layout_frame_items.itemAt(index_2 - 1).widget()  # виджет выбраный для перемещения
+        team_1_btn = self.v_Layout_frame_items.itemAt(index_1 - 1).widget()  # виджет выбраный для перемещения
+        team_2_btn = self.v_Layout_frame_items.itemAt(index_2 - 1).widget()  # виджет выбраный для перемещения
 
-        team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)  # Item с виджетом team_2
-        self.v_Layout_frame_items.insertWidget(index_1 - 1, team_replace.widget())  # вставляем виджет team_2
+        team_replace = self.v_Layout_frame_items.replaceWidget(team_2_btn, team_1_btn)  # Item с виджетом team_2_btn
+        self.v_Layout_frame_items.insertWidget(index_1 - 1, team_replace.widget())  # вставляем виджет team_2_btn
 
         team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1-1).widget()
         team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2-1).widget()
@@ -312,30 +310,31 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         team_replace_rat = self.image_rating.v_Layout_grb_items_rat.replaceWidget(team_2_rat, team_1_rat)
         self.image_rating.v_Layout_grb_items_rat.insertWidget(index_1-1, team_replace_rat.widget())
 
-        team_w = self.team_widgets_btn.pop(index_1 - 1)
-        self.team_widgets_btn.insert(index_2 - 1, team_w)
+        team_w_btn = self.team_widgets_btn.pop(index_1 - 1)
+        self.team_widgets_btn.insert(index_2 - 1, team_w_btn)
         team_w_rat = self.team_widgets_rat.pop(index_1 - 1)
         self.team_widgets_rat.insert(index_2 - 1, team_w_rat)
 
-        team_p1_1 = self.teams_properties.pop(index_1 * 2)
-        team_p1_2 = self.teams_properties.pop(index_1 * 2 - 1)
-        team_p2_1 = self.teams_properties.pop(index_2 * 2)
-        team_p2_2 = self.teams_properties.pop(index_2 * 2 - 1)
+        team_p1_1 = self.teams_properties.pop(index_1 * 2 - 2)
+        team_p1_2 = self.teams_properties.pop(index_1 * 2 - 2)
+        team_p2_1 = self.teams_properties.pop(index_2 * 2 - 2)
+        team_p2_2 = self.teams_properties.pop(index_2 * 2 - 2)
 
-        self.teams_properties.insert(index_2 * 2 - 1, team_p1_1)
-        self.teams_properties.insert(index_2 * 2 - 1, team_p1_2)
-        self.teams_properties.insert(index_1 * 2 - 1, team_p2_1)
-        self.teams_properties.insert(index_1 * 2 - 1, team_p2_2)
+        self.teams_properties.insert(index_2 * 2 - 2, team_p1_2)
+        self.teams_properties.insert(index_2 * 2 - 2, team_p1_1)
+        self.teams_properties.insert(index_1 * 2 - 2, team_p2_2)
+        self.teams_properties.insert(index_1 * 2 - 2, team_p2_1)
 
         clear_layout(self.v_Layout_frame_items)
         clear_layout(self.image_rating.v_Layout_grb_items_rat)
+
         self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
         self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
 
-        team_1 = self.v_Layout_frame_items.itemAt(index_1 - 1).widget()
-        team_2 = self.v_Layout_frame_items.itemAt(index_2 - 1).widget()
-        team_1.btn_Team.setChecked(True)
-        team_2.btn_Team.setChecked(True)
+        team_1_btn = self.v_Layout_frame_items.itemAt(index_1 - 1).widget()
+        team_2_btn = self.v_Layout_frame_items.itemAt(index_2 - 1).widget()
+        team_1_btn.btn_Team.setChecked(True)
+        team_2_btn.btn_Team.setChecked(True)
 
         self.lineEdit_Pos.setText("")
 
@@ -369,13 +368,15 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                     team_replace = self.image_rating.v_Layout_grb_items_rat.replaceWidget(team_2, team_1)
                     self.image_rating.v_Layout_grb_items_rat.insertWidget(position-1, team_replace.widget())
 
-                team_w = self.team_widgets_btn.pop(index)
-                self.team_widgets_btn.insert(position, team_w)
+                team_w_btn = self.team_widgets_btn.pop(index)
+                self.team_widgets_btn.insert(position, team_w_btn)
+                team_w_rat = self.team_widgets_rat.pop(index)
+                self.team_widgets_rat.insert(position, team_w_rat)
 
-                team_p1 = self.teams_properties.pop(index * 2 + 2)
-                team_p2 = self.teams_properties.pop(index * 2 + 1)
-                self.teams_properties.insert(position * 2 + 1, team_p1)
-                self.teams_properties.insert(position * 2 + 1, team_p2)
+                team_p1 = self.teams_properties.pop(index * 2)
+                team_p2 = self.teams_properties.pop(index * 2)
+                self.teams_properties.insert(position * 2, team_p2)
+                self.teams_properties.insert(position * 2, team_p1)
 
                 clear_layout(self.v_Layout_frame_items)
                 clear_layout(self.image_rating.v_Layout_grb_items_rat)

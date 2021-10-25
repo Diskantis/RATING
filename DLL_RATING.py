@@ -26,7 +26,7 @@ def clear_layout(layout):
 
 def team_widgets(list_str, layout):
     widgets = []
-    for i in list_str[2:len(list_str) + 1:2]:
+    for i in list_str[1:len(list_str) + 1:2]:
         index = str(layout.count() + 1)
         team = Widget_Team_Button(index, i)
         layout.addWidget(team)
@@ -36,7 +36,7 @@ def team_widgets(list_str, layout):
 
 def team_widgets_rat(list_str, layout):
     widgets = []
-    for i in list_str[1:len(list_str) + 1:2]:
+    for i in list_str[:len(list_str) + 1:2]:
         team = Widget_Team_Rating(i)
         layout.addWidget(team)
         widgets.append(team)  # создаем список с виджетами команд
@@ -110,7 +110,7 @@ class ImagePlayer:
         self.video.setObjectName("ImageRating")
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        self.video.resize(1920, 1080)
+        self.video.setFixedSize(1920, 1080)
         self.video.move(1920, 0)
         # self.video.resize(749, 421)
         # self.video.move(1100, 10)
@@ -258,11 +258,12 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         # self.rem_team.triggered.connect(self.remove_team)
 
     def show_context_menu(self, point):
-        sender = self.sender()
-        print(sender.text())
+        # sender = self.sender()
+        # print(sender.text())
         self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
 
     def edit_team(self):
+        print(self.btn_Team.text())
         self.edit_team = Add_Team()
         self.edit_team.setWindowTitle("Edit team")
         self.edit_team.show()
