@@ -28,7 +28,7 @@ def team_widgets(list_str, layout):
     widgets = []
     for i in list_str[1:len(list_str) + 1:2]:
         index = str(layout.count() + 1)
-        team = Widget_Team_Button(index, i, list_str)
+        team = Widget_Team_Button(index, i)
         layout.addWidget(team)
         widgets.append(team)  # создаем список с виджетами команд
     return widgets
@@ -241,7 +241,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
 
 
 class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
-    def __init__(self, index, name, list_str):
+    def __init__(self, index, name):
         super(Widget_Team_Button, self).__init__()
 
         self.setupUi(self)
@@ -250,61 +250,22 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         self.btn_Team.setText(index)
         self.label_name_team.setText(name)
 
-        self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
+        # self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
 
-        self.edt_team.triggered.connect(lambda: self.editing_team(list_str))
+        # self.edt_team.triggered.connect(lambda: self.editing_team(list_str))
         # self.itm_scale.triggered.connect(self.item_scale)
         # self.pos_scale.triggered.connect(self.position_scale)
         # self.pos_offset.triggered.connect(self.position_offset)
-        # self.rem_team.triggered.connect(self.remove_team)
+        # self.rem_team.triggered.connect(self.right_click_remove_team)
 
-    def show_context_menu(self, point):
-        sender = self.sender()
-        self.index_btn = sender.text()
-        self.menuTeam.exec(self.btn_Team.mapToGlobal(point))
-
-    def editing_team(self, team_prop):
-
-        self.teams_properties = team_prop
-        index = int(self.index_btn)
-        team_path_img, team_name = team_prop[(index - 1) * 2], team_prop[(index - 1) * 2 + 1]
-
-        self.edit_team = Add_Team()
-        self.edit_team.setWindowTitle("Edit team")
-        self.edit_team.line_image.setText(team_path_img)
-        self.edit_team.line_text.setText(team_name)
-        self.edit_team.show()
-
-        self.edit_team.btn_brow_image.clicked.connect(self.edit_team.add_team_brow_img)  # button "Browse..." Item Image
-
-        self.edit_team.btn_ok.clicked.connect(lambda: self.editing_team_ok(index))  # button OK
-        self.edit_team.btn_ok.setAutoDefault(True)
-
-        self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
-
-    def editing_team_ok(self, index):
-        from Main_RATING import MainRATING
-
-        print(self.teams_properties)
-        self.teams_properties[(index - 1) * 2] = self.edit_team.line_image.displayText()
-        self.teams_properties[(index - 1) * 2 + 1] = self.edit_team.line_text.displayText()
-        print(self.teams_properties)
-
-        # self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
-        # self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
-
-        self.edit_team.close()
-
-        # MainRATING.save_file(self.teams_properties, path_sv_preset="saves/autosave.sav")
-
-    def edit_team_brow_img(self):
-        # if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-        #     self.player_1, self.player_2 = start_player()  # func dll.start_player
-        # else:
-        #     self.pref.line_back_video.clear()
-        #     self.pref.line_back_image.clear()
-        #     self.pref.line_logo_video.clear()
-        pass
+    # def edit_team_brow_img(self):
+    #     # if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
+    #     #     self.player_1, self.player_2 = start_player()  # func dll.start_player
+    #     # else:
+    #     #     self.pref.line_back_video.clear()
+    #     #     self.pref.line_back_image.clear()
+    #     #     self.pref.line_logo_video.clear()
+    #     pass
 
     # def add_new_team_ok(self):
     #     if self.edit_team.line_image.displayText() and self.edit_team.line_text.displayText():
@@ -325,6 +286,7 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     #         self.team_widgets_rat.append(self.team_rat)
     #
     #         self.click_team_widget()
+    #
     # def add_check(self):
     #     try:
     #         if self.team:
@@ -334,25 +296,6 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     #         self.team = Widget_Team(self.add_team.line_text.displayText())
     #         self.v_Layout_frame_items.addWidget(self.team)
     #         self.add_team.close()
-
-    def item_scale(self):
-        pass
-
-    def position_scale(self):
-        pass
-
-    def position_offset(self):
-        pass
-
-    def remove_team(self):
-        pass
-
-    # def mousePressEvent(self, event):
-    #     button = event.button()
-    #     if button == Qt.RightButton:
-    #         print("Right button click!")
-    # elif button == Qt.LeftButton:
-    #     print("Left button click!")
 
 
 class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):

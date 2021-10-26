@@ -21,6 +21,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team_widgets_btn = []  # список виджетов команд с кнопками
         self.team_widgets_rat = []  # список виджетов команд с банерами
         self.select_team = {}
+        self.index_btn = None
         self.logo_or_scene = 0
 
         self.on_last_session = self.load_def_ref()
@@ -47,15 +48,73 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         if self.team_widgets_btn is not None:
             for i in self.team_widgets_btn:
                 self.my_widget = i
-                self.my_widget.btn_Team.clicked.connect(self.click_team_widget_btn)
-                # self.my_widget.btn_Team.customContextMenuRequested.connect(self.my_widget.show_context_menu)
-                # self.my_widget.edt_team.triggered.connect(lambda: self.my_widget.edit_team(self.teams_properties))
-                # self.itm_scale.triggered.connect(self.item_scale)
-                # self.pos_scale.triggered.connect(self.position_scale)
-                # self.pos_offset.triggered.connect(self.position_offset)
-                # self.rem_team.triggered.connect(self.remove_team)
+                self.my_widget.btn_Team.clicked.connect(self.left_click_team_widget_btn)
+                self.my_widget.btn_Team.customContextMenuRequested.connect(self.right_click_team_widget_btn)
+                self.my_widget.edt_team.triggered.connect(self.right_click_edit_team)
+                self.my_widget.itm_scale.triggered.connect(self.right_click_item_scale)
+                self.my_widget.pos_scale.triggered.connect(self.right_click_position_scale)
+                self.my_widget.pos_offset.triggered.connect(self.right_click_position_offset)
+                self.my_widget.rem_team.triggered.connect(self.right_click_remove_team)
 
-    def click_team_widget_btn(self):
+    def right_click_team_widget_btn(self, point):
+        sender = self.sender()
+        self.index_btn = int(sender.text())
+
+        self.team = self.v_Layout_frame_items.itemAt(self.index_btn-1).widget()
+        self.team.menuTeam.exec(self.team.btn_Team.mapToGlobal(point))
+
+    def right_click_edit_team(self):
+        print("edit_team")
+        index = self.index_btn - 1
+        team_path_img, team_name = self.teams_properties[index * 2], self.teams_properties[index * 2 + 1]
+
+        self.edit_team = Add_Team()
+        self.edit_team.setWindowTitle("Edit team")
+        self.edit_team.line_image.setText(team_path_img)
+        self.edit_team.line_text.setText(team_name)
+        self.edit_team.show()
+
+        self.edit_team.btn_brow_image.clicked.connect(self.edit_team.add_team_brow_img)  # Item Image "Browse..."
+
+        self.edit_team.btn_ok.clicked.connect(self.right_click_edit_team_ok)  # button OK
+        self.edit_team.btn_ok.setAutoDefault(True)
+
+        self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
+
+    def right_click_edit_team_ok(self):
+        index = self.index_btn-1
+
+        self.teams_properties[index * 2] = self.edit_team.line_image.displayText()
+        self.teams_properties[index * 2 + 1] = self.edit_team.line_text.displayText()
+
+        clear_layout(self.v_Layout_frame_items)
+        clear_layout(self.image_rating.v_Layout_grb_items_rat)
+
+        self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
+        self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
+
+        self.edit_team.close()
+
+        self.click_team_widget()
+
+    def right_click_item_scale(self):
+        print("item_scale")
+        pass
+
+    def right_click_position_scale(self):
+        print("position_scale")
+        pass
+
+    def right_click_position_offset(self):
+        print("position_offset")
+        pass
+
+    def right_click_remove_team(self):
+        self.team = self.v_Layout_frame_items.itemAt(self.index_btn - 1).widget()
+        self.select_team.update({self.index_btn: True})
+        self.remove_team()
+
+    def left_click_team_widget_btn(self):
         sender = self.sender()
         if sender.isChecked() is False:
             self.select_team.pop(int(sender.text()), None)
@@ -235,7 +294,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.add_team = Add_Team()
         self.add_team.show()
 
-        self.add_team.btn_brow_image.clicked.connect(self.add_team.add_team_brow_img)  # button "Browse..." Item Image
+        self.add_team.btn_brow_image.clicked.connect(self.add_team.add_team_brow_img)  # Item Image "Browse..."
 
         self.add_team.btn_ok.clicked.connect(self.add_new_team_ok)  # button OK
         self.add_team.btn_ok.setAutoDefault(True)
