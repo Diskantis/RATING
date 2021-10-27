@@ -709,8 +709,84 @@ class Ui_Add_Team(object):
         self.label_text.setText(_translate("Add_team", "Text:"))
         self.btn_brow_image.setText(_translate("Add_team", "Browse..."))
 
-        self.btn_cancel.setText(_translate("Preference", "Cancel"))
-        self.btn_ok.setText(_translate("Preference", "OK"))
+        self.btn_cancel.setText(_translate("Add_team", "Cancel"))
+        self.btn_ok.setText(_translate("Add_team", "OK"))
+
+
+class Ui_Menu_Team(object):
+    def setupUi(self, Menu_Team):
+        Menu_Team.setObjectName("Item_scale")
+        Menu_Team.setWindowModality(QtCore.Qt.ApplicationModal)
+        Menu_Team.resize(300, 150)
+        Menu_Team.setMinimumSize(QtCore.QSize(300, 150))
+        Menu_Team.setMaximumSize(QtCore.QSize(300, 150))
+        Menu_Team.setStyleSheet("background-color: rgb(78, 79, 84); color: rgb(209, 209, 217);")
+
+        font = QtGui.QFont()
+        font.setPointSize(10)
+
+        self.grb_item_scale = QtWidgets.QGroupBox(Menu_Team)
+        self.grb_item_scale.setGeometry(QtCore.QRect(10, 10, 280, 90))
+        font_grp = QtGui.QFont()
+        font_grp.setPointSize(10)
+        font_grp.setBold(True)
+        font_grp.setUnderline(True)
+        self.grb_item_scale.setFont(font_grp)
+        self.grb_item_scale.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
+        self.grb_item_scale.setAlignment(QtCore.Qt.AlignCenter)
+        self.grb_item_scale.setObjectName("grb_team_prp")
+
+        self.label_scale = QtWidgets.QLabel(self.grb_item_scale)
+        self.label_scale.setGeometry(QtCore.QRect(12, 20, 255, 30))
+        self.label_scale.setFont(font)
+        self.label_scale.setObjectName("label_text")
+
+        self.line_scale = QtWidgets.QLineEdit(self.grb_item_scale)
+        self.line_scale.setGeometry(QtCore.QRect(12, 50, 255, 30))
+        self.line_scale.setFont(font)
+        self.line_scale.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                     "border: 1px solid rgba(50, 50, 50, 240); "
+                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.line_scale.setObjectName("line_text")
+
+        # FRAME OK ADD_NEW_ITEM
+        self.frame_ok = QtWidgets.QFrame(Menu_Team)
+        self.frame_ok.setEnabled(True)
+        self.frame_ok.setGeometry(QtCore.QRect(0, 100, 300, 50))
+        self.frame_ok.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_ok.setObjectName("frame_ok")
+
+        self.h_Layout_ok = QtWidgets.QHBoxLayout(self.frame_ok)
+        self.h_Layout_ok.setObjectName("h_Layout_ok")
+
+        spacerItem1 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.h_Layout_ok.addItem(spacerItem1)
+
+        self.btn_cancel = QtWidgets.QPushButton(self.frame_ok)
+        self.btn_cancel.setMinimumSize(QtCore.QSize(80, 30))
+        self.btn_cancel.setFont(font)
+        self.btn_cancel.setObjectName("btn_cancel")
+        self.h_Layout_ok.addWidget(self.btn_cancel)
+
+        self.btn_ok = QtWidgets.QPushButton(self.frame_ok)
+        self.btn_ok.setMinimumSize(QtCore.QSize(80, 30))
+        self.btn_ok.setFont(font)
+        self.btn_ok.setObjectName("btn_ok")
+        self.h_Layout_ok.addWidget(self.btn_ok)
+
+        self.retranslateUi(Menu_Team)
+        QtCore.QMetaObject.connectSlotsByName(Menu_Team)
+
+    def retranslateUi(self, Menu_Team):
+        _translate = QtCore.QCoreApplication.translate
+        Menu_Team.setWindowTitle(_translate("Menu_Team", "Set scale"))
+        self.grb_item_scale.setTitle(_translate("Menu_Team", "Item Scale"))
+        self.label_scale.setText(_translate("Menu_Team", "Enter scale:"))
+
+        self.btn_cancel.setText(_translate("Menu_Team", "Cancel"))
+        self.btn_ok.setText(_translate("Menu_Team", "OK"))
 
 
 class Ui_Widget_Team_Button(object):

@@ -8,7 +8,7 @@ from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
 from DLL_RATING import clear_layout, team_widgets, team_widgets_rat, read_reference, start_player, \
-    ImagePlayer, Preference, Add_Team, Widget_Team_Button, Widget_Team_Rating
+    ImagePlayer, Preference, Add_Team, Menu_Team, Widget_Team_Button, Widget_Team_Rating
 
 
 class MainRATING(QMainWindow, Ui_MainWindow, ):
@@ -56,6 +56,35 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 self.my_widget.pos_offset.triggered.connect(self.right_click_position_offset)
                 self.my_widget.rem_team.triggered.connect(self.right_click_remove_team)
 
+    def left_click_team_widget_btn(self):
+        sender = self.sender()
+        if sender.isChecked() is False:
+            self.select_team.pop(int(sender.text()), None)
+        else:
+            self.select_team.update({int(sender.text()): sender.isChecked()})
+
+        def has_low_price(price):
+            return self.select_team[price] is True
+
+        check_true = list(filter(has_low_price, self.select_team.keys()))
+
+        if len(check_true) == 2:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(True)
+        elif len(check_true) == 1:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(True)
+            self.btn_Swap_Teams.setEnabled(False)
+        elif len(check_true) > 2:
+            self.btn_Remove_Team.setEnabled(True)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(False)
+        else:
+            self.btn_Remove_Team.setEnabled(False)
+            self.btn_Move_to_Pos.setEnabled(False)
+            self.btn_Swap_Teams.setEnabled(False)
+
     def right_click_team_widget_btn(self, point):
         sender = self.sender()
         self.index_btn = int(sender.text())
@@ -64,7 +93,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team.menuTeam.exec(self.team.btn_Team.mapToGlobal(point))
 
     def right_click_edit_team(self):
-        print("edit_team")
         index = self.index_btn - 1
         team_path_img, team_name = self.teams_properties[index * 2], self.teams_properties[index * 2 + 1]
 
@@ -99,10 +127,44 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale(self):
         print("item_scale")
-        pass
+        self.item_scale = Menu_Team()
+        self.item_scale.show()
+
+        index = self.index_btn - 1
+        item_scale = float(self.teams_properties[index * 6 + 2])
+        self.item_scale.line_scale.setText(str(item_scale))
+
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(self.index_btn-1).widget()
+
+        # self.pixmap1 = self.team.pixmap1.scaledToWidth(item_scale * 1000)
+        # self.team.image_team.setPixmap(self.pixmap1)
+
+        self.item_scale.btn_ok.clicked.connect(self.right_click_item_scale_ok)  # button OK
+        self.item_scale.btn_ok.setAutoDefault(True)
+
+        self.item_scale.btn_cancel.clicked.connect(self.item_scale.menu_cancel)  # button
+
+    def right_click_item_scale_ok(self):
+        index = self.index_btn - 1
+        scale = float(self.item_scale.line_scale.displayText())
+        print(scale)
+        self.teams_properties[index * 6 + 2] = scale
+
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
+        self.pixmap1 = self.team.pixmap1.scaledToWidth(scale * 1000)
+        self.team.image_team.setPixmap(self.pixmap1)
+
+        self.item_scale.close()
 
     def right_click_position_scale(self):
         print("position_scale")
+        self.position_scale = Menu_Team()
+        self.position_scale.show()
+
+        # self.position_scale.retranslateUi(Menu_Team)
+        # Menu_Team.setWindowTitle(_translate("Menu_Team", "Set scale"))
+        # self.grb_item_scale.setTitle(_translate("Menu_Team", "Item Scale"))
+        # self.label_scale.setText(_translate("Menu_Team", "Enter scale:"))
         pass
 
     def right_click_position_offset(self):
@@ -113,35 +175,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team = self.v_Layout_frame_items.itemAt(self.index_btn - 1).widget()
         self.select_team.update({self.index_btn: True})
         self.remove_team()
-
-    def left_click_team_widget_btn(self):
-        sender = self.sender()
-        if sender.isChecked() is False:
-            self.select_team.pop(int(sender.text()), None)
-        else:
-            self.select_team.update({int(sender.text()): sender.isChecked()})
-
-        def has_low_price(price):
-            return self.select_team[price] is True
-
-        check_true = list(filter(has_low_price, self.select_team.keys()))
-
-        if len(check_true) == 2:
-            self.btn_Remove_Team.setEnabled(True)
-            self.btn_Move_to_Pos.setEnabled(False)
-            self.btn_Swap_Teams.setEnabled(True)
-        elif len(check_true) == 1:
-            self.btn_Remove_Team.setEnabled(True)
-            self.btn_Move_to_Pos.setEnabled(True)
-            self.btn_Swap_Teams.setEnabled(False)
-        elif len(check_true) > 2:
-            self.btn_Remove_Team.setEnabled(True)
-            self.btn_Move_to_Pos.setEnabled(False)
-            self.btn_Swap_Teams.setEnabled(False)
-        else:
-            self.btn_Remove_Team.setEnabled(False)
-            self.btn_Move_to_Pos.setEnabled(False)
-            self.btn_Swap_Teams.setEnabled(False)
 
     def load_def_ref(self):
         self.pref = Preference()  # class dll.Preference
@@ -162,11 +195,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.pref.comboBox_language.setCurrentText(cmb_lng)
 
         try:
-            if self.player_1 or self.player_2:
+            if self.player_1 or self.player_2:  # если плеера запущены - ни чего не делает
                 pass
         except AttributeError:
-            if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-                self.player_1, self.player_2 = start_player()  # func dll.start_player
+            if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):  # если плеера не запущены - проверяет правельность путей
+                self.player_1, self.player_2 = start_player()  # запускает плеера func dll.start_player
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
@@ -179,7 +212,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         clear_layout(self.v_Layout_frame_items)
         clear_layout(self.image_rating.v_Layout_grb_items_rat)
 
-        self.teams_properties = [0]
+        self.teams_properties = []
         self.team_widgets_btn = []
         self.team_widgets_rat = []
         self.select_team.clear()
@@ -207,6 +240,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
             self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
+
+            val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
+            self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
+            self.image_rating.video.activateWindow()  # делает окно рейтинга активным
 
         except (IndexError, FileNotFoundError):
             pass
@@ -304,7 +341,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def add_new_team_ok(self):
         if self.add_team.line_image.displayText() and self.add_team.line_text.displayText():
 
-            prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText()]
+            prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText(), 0, 0, 0, 0]
             index = str(self.v_Layout_frame_items.count() + 1)
 
             self.team = Widget_Team_Button(index, self.add_team.line_text.displayText())
@@ -315,10 +352,14 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.add_team.close()
 
-            self.teams_properties += prop
+            self.teams_properties += [prop]
 
-            self.team_widgets_btn.append(self.team)
-            self.team_widgets_rat.append(self.team_rat)
+            self.team_widgets_btn.append(self.team)  # список виджетов команд с кнопками
+            self.team_widgets_rat.append(self.team_rat)  # список виджетов команд с банерами
+
+            val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
+            self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
+            self.image_rating.video.activateWindow()  # делает окно рейтинга активным
 
             self.click_team_widget()
 
@@ -328,8 +369,9 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         for i in pos:
             self.team_widgets_btn.pop(i-1)
             self.team_widgets_rat.pop(i-1)
-            self.teams_properties.pop((i-1) * 2)
-            self.teams_properties.pop((i-1) * 2)
+
+            for _ in range(6):
+                self.teams_properties.pop((i-1) * 6)
 
             team_btn = self.v_Layout_frame_items.itemAt(i - 1).widget()  # удаляет виджет с кнопкой
             self.v_Layout_frame_items.removeWidget(team_btn)
@@ -374,15 +416,33 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         team_w_rat = self.team_widgets_rat.pop(index_1 - 1)
         self.team_widgets_rat.insert(index_2 - 1, team_w_rat)
 
-        team_p1_1 = self.teams_properties.pop(index_1 * 2 - 2)
-        team_p1_2 = self.teams_properties.pop(index_1 * 2 - 2)
-        team_p2_1 = self.teams_properties.pop(index_2 * 2 - 2)
-        team_p2_2 = self.teams_properties.pop(index_2 * 2 - 2)
+        team_p1_1 = self.teams_properties.pop(index_1 * 6 - 6)
+        team_p1_2 = self.teams_properties.pop(index_1 * 6 - 6)
+        team_p1_3 = self.teams_properties.pop(index_1 * 6 - 6)
+        team_p1_4 = self.teams_properties.pop(index_1 * 6 - 6)
+        team_p1_5 = self.teams_properties.pop(index_1 * 6 - 6)
+        team_p1_6 = self.teams_properties.pop(index_1 * 6 - 6)
 
-        self.teams_properties.insert(index_2 * 2 - 2, team_p1_2)
-        self.teams_properties.insert(index_2 * 2 - 2, team_p1_1)
-        self.teams_properties.insert(index_1 * 2 - 2, team_p2_2)
-        self.teams_properties.insert(index_1 * 2 - 2, team_p2_1)
+        team_p2_1 = self.teams_properties.pop(index_2 * 6 - 6)
+        team_p2_2 = self.teams_properties.pop(index_2 * 6 - 6)
+        team_p2_3 = self.teams_properties.pop(index_2 * 6 - 6)
+        team_p2_4 = self.teams_properties.pop(index_2 * 6 - 6)
+        team_p2_5 = self.teams_properties.pop(index_2 * 6 - 6)
+        team_p2_6 = self.teams_properties.pop(index_2 * 6 - 6)
+
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_6)
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_5)
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_4)
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_3)
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_2)
+        self.teams_properties.insert(index_2 * 6 - 6, team_p1_1)
+
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_6)
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_5)
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_4)
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_3)
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_2)
+        self.teams_properties.insert(index_1 * 6 - 6, team_p2_1)
 
         clear_layout(self.v_Layout_frame_items)
         clear_layout(self.image_rating.v_Layout_grb_items_rat)
@@ -432,10 +492,18 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 team_w_rat = self.team_widgets_rat.pop(index)
                 self.team_widgets_rat.insert(position, team_w_rat)
 
-                team_p1 = self.teams_properties.pop(index * 2)
-                team_p2 = self.teams_properties.pop(index * 2)
-                self.teams_properties.insert(position * 2, team_p2)
-                self.teams_properties.insert(position * 2, team_p1)
+                team_p1 = self.teams_properties.pop(index * 6)
+                team_p2 = self.teams_properties.pop(index * 6)
+                team_p3 = self.teams_properties.pop(index * 6)
+                team_p4 = self.teams_properties.pop(index * 6)
+                team_p5 = self.teams_properties.pop(index * 6)
+                team_p6 = self.teams_properties.pop(index * 6)
+                self.teams_properties.insert(position * 6, team_p6)
+                self.teams_properties.insert(position * 6, team_p5)
+                self.teams_properties.insert(position * 6, team_p4)
+                self.teams_properties.insert(position * 6, team_p3)
+                self.teams_properties.insert(position * 6, team_p2)
+                self.teams_properties.insert(position * 6, team_p1)
 
                 clear_layout(self.v_Layout_frame_items)
                 clear_layout(self.image_rating.v_Layout_grb_items_rat)

@@ -10,7 +10,7 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating
+from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating, Ui_Menu_Team
 
 
 def clear_layout(layout):
@@ -26,7 +26,7 @@ def clear_layout(layout):
 
 def team_widgets(list_str, layout):
     widgets = []
-    for i in list_str[1:len(list_str) + 1:2]:
+    for i in list_str[1:len(list_str) + 1:6]:
         index = str(layout.count() + 1)
         team = Widget_Team_Button(index, i)
         layout.addWidget(team)
@@ -36,10 +36,15 @@ def team_widgets(list_str, layout):
 
 def team_widgets_rat(list_str, layout):
     widgets = []
-    for i in list_str[:len(list_str) + 1:2]:
+    for i in list_str[:len(list_str) + 1:6]:
         team = Widget_Team_Rating(i)
+        # scale = float(list_str[2])
+        # pixmap1 = team.pixmap1.scaledToWidth(scale)
+        # team.image_team.setPixmap(pixmap1)
+
         layout.addWidget(team)
         widgets.append(team)  # создаем список с виджетами команд
+
     return widgets
 
 
@@ -240,6 +245,16 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         self.close()
 
 
+class Menu_Team(QtWidgets.QDialog, Ui_Menu_Team):
+    def __init__(self):
+        super(Menu_Team, self).__init__()
+
+        self.setupUi(self)
+
+    def menu_cancel(self):
+        self.close()
+
+
 class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
     def __init__(self, index, name):
         super(Widget_Team_Button, self).__init__()
@@ -249,53 +264,6 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         # # кнопка с названием команды
         self.btn_Team.setText(index)
         self.label_name_team.setText(name)
-
-        # self.btn_Team.customContextMenuRequested.connect(self.show_context_menu)
-
-        # self.edt_team.triggered.connect(lambda: self.editing_team(list_str))
-        # self.itm_scale.triggered.connect(self.item_scale)
-        # self.pos_scale.triggered.connect(self.position_scale)
-        # self.pos_offset.triggered.connect(self.position_offset)
-        # self.rem_team.triggered.connect(self.right_click_remove_team)
-
-    # def edit_team_brow_img(self):
-    #     # if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):
-    #     #     self.player_1, self.player_2 = start_player()  # func dll.start_player
-    #     # else:
-    #     #     self.pref.line_back_video.clear()
-    #     #     self.pref.line_back_image.clear()
-    #     #     self.pref.line_logo_video.clear()
-    #     pass
-
-    # def add_new_team_ok(self):
-    #     if self.edit_team.line_image.displayText() and self.edit_team.line_text.displayText():
-    #         prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText()]
-    #         index = str(self.v_Layout_frame_items.count() + 1)
-    #
-    #         self.team = Widget_Team_Button(index, self.add_team.line_text.displayText())
-    #         self.v_Layout_frame_items.addWidget(self.team)
-    #
-    #         self.team_rat = Widget_Team_Rating(self.add_team.line_image.displayText())
-    #         self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat)
-    #
-    #         self.add_team.close()
-    #
-    #         self.teams_properties += prop
-    #
-    #         self.team_widgets_btn.append(self.team)
-    #         self.team_widgets_rat.append(self.team_rat)
-    #
-    #         self.click_team_widget()
-    #
-    # def add_check(self):
-    #     try:
-    #         if self.team:
-    #             self.add_team.close()
-    #     except AttributeError:
-    #         self.add_team.add_team_save()
-    #         self.team = Widget_Team(self.add_team.line_text.displayText())
-    #         self.v_Layout_frame_items.addWidget(self.team)
-    #         self.add_team.close()
 
 
 class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
