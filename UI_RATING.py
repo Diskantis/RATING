@@ -725,31 +725,32 @@ class Ui_Menu_Team(object):
         font = QtGui.QFont()
         font.setPointSize(10)
 
-        self.grb_item_scale = QtWidgets.QGroupBox(Menu_Team)
-        self.grb_item_scale.setGeometry(QtCore.QRect(10, 10, 280, 90))
+        self.grb_menu_parameter = QtWidgets.QGroupBox(Menu_Team)
+        self.grb_menu_parameter.setGeometry(QtCore.QRect(10, 10, 280, 90))
         font_grp = QtGui.QFont()
         font_grp.setPointSize(10)
         font_grp.setBold(True)
         font_grp.setUnderline(True)
-        self.grb_item_scale.setFont(font_grp)
-        self.grb_item_scale.setStyleSheet("QGroupBox {border-radius: 5px; border: 1px solid rgba(209, 209, 217, 240);} ")
-        self.grb_item_scale.setAlignment(QtCore.Qt.AlignCenter)
-        self.grb_item_scale.setObjectName("grb_team_prp")
+        self.grb_menu_parameter.setFont(font_grp)
+        self.grb_menu_parameter.setStyleSheet("QGroupBox {border-radius: 5px; "
+                                              "border: 1px solid rgba(209, 209, 217, 240);}")
+        self.grb_menu_parameter.setAlignment(QtCore.Qt.AlignCenter)
+        self.grb_menu_parameter.setObjectName("grb_team_prp")
 
-        self.label_scale = QtWidgets.QLabel(self.grb_item_scale)
-        self.label_scale.setGeometry(QtCore.QRect(12, 20, 255, 30))
-        self.label_scale.setFont(font)
-        self.label_scale.setObjectName("label_text")
+        self.label_parameter = QtWidgets.QLabel(self.grb_menu_parameter)
+        self.label_parameter.setGeometry(QtCore.QRect(12, 20, 255, 30))
+        self.label_parameter.setFont(font)
+        self.label_parameter.setObjectName("label_text")
 
-        self.line_scale = QtWidgets.QLineEdit(self.grb_item_scale)
-        self.line_scale.setGeometry(QtCore.QRect(12, 50, 255, 30))
-        self.line_scale.setFont(font)
-        self.line_scale.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
-                                     "border: 1px solid rgba(50, 50, 50, 240); "
-                                     "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                                     "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                                     "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
-        self.line_scale.setObjectName("line_text")
+        self.line_parameter = QtWidgets.QLineEdit(self.grb_menu_parameter)
+        self.line_parameter.setGeometry(QtCore.QRect(12, 50, 255, 30))
+        self.line_parameter.setFont(font)
+        self.line_parameter.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                          "border: 1px solid rgba(50, 50, 50, 240); "
+                                          "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                          "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+                                          "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.line_parameter.setObjectName("line_text")
 
         # FRAME OK ADD_NEW_ITEM
         self.frame_ok = QtWidgets.QFrame(Menu_Team)
@@ -782,8 +783,8 @@ class Ui_Menu_Team(object):
     def retranslateUi(self, Menu_Team):
         _translate = QtCore.QCoreApplication.translate
         Menu_Team.setWindowTitle(_translate("Menu_Team", "Set scale"))
-        self.grb_item_scale.setTitle(_translate("Menu_Team", "Item Scale"))
-        self.label_scale.setText(_translate("Menu_Team", "Enter scale:"))
+        self.grb_menu_parameter.setTitle(_translate("Menu_Team", "Item Scale"))
+        self.label_parameter.setText(_translate("Menu_Team", "Enter scale:"))
 
         self.btn_cancel.setText(_translate("Menu_Team", "Cancel"))
         self.btn_ok.setText(_translate("Menu_Team", "OK"))
@@ -844,11 +845,7 @@ class Ui_Widget_Team_Button(object):
 class Ui_Widget_Team_Rating(object):
     def setupUi(self, Widget_Team_Rating):
 
-        self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(Widget_Team_Rating)
-        self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
-        self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
-
         self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
-        self.image_team.setAlignment(QtCore.Qt.AlignCenter)
+        self.image_team.setScaledContents(True)
+        self.image_team.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.image_team.setObjectName("image_team")
-        self.v_Layout_widget_team_rating.addWidget(self.image_team)

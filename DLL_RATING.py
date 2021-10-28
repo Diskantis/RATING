@@ -38,11 +38,12 @@ def team_widgets_rat(list_str, layout):
     widgets = []
     for i in list_str[:len(list_str) + 1:6]:
         team = Widget_Team_Rating(i)
-        # scale = float(list_str[2])
-        # pixmap1 = team.pixmap1.scaledToWidth(scale)
-        # team.image_team.setPixmap(pixmap1)
-
-        layout.addWidget(team)
+        scale = float(list_str[2])
+        pixmap1 = QPixmap(i)
+        width = pixmap1.width()
+        height = pixmap1.height()
+        team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
+        layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
         widgets.append(team)  # создаем список с виджетами команд
 
     return widgets
@@ -127,7 +128,9 @@ class ImagePlayer:
 
             # слой вертекального выравнивания группы виджетов команд
             self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
+            self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
             self.v_Layout_grb_items_rat.setContentsMargins(0, 0, 0, 0)
+            self.v_Layout_grb_items_rat.setSpacing(0)
             self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
 
         if path is not None:
@@ -272,6 +275,10 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
 
         self.setupUi(self)
 
+        self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(self)
+        self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
+        self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
+
         self.pixmap1 = QPixmap(path)
-        # self.pixmap1 = self.pixmap1.scaledToWidth(400)
         self.image_team.setPixmap(self.pixmap1)
+        self.v_Layout_widget_team_rating.addWidget(self.image_team)

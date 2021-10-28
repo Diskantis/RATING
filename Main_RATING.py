@@ -2,7 +2,8 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QTranslator
 
@@ -126,18 +127,16 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.click_team_widget()
 
     def right_click_item_scale(self):
-        print("item_scale")
         self.item_scale = Menu_Team()
+        self.item_scale.setWindowTitle("Set position scale")
+        self.item_scale.grb_menu_parameter.setTitle("Position Scale")
+        self.item_scale.label_parameter.setText("Enter position scale:")
+
         self.item_scale.show()
 
         index = self.index_btn - 1
         item_scale = float(self.teams_properties[index * 6 + 2])
-        self.item_scale.line_scale.setText(str(item_scale))
-
-        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(self.index_btn-1).widget()
-
-        # self.pixmap1 = self.team.pixmap1.scaledToWidth(item_scale * 1000)
-        # self.team.image_team.setPixmap(self.pixmap1)
+        self.item_scale.line_parameter.setText(str(item_scale))
 
         self.item_scale.btn_ok.clicked.connect(self.right_click_item_scale_ok)  # button OK
         self.item_scale.btn_ok.setAutoDefault(True)
@@ -146,29 +145,51 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale_ok(self):
         index = self.index_btn - 1
-        scale = float(self.item_scale.line_scale.displayText())
+        scale = float(self.item_scale.line_parameter.displayText())
         print(scale)
+
         self.teams_properties[index * 6 + 2] = scale
 
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-        self.pixmap1 = self.team.pixmap1.scaledToWidth(scale * 1000)
-        self.team.image_team.setPixmap(self.pixmap1)
+        i = self.teams_properties[index * 6]
+        pixmap1 = QPixmap(i)
+        width,  = pixmap1.width()
+        height = pixmap1.height()
+        self.team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
 
         self.item_scale.close()
 
     def right_click_position_scale(self):
-        print("position_scale")
         self.position_scale = Menu_Team()
         self.position_scale.show()
 
-        # self.position_scale.retranslateUi(Menu_Team)
-        # Menu_Team.setWindowTitle(_translate("Menu_Team", "Set scale"))
-        # self.grb_item_scale.setTitle(_translate("Menu_Team", "Item Scale"))
-        # self.label_scale.setText(_translate("Menu_Team", "Enter scale:"))
-        pass
+        index = self.index_btn - 1
+        position_scale = float(self.teams_properties[index * 6 + 3])
+        self.position_scale.line_parameter.setText(str(position_scale))
+
+        self.position_scale.btn_ok.clicked.connect(self.right_click_position_scale_ok)  # button OK
+        self.position_scale.btn_ok.setAutoDefault(True)
+
+        self.position_scale.btn_cancel.clicked.connect(self.position_scale.menu_cancel)  # button
+
+    def right_click_position_scale_ok(self):
+        index = self.index_btn - 1
+        scale = float(self.position_scale.line_parameter.displayText())
+
+        self.teams_properties[index * 6 + 3] = scale
+
+        scale = int(scale * 1000)
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
+        self.pixmap1 = self.team.pixmap1.scaledToWidth(scale)
+        self.team.image_team.setPixmap(self.pixmap1)
+
+        self.position_scale.close()
 
     def right_click_position_offset(self):
-        print("position_offset")
+        # print("position_offset")
+        pass
+
+    def right_click_position_offset_ok(self):
         pass
 
     def right_click_remove_team(self):
@@ -348,7 +369,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             self.v_Layout_frame_items.addWidget(self.team)
 
             self.team_rat = Widget_Team_Rating(self.add_team.line_image.displayText())
-            self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat)
+            self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat)  # , 0, QtCore.Qt.AlignHCenter
 
             self.add_team.close()
 
