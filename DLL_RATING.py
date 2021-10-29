@@ -36,15 +36,17 @@ def team_widgets(list_str, layout):
 
 def team_widgets_rat(list_str, layout):
     widgets = []
+    itr = 2
     for i in list_str[:len(list_str) + 1:6]:
         team = Widget_Team_Rating(i)
-        scale = float(list_str[2])
+        layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
+        widgets.append(team)
+        scale = float(list_str[itr])
+        itr += 6
         pixmap1 = QPixmap(i)
         width = pixmap1.width()
         height = pixmap1.height()
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
-        layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
-        widgets.append(team)  # создаем список с виджетами команд
 
     return widgets
 
@@ -84,11 +86,11 @@ class VideoPlayer:
         self.video.setObjectName("VideoPlayer")
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        self.video.move(1920, 0)
-        self.video.setFixedSize(1920, 1080)
-        self.video.setFullScreen(True)
-        # self.video.resize(749, 421)
-        # self.video.move(1100, 10)
+        # self.video.move(1920, 0)
+        # self.video.setFixedSize(1920, 1080)
+        # self.video.setFullScreen(True)
+        self.video.resize(749, 421)
+        self.video.move(1100, 10)
 
         if path is not None:
             self.playlist = QMediaPlaylist()
@@ -117,7 +119,7 @@ class ImagePlayer:
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.setFixedSize(1920, 1080)
-        self.video.move(1920, 0)
+        # self.video.move(1920, 0)
         # self.video.resize(749, 421)
         # self.video.move(1100, 10)
 

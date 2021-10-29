@@ -779,6 +779,7 @@ class Ui_Menu_Team(object):
 
         self.retranslateUi(Menu_Team)
         QtCore.QMetaObject.connectSlotsByName(Menu_Team)
+        Menu_Team.setTabOrder(self.btn_ok, self.btn_cancel)
 
     def retranslateUi(self, Menu_Team):
         _translate = QtCore.QCoreApplication.translate

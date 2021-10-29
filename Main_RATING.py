@@ -95,7 +95,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_edit_team(self):
         index = self.index_btn - 1
-        team_path_img, team_name = self.teams_properties[index * 2], self.teams_properties[index * 2 + 1]
+        team_path_img, team_name = self.teams_properties[index * 6], self.teams_properties[index * 6 + 1]
 
         self.edit_team = Add_Team()
         self.edit_team.setWindowTitle("Edit team")
@@ -113,8 +113,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def right_click_edit_team_ok(self):
         index = self.index_btn-1
 
-        self.teams_properties[index * 2] = self.edit_team.line_image.displayText()
-        self.teams_properties[index * 2 + 1] = self.edit_team.line_text.displayText()
+        self.teams_properties[index * 6] = self.edit_team.line_image.displayText()
+        self.teams_properties[index * 6 + 1] = self.edit_team.line_text.displayText()
 
         clear_layout(self.v_Layout_frame_items)
         clear_layout(self.image_rating.v_Layout_grb_items_rat)
@@ -146,14 +146,12 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def right_click_item_scale_ok(self):
         index = self.index_btn - 1
         scale = float(self.item_scale.line_parameter.displayText())
-        print(scale)
 
         self.teams_properties[index * 6 + 2] = scale
 
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-        i = self.teams_properties[index * 6]
-        pixmap1 = QPixmap(i)
-        width,  = pixmap1.width()
+        pixmap1 = QPixmap(self.teams_properties[index * 6])
+        width = pixmap1.width()
         height = pixmap1.height()
         self.team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
 
@@ -362,14 +360,15 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
     def add_new_team_ok(self):
         if self.add_team.line_image.displayText() and self.add_team.line_text.displayText():
 
-            prop = [self.add_team.line_image.displayText(), self.add_team.line_text.displayText(), 0, 0, 0, 0]
+            prop = [self.add_team.line_image.displayText(),
+                    self.add_team.line_text.displayText(), "1.0", "1.0", "0", "0"]
             index = str(self.v_Layout_frame_items.count() + 1)
 
             self.team = Widget_Team_Button(index, self.add_team.line_text.displayText())
             self.v_Layout_frame_items.addWidget(self.team)
 
             self.team_rat = Widget_Team_Rating(self.add_team.line_image.displayText())
-            self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat)  # , 0, QtCore.Qt.AlignHCenter
+            self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat, 0, QtCore.Qt.AlignHCenter)
 
             self.add_team.close()
 
