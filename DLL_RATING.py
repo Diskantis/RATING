@@ -26,9 +26,9 @@ def clear_layout(layout):
 
 def team_widgets(list_str, layout):
     widgets = []
-    for i in list_str[1:len(list_str) + 1:6]:
+    for i in list_str[:len(list_str) + 1:]:
         index = str(layout.count() + 1)
-        team = Widget_Team_Button(index, i)
+        team = Widget_Team_Button(index, i[1])
         layout.addWidget(team)
         widgets.append(team)  # создаем список с виджетами команд
     return widgets
@@ -36,18 +36,15 @@ def team_widgets(list_str, layout):
 
 def team_widgets_rat(list_str, layout):
     widgets = []
-    itr = 2
-    for i in list_str[:len(list_str) + 1:6]:
-        team = Widget_Team_Rating(i)
+    for i in enumerate(list_str[:len(list_str) + 1:]):
+        team = Widget_Team_Rating(i[1][0])
         layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
         widgets.append(team)
-        scale = float(list_str[itr])
-        itr += 6
-        pixmap1 = QPixmap(i)
+        scale = i[1][2]
+        pixmap1 = QPixmap(i[1][0])
         width = pixmap1.width()
         height = pixmap1.height()
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
-
     return widgets
 
 

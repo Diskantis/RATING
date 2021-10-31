@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ast
 import os
 import sys
 
@@ -90,12 +91,12 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         sender = self.sender()
         self.index_btn = int(sender.text())
 
-        self.team = self.v_Layout_frame_items.itemAt(self.index_btn-1).widget()
+        self.team = self.v_Layout_frame_items.itemAt(self.index_btn - 1).widget()
         self.team.menuTeam.exec(self.team.btn_Team.mapToGlobal(point))
 
     def right_click_edit_team(self):
         index = self.index_btn - 1
-        team_path_img, team_name = self.teams_properties[index * 6], self.teams_properties[index * 6 + 1]
+        team_path_img, team_name = self.teams_properties[index][0], self.teams_properties[index][1]
 
         self.edit_team = Add_Team()
         self.edit_team.setWindowTitle("Edit team")
@@ -111,10 +112,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.edit_team.btn_cancel.clicked.connect(self.edit_team.add_cancel)  # button CANCEL
 
     def right_click_edit_team_ok(self):
-        index = self.index_btn-1
+        index = self.index_btn - 1
 
-        self.teams_properties[index * 6] = self.edit_team.line_image.displayText()
-        self.teams_properties[index * 6 + 1] = self.edit_team.line_text.displayText()
+        self.teams_properties[index][0] = self.edit_team.line_image.displayText()
+        self.teams_properties[index][1] = self.edit_team.line_text.displayText()
 
         clear_layout(self.v_Layout_frame_items)
         clear_layout(self.image_rating.v_Layout_grb_items_rat)
@@ -135,7 +136,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.item_scale.show()
 
         index = self.index_btn - 1
-        item_scale = float(self.teams_properties[index * 6 + 2])
+        item_scale = self.teams_properties[index][2]
         self.item_scale.line_parameter.setText(str(item_scale))
 
         self.item_scale.btn_ok.clicked.connect(self.right_click_item_scale_ok)  # button OK
@@ -147,10 +148,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         index = self.index_btn - 1
         scale = float(self.item_scale.line_parameter.displayText())
 
-        self.teams_properties[index * 6 + 2] = scale
+        self.teams_properties[index][2] = scale
 
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-        pixmap1 = QPixmap(self.teams_properties[index * 6])
+        pixmap1 = QPixmap(self.teams_properties[index][0])
         width = pixmap1.width()
         height = pixmap1.height()
         self.team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
@@ -252,8 +253,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             list_str = []
             with open(path_op_preset, "r") as f:
                 for line in f.readlines():
-                    line = line.strip("\n")
-                    list_str.append(line)
+                    line1 = ast.literal_eval(line)
+                    list_str.append(line1)
 
             self.teams_properties = list_str
 
@@ -279,6 +280,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             with open(path_sv_preset, "w") as f:
                 for line in teams_properties:
                     f.write(f'{line}\n')
+
         except (IndexError, FileNotFoundError):
             pass
 
@@ -359,20 +361,24 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def add_new_team_ok(self):
         if self.add_team.line_image.displayText() and self.add_team.line_text.displayText():
-
             prop = [self.add_team.line_image.displayText(),
-                    self.add_team.line_text.displayText(), "1.0", "1.0", "0", "0"]
+                    self.add_team.line_text.displayText(), 1.0, 1.0, 0, 0]
             index = str(self.v_Layout_frame_items.count() + 1)
+
+            self.teams_properties += [prop]
 
             self.team = Widget_Team_Button(index, self.add_team.line_text.displayText())
             self.v_Layout_frame_items.addWidget(self.team)
 
             self.team_rat = Widget_Team_Rating(self.add_team.line_image.displayText())
+            scale = float(self.teams_properties[int(index) - 1][2])
+            pixmap = QPixmap(self.teams_properties[int(index) - 1][0])
+            width = pixmap.width()
+            height = pixmap.height()
+            self.team_rat.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
             self.image_rating.v_Layout_grb_items_rat.addWidget(self.team_rat, 0, QtCore.Qt.AlignHCenter)
 
             self.add_team.close()
-
-            self.teams_properties += [prop]
 
             self.team_widgets_btn.append(self.team)  # список виджетов команд с кнопками
             self.team_widgets_rat.append(self.team_rat)  # список виджетов команд с банерами
@@ -387,11 +393,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos = list(self.select_team.keys())
         pos.sort(reverse=True)
         for i in pos:
-            self.team_widgets_btn.pop(i-1)
-            self.team_widgets_rat.pop(i-1)
+            self.team_widgets_btn.pop(i - 1)
+            self.team_widgets_rat.pop(i - 1)
 
-            for _ in range(6):
-                self.teams_properties.pop((i-1) * 6)
+            self.teams_properties.pop(i - 1)
 
             team_btn = self.v_Layout_frame_items.itemAt(i - 1).widget()  # удаляет виджет с кнопкой
             self.v_Layout_frame_items.removeWidget(team_btn)
@@ -425,11 +430,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         team_replace = self.v_Layout_frame_items.replaceWidget(team_2_btn, team_1_btn)  # Item с виджетом team_2_btn
         self.v_Layout_frame_items.insertWidget(index_1 - 1, team_replace.widget())  # вставляем виджет team_2_btn
 
-        team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1-1).widget()
-        team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2-1).widget()
+        team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget()
+        team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2 - 1).widget()
 
         team_replace_rat = self.image_rating.v_Layout_grb_items_rat.replaceWidget(team_2_rat, team_1_rat)
-        self.image_rating.v_Layout_grb_items_rat.insertWidget(index_1-1, team_replace_rat.widget())
+        self.image_rating.v_Layout_grb_items_rat.insertWidget(index_1 - 1, team_replace_rat.widget())
 
         team_w_btn = self.team_widgets_btn.pop(index_1 - 1)
         self.team_widgets_btn.insert(index_2 - 1, team_w_btn)
@@ -480,9 +485,9 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.click_team_widget()
 
     def move_team(self):
-        index = (list(self.select_team.keys())[0])-1  # инедкс виджета выбраного для перемещения
+        index = (list(self.select_team.keys())[0]) - 1  # инедкс виджета выбраного для перемещения
         try:
-            position = (int(self.lineEdit_Pos.displayText()))-1  # номер позиции куда перемещаем виджет
+            position = (int(self.lineEdit_Pos.displayText())) - 1  # номер позиции куда перемещаем виджет
 
             if 0 <= position <= self.v_Layout_frame_items.count():
                 if position <= 1:
@@ -498,14 +503,14 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
                 elif position < self.v_Layout_frame_items.count():
                     team_1 = self.v_Layout_frame_items.itemAt(index).widget()
-                    team_2 = self.v_Layout_frame_items.itemAt(position-1).widget()
+                    team_2 = self.v_Layout_frame_items.itemAt(position - 1).widget()
                     team_replace = self.v_Layout_frame_items.replaceWidget(team_2, team_1)
-                    self.v_Layout_frame_items.insertWidget(position-1, team_replace.widget())
+                    self.v_Layout_frame_items.insertWidget(position - 1, team_replace.widget())
 
                     team_1 = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-                    team_2 = self.image_rating.v_Layout_grb_items_rat.itemAt(position-1).widget()
+                    team_2 = self.image_rating.v_Layout_grb_items_rat.itemAt(position - 1).widget()
                     team_replace = self.image_rating.v_Layout_grb_items_rat.replaceWidget(team_2, team_1)
-                    self.image_rating.v_Layout_grb_items_rat.insertWidget(position-1, team_replace.widget())
+                    self.image_rating.v_Layout_grb_items_rat.insertWidget(position - 1, team_replace.widget())
 
                 team_w_btn = self.team_widgets_btn.pop(index)
                 self.team_widgets_btn.insert(position, team_w_btn)
@@ -536,7 +541,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
                 team_2 = self.v_Layout_frame_items.itemAt(position).widget()
                 team_2.btn_Team.setChecked(True)
-                self.select_team[position+1] = True
+                self.select_team[position + 1] = True
 
                 self.lineEdit_Pos.setText("")
 
