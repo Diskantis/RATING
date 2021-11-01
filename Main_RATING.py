@@ -202,11 +202,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_position_offset_ok(self):
         index = self.index_btn - 1
-        offset_dX = int(self.position_offset.line_dX.displayText())
-        offset_dY = int(self.position_offset.line_dY.displayText())
+        offset_dx = int(self.position_offset.line_dX.displayText())
+        offset_dy = int(self.position_offset.line_dY.displayText())
 
-        self.teams_properties[index][4] += offset_dX
-        self.teams_properties[index][5] += offset_dY
+        self.teams_properties[index][4] += offset_dx
+        self.teams_properties[index][5] += offset_dy
 
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
         pos_x = self.team.x()
@@ -214,7 +214,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pixmap1 = QPixmap(self.teams_properties[index][0])
         width = pixmap1.width()
         height = pixmap1.height()
-        self.team.setGeometry(QtCore.QRect(pos_x + offset_dX, pos_y + offset_dY, width, height))
+        self.team.setGeometry(QtCore.QRect(pos_x + offset_dx, pos_y + offset_dy, width, height))
 
         self.position_offset.close()
 
