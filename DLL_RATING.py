@@ -3,7 +3,7 @@ import ast
 import os
 import re
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
@@ -252,6 +252,51 @@ class Menu_Team(QtWidgets.QDialog, Ui_Menu_Team):
         super(Menu_Team, self).__init__()
 
         self.setupUi(self)
+
+    def menu_cancel(self):
+        self.close()
+
+
+class Position_Offset(Menu_Team):
+    def __init__(self):
+        super(Menu_Team, self).__init__()
+
+        self.setupUi(self)
+
+        self.resize(300, 170)
+        self.setMinimumSize(QtCore.QSize(300, 170))
+        self.setMaximumSize(QtCore.QSize(300, 170))
+        self.setWindowTitle("Set position offset")
+        self.grb_menu_parameter.setTitle("Position Offset")
+
+        self.grb_menu_parameter.setGeometry(QtCore.QRect(10, 10, 280, 110))
+
+        self.label_dX = self.label_parameter
+        self.label_dX.setGeometry(QtCore.QRect(10, 30, 30, 30))
+        self.label_dX.setText("dX:")
+
+        self.line_dX = self.line_parameter
+        self.line_dX.setGeometry(QtCore.QRect(35, 30, 232, 30))
+
+        self.label_dY = QtWidgets.QLabel(self.grb_menu_parameter)
+        self.label_dY.setGeometry(QtCore.QRect(10, 70, 30, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_dY.setFont(font)
+        self.label_dY.setText("dY:")
+        self.label_dY.setObjectName("label_text")
+
+        self.line_dY = QtWidgets.QLineEdit(self.grb_menu_parameter)
+        self.line_dY.setGeometry(QtCore.QRect(35, 70, 232, 30))
+        self.line_dY.setFont(font)
+        self.line_dY.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+                                   "border: 1px solid rgba(50, 50, 50, 240); "
+                                   "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+                                   "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255),"
+                                   "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.line_dY.setObjectName("line_text")
+
+        self.frame_ok.setGeometry(QtCore.QRect(0, 120, 300, 50))
 
     def menu_cancel(self):
         self.close()

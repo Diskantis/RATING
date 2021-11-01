@@ -10,7 +10,7 @@ from PyQt5.QtCore import QTranslator
 
 from UI_RATING import Ui_MainWindow, Ui_About
 from DLL_RATING import clear_layout, team_widgets, team_widgets_rat, read_reference, start_player, \
-    ImagePlayer, Preference, Add_Team, Menu_Team, Widget_Team_Button, Widget_Team_Rating
+    ImagePlayer, Preference, Add_Team, Menu_Team, Widget_Team_Button, Widget_Team_Rating, Position_Offset
 
 
 class MainRATING(QMainWindow, Ui_MainWindow, ):
@@ -129,9 +129,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale(self):
         self.item_scale = Menu_Team()
-        self.item_scale.setWindowTitle("Set position scale")
-        self.item_scale.grb_menu_parameter.setTitle("Position Scale")
-        self.item_scale.label_parameter.setText("Enter position scale:")
 
         self.item_scale.show()
 
@@ -160,10 +157,13 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_position_scale(self):
         self.position_scale = Menu_Team()
+        self.position_scale.setWindowTitle("Set position scale")
+        self.position_scale.grb_menu_parameter.setTitle("Position Scale")
+        self.position_scale.label_parameter.setText("Enter position scale:")
         self.position_scale.show()
 
         index = self.index_btn - 1
-        position_scale = float(self.teams_properties[index * 6 + 3])
+        position_scale = self.teams_properties[index][3]
         self.position_scale.line_parameter.setText(str(position_scale))
 
         self.position_scale.btn_ok.clicked.connect(self.right_click_position_scale_ok)  # button OK
@@ -175,7 +175,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         index = self.index_btn - 1
         scale = float(self.position_scale.line_parameter.displayText())
 
-        self.teams_properties[index * 6 + 3] = scale
+        self.teams_properties[index][3] = scale
 
         scale = int(scale * 1000)
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
@@ -185,11 +185,38 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.position_scale.close()
 
     def right_click_position_offset(self):
-        # print("position_offset")
-        pass
+        self.position_offset = Position_Offset()
+        self.position_offset.show()
+
+        index = self.index_btn - 1
+        position_dX = self.teams_properties[index][4]
+        position_dY = self.teams_properties[index][5]
+
+        self.position_offset.line_dX.setText(str(position_dX))
+        self.position_offset.line_dY.setText(str(position_dY))
+
+        self.position_offset.btn_ok.clicked.connect(self.right_click_position_offset_ok)  # button OK
+        self.position_offset.btn_ok.setAutoDefault(True)
+
+        self.position_offset.btn_cancel.clicked.connect(self.position_offset.menu_cancel)  # button
 
     def right_click_position_offset_ok(self):
-        pass
+        index = self.index_btn - 1
+        offset_dX = int(self.position_offset.line_dX.displayText())
+        offset_dY = int(self.position_offset.line_dY.displayText())
+
+        self.teams_properties[index][4] += offset_dX
+        self.teams_properties[index][5] += offset_dY
+
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
+        pos_x = self.team.x()
+        pos_y = self.team.y()
+        pixmap1 = QPixmap(self.teams_properties[index][0])
+        width = pixmap1.width()
+        height = pixmap1.height()
+        self.team.setGeometry(QtCore.QRect(pos_x + offset_dX, pos_y + offset_dY, width, height))
+
+        self.position_offset.close()
 
     def right_click_remove_team(self):
         self.team = self.v_Layout_frame_items.itemAt(self.index_btn - 1).widget()
