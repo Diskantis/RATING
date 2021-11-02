@@ -37,33 +37,32 @@ def team_widgets(list_str, layout):
 def team_widgets_rat(list_str, layout):
     widgets = []
     for i in enumerate(list_str[:len(list_str) + 1:]):
+
         team = Widget_Team_Rating(i[1][0])
         layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
         widgets.append(team)
-        scale = i[1][2]
 
-        # pos_scale = i[1][3]
-        # offset_dx = i[1][4]
-        # offset_dy = i[1][5]
+        scale = i[1][2]
+        pos_scale = i[1][3]
+        offset_dx = i[1][4]
+        offset_dy = i[1][5]
+
         # pos_x = team.x()
         # pos_y = team.y()
         # print(pos_x)
         # print(pos_y)
-        #
+
+        pixmap = QPixmap(i[1][0])
+        pixmap = pixmap.scaledToWidth(int(1000 * pos_scale))
+        team.image_team.setPixmap(pixmap)
+        width = pixmap.width()
+        height = pixmap.height()
+
+        team.setFixedSize(QtCore.QSize(width, height))
+        team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
         # team.setGeometry(QtCore.QRect(pos_x + offset_dx, pos_y + offset_dy, width, height))
 
-        pixmap1 = QPixmap(i[1][0])
-        width = pixmap1.width()
-        height = pixmap1.height()
-
-        team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
     return widgets
-
-
-# def position_offset(list_str):
-#     for i in list_str[:len(list_str) + 1:]:
-#         print(i)
-
 
 
 def read_reference(file_name):

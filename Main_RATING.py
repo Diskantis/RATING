@@ -143,15 +143,15 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale_ok(self):
         index = self.index_btn - 1
-        scale = float(self.item_scale.line_parameter.displayText())
-
-        self.teams_properties[index][2] = scale
-
+        itm_scale = float(self.item_scale.line_parameter.displayText())
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
+
+        self.teams_properties[index][2] = itm_scale
+
         pixmap1 = QPixmap(self.teams_properties[index][0])
         width = pixmap1.width()
         height = pixmap1.height()
-        self.team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
+        self.team.setFixedSize(QtCore.QSize(int(width * itm_scale), int(height * itm_scale)))
 
         self.item_scale.close()
 
@@ -173,14 +173,18 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_position_scale_ok(self):
         index = self.index_btn - 1
-        scale = float(self.position_scale.line_parameter.displayText())
-
-        self.teams_properties[index][3] = scale
-
-        scale = int(scale * 1000)
+        pos_scale = float(self.position_scale.line_parameter.displayText())
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-        self.pixmap1 = self.team.pixmap1.scaledToWidth(scale)
-        self.team.image_team.setPixmap(self.pixmap1)
+
+        self.teams_properties[index][3] = pos_scale
+
+        self.pixmap = self.team.pixmap1.scaledToWidth(int(1000 * pos_scale))
+        self.team.image_team.setPixmap(self.pixmap)
+
+        width = self.pixmap.width()
+        height = self.pixmap.height()
+
+        self.team.setFixedSize(QtCore.QSize(width, height))
 
         self.position_scale.close()
 
@@ -204,13 +208,14 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         index = self.index_btn - 1
         offset_dx = int(self.position_offset.line_dX.displayText())
         offset_dy = int(self.position_offset.line_dY.displayText())
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
 
         self.teams_properties[index][4] += offset_dx
         self.teams_properties[index][5] += offset_dy
 
-        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
         pos_x = self.team.x()
         pos_y = self.team.y()
+
         pixmap1 = QPixmap(self.teams_properties[index][0])
         width = pixmap1.width()
         height = pixmap1.height()
@@ -287,6 +292,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
             self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
+
+            # for i in range(self.image_rating.v_Layout_grb_items_rat.count()):
+            #     team = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
+            #     print(team.geometry())
+                # print(pos_x, pos_y)
 
             val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
             self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
