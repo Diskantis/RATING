@@ -44,23 +44,18 @@ def team_widgets_rat(list_str, layout):
 
         scale = i[1][2]
         pos_scale = i[1][3]
-        offset_dx = i[1][4]
-        offset_dy = i[1][5]
-
-        # pos_x = team.x()
-        # pos_y = team.y()
-        # print(pos_x)
-        # print(pos_y)
 
         pixmap = QPixmap(i[1][0])
-        pixmap = pixmap.scaledToWidth(int(1000 * pos_scale))
+        width = pixmap.width()
+
+        pixmap = pixmap.scaledToWidth(int(width * pos_scale))
         team.image_team.setPixmap(pixmap)
+
         width = pixmap.width()
         height = pixmap.height()
 
         team.setFixedSize(QtCore.QSize(width, height))
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
-        # team.setGeometry(QtCore.QRect(pos_x + offset_dx, pos_y + offset_dy, width, height))
 
     return widgets
 
@@ -144,7 +139,7 @@ class ImagePlayer:
 
             # слой вертекального выравнивания группы виджетов команд
             self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
-            self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+            self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)  # SetDefaultConstraint
             self.v_Layout_grb_items_rat.setContentsMargins(0, 0, 0, 0)
             self.v_Layout_grb_items_rat.setSpacing(0)
             self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
@@ -340,6 +335,6 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
         self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
         self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
 
-        self.pixmap1 = QPixmap(path)
-        self.image_team.setPixmap(self.pixmap1)
+        self.pixmap = QPixmap(path)
+        self.image_team.setPixmap(self.pixmap)
         self.v_Layout_widget_team_rating.addWidget(self.image_team)

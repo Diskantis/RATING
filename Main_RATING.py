@@ -22,7 +22,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.teams_properties = []  # список с параметрами команд кол. команд + (путь к файлу банера и имя команды)
         self.team_widgets_btn = []  # список виджетов команд с кнопками
         self.team_widgets_rat = []  # список виджетов команд с банерами
-        self.select_team = {}
+        self.select_team = {}  # словарь выделенных виджетов
         self.index_btn = None
         self.logo_or_scene = 0
 
@@ -32,6 +32,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         if self.on_last_session:
             self.open_file("saves/autosave.sav")
+            self.asd()
 
         self.action_New.triggered.connect(self.create_new)  # button "New" menu"File"
         self.action_Open.triggered.connect(lambda: self.open_file())  # button "Open" menu "File"
@@ -47,9 +48,9 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.btn_Logo_Rating.clicked.connect(self.logo_rating)  # button "Logo/Rating"
 
     def click_team_widget(self):
+
         if self.team_widgets_btn is not None:
-            for i in self.team_widgets_btn:
-                self.my_widget = i
+            for self.my_widget in self.team_widgets_btn:
                 self.my_widget.btn_Team.clicked.connect(self.left_click_team_widget_btn)
                 self.my_widget.btn_Team.customContextMenuRequested.connect(self.right_click_team_widget_btn)
                 self.my_widget.edt_team.triggered.connect(self.right_click_edit_team)
@@ -96,6 +97,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_edit_team(self):
         index = self.index_btn - 1
+
         team_path_img, team_name = self.teams_properties[index][0], self.teams_properties[index][1]
 
         self.edit_team = Add_Team()
@@ -178,7 +180,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.teams_properties[index][3] = pos_scale
 
-        self.pixmap = self.team.pixmap1.scaledToWidth(int(1000 * pos_scale))
+        width = self.team.pixmap.width()
+        self.pixmap = self.team.pixmap.scaledToWidth(int(width * pos_scale))
         self.team.image_team.setPixmap(self.pixmap)
 
         width = self.pixmap.width()
@@ -193,11 +196,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.position_offset.show()
 
         index = self.index_btn - 1
-        position_dX = self.teams_properties[index][4]
-        position_dY = self.teams_properties[index][5]
+        offset_dx = self.teams_properties[index][4]
+        offset_dy = self.teams_properties[index][5]
 
-        self.position_offset.line_dX.setText(str(position_dX))
-        self.position_offset.line_dY.setText(str(position_dY))
+        self.position_offset.line_dX.setText(str(offset_dx))
+        self.position_offset.line_dY.setText(str(offset_dy))
 
         self.position_offset.btn_ok.clicked.connect(self.right_click_position_offset_ok)  # button OK
         self.position_offset.btn_ok.setAutoDefault(True)
@@ -208,6 +211,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         index = self.index_btn - 1
         offset_dx = int(self.position_offset.line_dX.displayText())
         offset_dy = int(self.position_offset.line_dY.displayText())
+
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
 
         self.teams_properties[index][4] += offset_dx
@@ -216,12 +220,21 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos_x = self.team.x()
         pos_y = self.team.y()
 
-        pixmap1 = QPixmap(self.teams_properties[index][0])
-        width = pixmap1.width()
-        height = pixmap1.height()
-        self.team.setGeometry(QtCore.QRect(pos_x + offset_dx, pos_y + offset_dy, width, height))
+        self.team.move(pos_x + offset_dx, pos_y + offset_dy)
 
         self.position_offset.close()
+
+    def asd(self):
+        for i in range(self.image_rating.v_Layout_grb_items_rat.count()):
+            self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
+
+            offset_dx = self.teams_properties[i][4]
+            offset_dy = self.teams_properties[i][5]
+
+            pos_x = self.team.x()
+            pos_y = self.team.y()
+
+            self.team.move(pos_x + offset_dx, pos_y + offset_dy)
 
     def right_click_remove_team(self):
         self.team = self.v_Layout_frame_items.itemAt(self.index_btn - 1).widget()
@@ -292,11 +305,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
             self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
             self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
-
-            # for i in range(self.image_rating.v_Layout_grb_items_rat.count()):
-            #     team = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
-            #     print(team.geometry())
-                # print(pos_x, pos_y)
 
             val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
             self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
