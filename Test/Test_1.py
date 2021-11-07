@@ -68,36 +68,3 @@ def application():
 
 if __name__ == "__main__":
     application()
-
-
-# class Ui_ImageRating(object):
-#     def setupUi(self, ImageRating):
-#         # Главное окно приложения
-#         ImageRating.setObjectName("ImageRating")
-#         ImageRating.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-#         ImageRating.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-#         ImageRating.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-#         ImageRating.resize(1920, 1080)
-#         ImageRating.move(1920, 0)
-#
-#         # Центральный виджет (все окно)
-#         self.centralwidget = QtWidgets.QWidget(ImageRating)
-#         self.centralwidget.setObjectName("centralwidget")
-#
-#         # слой вертекального выравнивания Центрального виджета (всего окна)
-#         self.v_Layout_centralwidget = QtWidgets.QVBoxLayout(self.centralwidget)
-#         self.v_Layout_centralwidget.setContentsMargins(10, 0, 10, 10)
-#         self.v_Layout_centralwidget.setObjectName("verticalLayout")
-#
-#         # рамочка группы виджетов команд
-#         self.frame_grb_items = QtWidgets.QFrame(self.centralwidget)
-#         self.frame_grb_items.setMinimumSize(QtCore.QSize(580, 450))
-#         self.frame_grb_items.setFrameShape(QtWidgets.QFrame.NoFrame)
-#         self.frame_grb_items.setObjectName("frame_items")
-#
-#         # слой вертекального выравнивания группы виджетов команд
-#         self.v_Layout_grb_items = QtWidgets.QVBoxLayout(self.frame_grb_items)
-#         self.v_Layout_grb_items.setObjectName("v_Layout_grb_items")
-#
-#         # прикрепляет группу виджетов к слою центрального виджета
-#         self.v_Layout_centralwidget.addWidget(self.frame_grb_items)
