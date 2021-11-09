@@ -95,11 +95,11 @@ class VideoPlayer:
         self.video.setObjectName("VideoPlayer")
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
-        # self.video.move(1920, 0)
-        # self.video.setFixedSize(1920, 1080)
-        # self.video.setFullScreen(True)
-        self.video.resize(749, 421)
-        self.video.move(1100, 10)
+        self.video.move(1920, 0)
+        self.video.setFixedSize(1920, 1080)
+        self.video.setFullScreen(True)
+        # self.video.resize(749, 421)
+        # self.video.move(1100, 10)
 
         if path is not None:
             self.playlist = QMediaPlaylist()
@@ -128,7 +128,7 @@ class ImagePlayer:
         self.video.setWindowTitle(name)
         self.video.setWindowFlags(Qt.CustomizeWindowHint | Qt.FramelessWindowHint)
         self.video.setFixedSize(1920, 1080)
-        # self.video.move(1920, 0)
+        self.video.move(1920, 0)
         # self.video.resize(749, 421)
         # self.video.move(1100, 10)
 
