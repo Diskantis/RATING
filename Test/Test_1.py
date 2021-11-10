@@ -18,8 +18,6 @@ class ImageRating(QtWidgets.QWidget):
         self.move(1920, 0)
 
 
-
-
 def application():
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("Fusion")

@@ -51,8 +51,7 @@ def team_widgets_rat(list_str, layout):
         pixmap = pixmap.scaledToWidth(int(width * pos_scale))
         team.image_team.setPixmap(pixmap)
 
-        width = pixmap.width()
-        height = pixmap.height()
+        width, height = pixmap.width(), pixmap.height()
 
         team.setFixedSize(QtCore.QSize(width, height))
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
