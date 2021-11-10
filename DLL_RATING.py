@@ -4,7 +4,7 @@ import os
 import re
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, QTimer
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -37,7 +37,6 @@ def team_widgets(list_str, layout):
 def team_widgets_rat(list_str, layout):
     widgets = []
     for i in enumerate(list_str[:len(list_str) + 1:]):
-
         team = Widget_Team_Rating(i[1][0])
         layout.addWidget(team, 0, QtCore.Qt.AlignHCenter)
         widgets.append(team)
@@ -55,6 +54,17 @@ def team_widgets_rat(list_str, layout):
 
         team.setFixedSize(QtCore.QSize(width, height))
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
+
+        # def offset():
+        #     offset_dx = i[1][4]
+        #     offset_dy = i[1][5]
+        #     team_l = layout.itemAt(i[0]).widget()
+        #     pos_x = team_l.x()
+        #     pos_y = team_l.y()
+        #     print(pos_y)
+        #     team_l.move(pos_x + offset_dx, pos_y + offset_dy)
+        #
+        # QTimer.singleShot(100, offset)
 
     return widgets
 
