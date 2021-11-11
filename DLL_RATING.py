@@ -13,6 +13,13 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating, Ui_Menu_Team
 
 
+def update_layout(time, layout, list_wid_rat, list_prop):
+    def sleep(list_wid):
+        clear_layout(layout)
+        list_wid = team_widgets_rat(list_prop, layout)
+    QTimer.singleShot(time, lambda: sleep(list_wid_rat))
+
+
 def clear_layout(layout):
     if layout is not None:
         while layout.count():
@@ -55,16 +62,17 @@ def team_widgets_rat(list_str, layout):
         team.setFixedSize(QtCore.QSize(width, height))
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
 
-        # def offset():
-        #     offset_dx = i[1][4]
-        #     offset_dy = i[1][5]
-        #     team_l = layout.itemAt(i[0]).widget()
-        #     pos_x = team_l.x()
-        #     pos_y = team_l.y()
-        #     print(pos_y)
-        #     team_l.move(pos_x + offset_dx, pos_y + offset_dy)
-        #
-        # QTimer.singleShot(100, offset)
+    def offset():
+        for ind in enumerate(list_str[:len(list_str) + 1:]):
+            team_l = layout.itemAt(ind[0]).widget()
+            offset_dx = ind[1][4]
+            offset_dy = ind[1][5]
+            pos_x = team_l.x()
+            pos_y = team_l.y()
+
+            team_l.move(pos_x + offset_dx, pos_y + offset_dy)
+
+    QTimer.singleShot(1, offset)
 
     return widgets
 
@@ -194,7 +202,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         try:
             path_vid_1 = QFileDialog.getOpenFileNames(self, caption="Open Video Background", directory="res",
                                                       filter="*.avi *.mov")[0][0]
-
+            path_vid_1 = os.path.normpath(os.path.relpath(path_vid_1, start=None))
             self.line_back_video.setText(path_vid_1)
         except IndexError:
             pass
@@ -203,6 +211,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         try:
             path_img = QFileDialog.getOpenFileNames(self, caption="Open Image Background", directory="res",
                                                     filter="*.jpg *.png")[0][0]
+            path_img = os.path.normpath(os.path.relpath(path_img, start=None))
             self.line_back_image.setText(path_img)
         except IndexError:
             pass
@@ -211,6 +220,7 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         try:
             path_vid_2 = QFileDialog.getOpenFileNames(self, caption="Open Video Logo", directory="res",
                                                       filter="*.avi *.mov")[0][0]
+            path_vid_2 = os.path.normpath(os.path.relpath(path_vid_2, start=None))
             self.line_logo_video.setText(path_vid_2)
         except IndexError:
             pass
@@ -259,6 +269,7 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         try:
             path_image = QFileDialog.getOpenFileNames(self, caption="Open Image Team", directory="res",
                                                       filter="*.jpg *.png")[0][0]
+            path_image = os.path.normpath(os.path.relpath(path_image, start=None))
             self.line_image.setText(path_image)
 
         except IndexError:
@@ -293,14 +304,14 @@ class Position_Offset(Menu_Team):
         self.grb_menu_parameter.setGeometry(QtCore.QRect(10, 10, 280, 110))
 
         self.label_dX = self.label_parameter
-        self.label_dX.setGeometry(QtCore.QRect(10, 30, 30, 30))
+        self.label_dX.setGeometry(QtCore.QRect(10, 30, 60, 30))
         self.label_dX.setText("dX:")
 
         self.line_dX = self.line_parameter
-        self.line_dX.setGeometry(QtCore.QRect(35, 30, 232, 30))
+        self.line_dX.setGeometry(QtCore.QRect(70, 30, 200, 30))
 
         self.label_dY = QtWidgets.QLabel(self.grb_menu_parameter)
-        self.label_dY.setGeometry(QtCore.QRect(10, 70, 30, 30))
+        self.label_dY.setGeometry(QtCore.QRect(10, 70, 60, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_dY.setFont(font)
@@ -308,7 +319,7 @@ class Position_Offset(Menu_Team):
         self.label_dY.setObjectName("label_text")
 
         self.line_dY = QtWidgets.QLineEdit(self.grb_menu_parameter)
-        self.line_dY.setGeometry(QtCore.QRect(35, 70, 232, 30))
+        self.line_dY.setGeometry(QtCore.QRect(70, 70, 200, 30))
         self.line_dY.setFont(font)
         self.line_dY.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
                                    "border: 1px solid rgba(50, 50, 50, 240); "
