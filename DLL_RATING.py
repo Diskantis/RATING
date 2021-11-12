@@ -192,17 +192,10 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         elif self.check_box_player.checkState() == QtCore.Qt.Unchecked:
             print("check_player ", self.check_box_player.isTristate())
 
-    def check_pause_stat_chang(self):  # во время анимации ставит видео на паузу (Pause playback when animating)
-        if self.check_box_pause.checkState() == QtCore.Qt.Checked:
-            print("check_pause True")
-        elif self.check_box_pause.checkState() == QtCore.Qt.Unchecked:
-            print("check_pause False")
-
     def bg_brow_vid(self):  # выбор файла для Video Background
         try:
             path_vid_1 = QFileDialog.getOpenFileNames(self, caption="Open Video Background", directory="res",
                                                       filter="*.avi *.mov")[0][0]
-            path_vid_1 = os.path.normpath(os.path.relpath(path_vid_1, start=None))
             self.line_back_video.setText(path_vid_1)
         except IndexError:
             pass
@@ -211,7 +204,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         try:
             path_img = QFileDialog.getOpenFileNames(self, caption="Open Image Background", directory="res",
                                                     filter="*.jpg *.png")[0][0]
-            path_img = os.path.normpath(os.path.relpath(path_img, start=None))
             self.line_back_image.setText(path_img)
         except IndexError:
             pass
@@ -220,7 +212,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
         try:
             path_vid_2 = QFileDialog.getOpenFileNames(self, caption="Open Video Logo", directory="res",
                                                       filter="*.avi *.mov")[0][0]
-            path_vid_2 = os.path.normpath(os.path.relpath(path_vid_2, start=None))
             self.line_logo_video.setText(path_vid_2)
         except IndexError:
             pass
@@ -229,9 +220,6 @@ class Preference(QtWidgets.QDialog, Ui_Preference):
     def margins(self, top, bottom):
         margins_team_rat = self.v_Layout_video.setContentsMargins(0, top, 0, bottom)
         return margins_team_rat
-
-    def animation(self):
-        pass
 
     # TAB COMMON
     def interface_lang(self):  # выбор языка интерфейса
@@ -269,7 +257,6 @@ class Add_Team(QtWidgets.QDialog, Ui_Add_Team):
         try:
             path_image = QFileDialog.getOpenFileNames(self, caption="Open Image Team", directory="res",
                                                       filter="*.jpg *.png")[0][0]
-            path_image = os.path.normpath(os.path.relpath(path_image, start=None))
             self.line_image.setText(path_image)
 
         except IndexError:

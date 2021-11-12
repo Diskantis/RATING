@@ -24,11 +24,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team_widgets_rat = []  # список виджетов команд с банерами
         self.select_team = {}  # словарь выделенных виджетов
         self.index_btn = None  # индекс кнопки при вызове меню (правая кнопка мыши)
-        self.contents_margins = 10
+        self.contents_margin = 10
         self.animation_duration = 1000  # длительность анимации
         self.logo_or_rating = 0
 
-        self.on_last_session = self.load_def_ref()
+        self.on_last_session, self.on_animation_pause = self.load_def_ref()
 
         self.image_rating = ImagePlayer("Team Ranking")  # создаем окно с рейтингом команд
 
@@ -125,8 +125,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
         self.team_widgets_rat = team_widgets_rat(self.teams_properties, self.image_rating.v_Layout_grb_items_rat)
 
+        update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
         self.edit_team.close()
-
         self.click_team_widget()
 
     def right_click_item_scale(self):
@@ -191,7 +191,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team.setFixedSize(QtCore.QSize(width, height))
 
         update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
-
         self.position_scale.close()
 
     def right_click_position_offset(self):
@@ -229,6 +228,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.team.move(pos_x + offset_dx, pos_y + offset_dy)
 
+        update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
         self.position_offset.close()
 
     def right_click_remove_team(self):
@@ -259,14 +259,13 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):  # если плеера не запущены - проверяет правельность путей
-                pass
-                # self.player_1, self.player_2 = start_player()  # запускает плеера func dll.start_player
+                self.player_1, self.player_2 = start_player()  # запускает плеера func dll.start_player
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
                 self.pref.line_logo_video.clear()
 
-        return self.pref.check_last_session.isChecked()
+        return self.pref.check_last_session.isChecked(), self.pref.check_box_pause.isChecked()
 
     def create_new(self):
 
@@ -343,7 +342,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         # TAB VIDEO
         self.pref.check_box_player.stateChanged.connect(self.pref.check_player_stat_chang)  # check box Player internal
-        self.pref.check_box_pause.stateChanged.connect(self.pref.check_pause_stat_chang)  # check box Pause animation
 
         self.pref.btn_bg_brow_vid.clicked.connect(self.pref.bg_brow_vid)  # button "Browse..." Background Video file
         self.pref.btn_bg_brow_img.clicked.connect(self.pref.bg_brow_img)  # button "Browse..." Background Image file
@@ -370,10 +368,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
                 update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
 
-                val = read_reference("reference.reg")  # считываем параметры margins (top, bottom)
-                self.contents_margins = self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7],
-                                                                                                    0, val[8])
+                val = read_reference("reference.reg")  # считываем параметры
+                self.on_animation_pause = val[1]
+                self.contents_margin = self.image_rating.v_Layout_grb_items_rat.setContentsMargins(0, val[7], 0, val[8])
                 self.animation_duration = val[9]
+
                 self.image_rating.video.activateWindow()  # делает окно рейтинга активным
 
             if self.logo_or_rating == 1:  # если кнопка Logo/Rating была в положение Logo меняет на Rating
@@ -490,6 +489,9 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.anim_group.addAnimation(self.anim_1)
         self.anim_group.addAnimation(self.anim_2)
 
+        if self.on_animation_pause:
+            self.player_1.pause()
+            QTimer.singleShot(self.animation_duration, self.player_1.player.play)
         self.anim_group.start()
 
         team_w_btn = self.team_widgets_btn.pop(index_1 - 1)
@@ -634,7 +636,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.exit()
 
 
-def application():
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("Fusion")
 
@@ -649,7 +651,3 @@ def application():
     windows = MainRATING()
     windows.show()
     sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    application()
