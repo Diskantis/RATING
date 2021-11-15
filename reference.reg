@@ -1,5 +1,5 @@
 Use Internal Video Player = "True"
-Pause Background When Animating = "True"
+Pause Background When Animating = "False"
 Use Video Background = "True"
 Use Image Background = "False"
 Background Video File Name = "res\RATING_FON.avi"

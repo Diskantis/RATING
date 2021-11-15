@@ -24,7 +24,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.team_widgets_rat = []  # список виджетов команд с банерами
         self.select_team = {}  # словарь выделенных виджетов
         self.index_btn = None  # индекс кнопки при вызове меню (правая кнопка мыши)
-        self.contents_margin = 10
+        self.contents_margin = 10  # отступы главного окна
         self.animation_duration = 1000  # длительность анимации
         self.logo_or_rating = 0
 
@@ -472,16 +472,20 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget()
         team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2 - 1).widget()
+        x_1 = int(self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget().width() / 2)
+        x_2 = int(self.image_rating.v_Layout_grb_items_rat.itemAt(index_2 - 1).widget().width() / 2)
+        off_x_1 = self.teams_properties[index_1 - 1][4]
+        off_x_2 = self.teams_properties[index_2 - 1][4]
 
         self.anim_1 = QPropertyAnimation(team_1_rat, b"pos")
-        self.anim_1.setKeyValueAt(0, QPoint(team_1_rat.x(), team_1_rat.y()))
-        self.anim_1.setKeyValueAt(1, QPoint(team_2_rat.x(), team_2_rat.y()))
+        self.anim_1.setKeyValueAt(0, QPoint(960 + off_x_1 - x_1, team_1_rat.y()))
+        self.anim_1.setKeyValueAt(1, QPoint(960 + off_x_2 - x_1, team_2_rat.y()))
         self.anim_1.setEasingCurve(QEasingCurve.InOutCubic)
         self.anim_1.setDuration(self.animation_duration)
 
         self.anim_2 = QPropertyAnimation(team_2_rat, b"pos")
-        self.anim_2.setKeyValueAt(0, QPoint(team_2_rat.x(), team_2_rat.y()))
-        self.anim_2.setKeyValueAt(1, QPoint(team_1_rat.x(), team_1_rat.y()))
+        self.anim_2.setKeyValueAt(0, QPoint(960 + off_x_2 - x_2, team_2_rat.y()))
+        self.anim_2.setKeyValueAt(1, QPoint(960 + off_x_1 - x_2, team_1_rat.y()))
         self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
         self.anim_2.setDuration(self.animation_duration)
 
@@ -508,11 +512,16 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         clear_layout(self.v_Layout_frame_items)
         self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
 
-        for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
-            self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - 448
-
-        update_layout(self.animation_duration, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat,
-                      self.teams_properties)
+        # for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
+        #     w = 960 - int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().width() / 2)
+        #     # print(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().y())
+        #     # h = int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().height() / 2)
+        #     # print(h)
+        #     self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - w
+        #     print(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().y())
+        #
+        # update_layout(self.animation_duration, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat,
+        #               self.teams_properties)
 
         team_1_btn = self.v_Layout_frame_items.itemAt(index_1 - 1).widget()
         team_2_btn = self.v_Layout_frame_items.itemAt(index_2 - 1).widget()
@@ -556,8 +565,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
                         self.anim_group.addAnimation(self.anim_2)
 
-                    self.anim_group.start()
-
                 elif position < self.v_Layout_frame_items.count():  # down
                     team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
                     team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(position).widget()
@@ -585,7 +592,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                         self.anim_2.setDuration(self.animation_duration)
                         self.anim_group.addAnimation(self.anim_2)
 
-                    self.anim_group.start()
+                if self.on_animation_pause:
+                    self.player_1.pause()
+                    QTimer.singleShot(self.animation_duration, self.player_1.player.play)
+                self.anim_group.start()
 
                 team_w_btn = self.team_widgets_btn.pop(index)
                 self.team_widgets_btn.insert(position, team_w_btn)
@@ -599,7 +609,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
 
                 for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
-                    self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - 448
+                    p = 960-int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().width()/2)
+                    self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - p
 
                 update_layout(self.animation_duration, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat,
                               self.teams_properties)

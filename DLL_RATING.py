@@ -72,7 +72,7 @@ def team_widgets_rat(list_str, layout):
 
             team_l.move(pos_x + offset_dx, pos_y + offset_dy)
 
-    QTimer.singleShot(1, offset)
+    QTimer.singleShot(0, offset)
 
     return widgets
 
