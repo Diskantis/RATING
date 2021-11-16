@@ -2,6 +2,7 @@
 import ast
 import os
 import re
+import time
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QUrl, Qt, QTimer
@@ -13,11 +14,11 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating, Ui_Menu_Team
 
 
-def update_layout(time, layout, list_wid_rat, list_prop):
+def update_layout(timer, layout, list_wid_rat, list_prop):
     def sleep(list_wid):
         clear_layout(layout)
         list_wid = team_widgets_rat(list_prop, layout)
-    QTimer.singleShot(time, lambda: sleep(list_wid_rat))
+    QTimer.singleShot(timer, lambda: sleep(list_wid_rat))
 
 
 def clear_layout(layout):
