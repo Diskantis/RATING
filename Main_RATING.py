@@ -200,13 +200,11 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         index = self.index_btn - 1
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
 
-        self.position_offset.label_dX.setText(f'dX ({self.team.x()}):')
-        self.position_offset.label_dY.setText(f'dY ({self.team.y()}):')
         offset_dx = self.teams_properties[index][4]
         offset_dy = self.teams_properties[index][5]
 
-        self.position_offset.line_dX.setText(str(offset_dx))
-        self.position_offset.line_dY.setText(str(offset_dy))
+        self.position_offset.label_dX.setText(f'dX ({offset_dx}):')
+        self.position_offset.label_dY.setText(f'dY ({offset_dy}):')
 
         self.position_offset.btn_ok.clicked.connect(self.right_click_position_offset_ok)  # button OK
         self.position_offset.btn_ok.setAutoDefault(True)
@@ -227,7 +225,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos_y = self.team.y()
 
         self.team.move(pos_x + offset_dx, pos_y + offset_dy)
-        self.team.move(pos_x + offset_dx, pos_y)
 
         update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
         self.position_offset.close()

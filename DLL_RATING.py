@@ -295,6 +295,7 @@ class Position_Offset(Menu_Team):
         self.label_dX.setText("dX:")
 
         self.line_dX = self.line_parameter
+        self.line_dX.setText(str(0))
         self.line_dX.setGeometry(QtCore.QRect(70, 30, 200, 30))
 
         self.label_dY = QtWidgets.QLabel(self.grb_menu_parameter)
@@ -306,6 +307,7 @@ class Position_Offset(Menu_Team):
         self.label_dY.setObjectName("label_text")
 
         self.line_dY = QtWidgets.QLineEdit(self.grb_menu_parameter)
+        self.line_dY.setText(str(0))
         self.line_dY.setGeometry(QtCore.QRect(70, 70, 200, 30))
         self.line_dY.setFont(font)
         self.line_dY.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
