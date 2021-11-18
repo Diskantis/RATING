@@ -227,6 +227,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         pos_y = self.team.y()
 
         self.team.move(pos_x + offset_dx, pos_y + offset_dy)
+        self.team.move(pos_x + offset_dx, pos_y)
 
         update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
         self.position_offset.close()
@@ -480,39 +481,45 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         off_x_1 = self.teams_properties[index_1 - 1][4]
         off_x_2 = self.teams_properties[index_2 - 1][4]
 
+        self.anim_group_1 = QParallelAnimationGroup()
+
         self.anim_1 = QPropertyAnimation(team_1_rat, b"pos")
         self.anim_1.setKeyValueAt(0, QPoint(960 + off_x_1 - x_1, team_1_rat.y()))
         self.anim_1.setKeyValueAt(1, QPoint(960 + off_x_2 - x_1, team_2_rat.y()))
         self.anim_1.setEasingCurve(QEasingCurve.InOutCubic)
         self.anim_1.setDuration(self.animation_duration)
+        self.anim_group_1.addAnimation(self.anim_1)
 
         self.anim_2 = QPropertyAnimation(team_2_rat, b"pos")
         self.anim_2.setKeyValueAt(0, QPoint(960 + off_x_2 - x_2, team_2_rat.y()))
         self.anim_2.setKeyValueAt(1, QPoint(960 + off_x_1 - x_2, int(team_1_rat.y() + scale)))
         self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
         self.anim_2.setDuration(self.animation_duration)
+        self.anim_group_1.addAnimation(self.anim_2)
 
-        i = index_1-1
+        self.anim_group_2 = QParallelAnimationGroup()
+
+        i = index_1 - 2
         while i >= index_2:
             team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
-            self.anim_3 = QPropertyAnimation(team_rat, b"pos")
+            self.anim = QPropertyAnimation(team_rat, b"pos")
             x_l, y_l = team_rat.x(), team_rat.y()
-            self.anim_3.setKeyValueAt(0, QPoint(x_l, y_l))
-            self.anim_3.setKeyValueAt(1, QPoint(x_l, y_l + scale))
+            self.anim.setKeyValueAt(0, QPoint(x_l, y_l))
+            self.anim.setKeyValueAt(1, QPoint(x_l, y_l + scale))
             i -= 1
-            self.anim_3.setEasingCurve(QEasingCurve.InOutCubic)
-            self.anim_3.setDuration(self.animation_duration)
-
-        self.anim_group = QParallelAnimationGroup()
-        self.anim_group.addAnimation(self.anim_1)
-        self.anim_group.addAnimation(self.anim_2)
-        self.anim_group.addAnimation(self.anim_3)
+            self.anim.setEasingCurve(QEasingCurve.InOutCubic)
+            self.anim.setDuration(self.animation_duration)
+            self.anim_group_2.addAnimation(self.anim)
 
         if self.on_animation_pause:
             self.player_1.pause()
             QTimer.singleShot(self.animation_duration, self.player_1.player.play)
         self.btn_Swap_Teams.setEnabled(False)
         QTimer.singleShot(self.animation_duration, lambda: self.btn_Swap_Teams.setEnabled(True))
+
+        self.anim_group = QParallelAnimationGroup()
+        self.anim_group.addAnimation(self.anim_group_1)
+        self.anim_group.addAnimation(self.anim_group_2)
 
         self.anim_group.start()
 
@@ -547,100 +554,98 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.click_team_widget()
 
     def move_team(self):
-        index = (list(self.select_team.keys())[0]) - 1  # инедкс виджета выбраного для перемещения
+        index = list(self.select_team.keys())[0] - 1  # инедкс виджета выбраного для перемещения
         try:
-            position = (int(self.lineEdit_Pos.displayText())) - 1  # номер позиции куда перемещаем виджет
+            position = int(self.lineEdit_Pos.displayText()) - 1  # номер позиции куда перемещаем виджет
             if 0 <= position <= self.v_Layout_frame_items.count():
-                if position <= index:  # up
+                try:
                     team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
                     team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(position).widget()
+                    x_1 = int(self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget().width() / 2)
+                    off_x_1 = self.teams_properties[index][4]
+                    off_x_2 = self.teams_properties[position][4]
 
                     self.anim_1 = QPropertyAnimation(team_1_rat, b"pos")
-                    self.anim_1.setKeyValueAt(0, QPoint(team_1_rat.x(), team_1_rat.y()))
-                    self.anim_1.setKeyValueAt(1, QPoint(team_2_rat.x(), team_2_rat.y()))
+                    self.anim_1.setKeyValueAt(0, QPoint(960 + off_x_1 - x_1, team_1_rat.y()))
                     self.anim_1.setEasingCurve(QEasingCurve.InOutCubic)
                     self.anim_1.setDuration(self.animation_duration)
 
                     self.anim_group = QParallelAnimationGroup()
                     self.anim_group.addAnimation(self.anim_1)
 
-                    i = index - 1
-                    x, y = team_1_rat.x(), team_1_rat.y()
-                    while i >= position:
-                        team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
-                        self.anim_2 = QPropertyAnimation(team_rat, b"pos")
-                        x_l, y_l = team_rat.x(), team_rat.y()
-                        self.anim_2.setKeyValueAt(0, QPoint(x_l, y_l))
-                        self.anim_2.setKeyValueAt(1, QPoint(x, y))
-                        x, y = x_l, y_l
-                        i -= 1
-                        self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
-                        self.anim_2.setDuration(self.animation_duration)
+                    x, y, off_x = team_1_rat.x(), team_1_rat.y(), off_x_1
+                    scale = team_1_rat.height()
+                    if position <= index:  # up
+                        self.anim_1.setKeyValueAt(1, QPoint(960 + off_x_2 - x_1, team_2_rat.y()))
+                        i = index - 1
+                        while i >= position:
+                            team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
+                            w = int(self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget().width() / 2)
+                            s = int(self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget().height()) - scale
+                            self.anim_2 = QPropertyAnimation(team_rat, b"pos")
+                            x_i, y_i = team_rat.x(), team_rat.y()
+                            self.anim_2.setKeyValueAt(0, QPoint(x_i, y_i))
+                            self.anim_2.setKeyValueAt(1, QPoint(960 + off_x - w, y - s))
+                            x, y, off_x = x_i, y_i, self.teams_properties[i][4]
+                            i -= 1
+                            self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
+                            self.anim_2.setDuration(self.animation_duration)
+                            self.anim_group.addAnimation(self.anim_2)
 
-                        self.anim_group.addAnimation(self.anim_2)
+                    elif position < self.v_Layout_frame_items.count():  # down
+                        self.anim_1.setKeyValueAt(1, QPoint(960 + off_x_2 - x_1, team_2_rat.y() -
+                                                            (team_1_rat.height() - team_2_rat.height())))
+                        i = index + 1
+                        while i <= position:
+                            team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
+                            w = int(self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget().width() / 2)
+                            s = scale - int(self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget().height())
+                            self.anim_2 = QPropertyAnimation(team_rat, b"pos")
+                            x_i, y_i = team_rat.x(), team_rat.y()
+                            self.anim_2.setKeyValueAt(0, QPoint(x_i, y_i))
+                            self.anim_2.setKeyValueAt(1, QPoint(960 + off_x - w, y))
+                            x, y, off_x = x_i, y_i - s, self.teams_properties[i][4]
+                            i += 1
+                            self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
+                            self.anim_2.setDuration(self.animation_duration)
+                            self.anim_group.addAnimation(self.anim_2)
 
-                elif position < self.v_Layout_frame_items.count():  # down
-                    team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-                    team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(position).widget()
+                    if self.on_animation_pause:
+                        self.player_1.pause()
+                        QTimer.singleShot(self.animation_duration, self.player_1.player.play)
+                    self.btn_Move_to_Pos.setEnabled(False)
+                    QTimer.singleShot(self.animation_duration, lambda: self.btn_Move_to_Pos.setEnabled(True))
 
-                    self.anim_1 = QPropertyAnimation(team_1_rat, b"pos")
-                    self.anim_1.setKeyValueAt(0, QPoint(team_1_rat.x(), team_1_rat.y()))
-                    self.anim_1.setKeyValueAt(1, QPoint(team_2_rat.x(), team_2_rat.y()))
-                    self.anim_1.setEasingCurve(QEasingCurve.InOutCubic)
-                    self.anim_1.setDuration(self.animation_duration)
+                    self.anim_group.start()
 
-                    self.anim_group = QParallelAnimationGroup()
-                    self.anim_group.addAnimation(self.anim_1)
+                    team_w_btn = self.team_widgets_btn.pop(index)
+                    self.team_widgets_btn.insert(position, team_w_btn)
+                    team_w_rat = self.team_widgets_rat.pop(index)
+                    self.team_widgets_rat.insert(position, team_w_rat)
 
-                    i = index + 1
-                    x, y = team_1_rat.x(), team_1_rat.y()
-                    while i <= position:
-                        team_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(i).widget()
-                        self.anim_2 = QPropertyAnimation(team_rat, b"pos")
-                        x_l, y_l = team_rat.x(), team_rat.y()
-                        self.anim_2.setKeyValueAt(0, QPoint(x_l, y_l))
-                        self.anim_2.setKeyValueAt(1, QPoint(x, y))
-                        x, y = x_l, y_l
-                        i += 1
-                        self.anim_2.setEasingCurve(QEasingCurve.InOutCubic)
-                        self.anim_2.setDuration(self.animation_duration)
-                        self.anim_group.addAnimation(self.anim_2)
+                    team_p1 = self.teams_properties.pop(index)
+                    self.teams_properties.insert(position, team_p1)
 
-                if self.on_animation_pause:
-                    self.player_1.pause()
-                    QTimer.singleShot(self.animation_duration, self.player_1.player.play)
-                self.btn_Move_to_Pos.setEnabled(False)
-                QTimer.singleShot(self.animation_duration, lambda: self.btn_Move_to_Pos.setEnabled(True))
-                self.anim_group.start()
+                    clear_layout(self.v_Layout_frame_items)
+                    self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
 
-                team_w_btn = self.team_widgets_btn.pop(index)
-                self.team_widgets_btn.insert(position, team_w_btn)
-                team_w_rat = self.team_widgets_rat.pop(index)
-                self.team_widgets_rat.insert(position, team_w_rat)
+                    for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
+                        w = 960 - int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().width() / 2)
+                        self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x()-w
 
-                team_p1 = self.teams_properties.pop(index)
-                self.teams_properties.insert(position, team_p1)
+                    update_layout(self.animation_duration, self.image_rating.v_Layout_grb_items_rat,
+                                  self.team_widgets_rat, self.teams_properties)
 
-                clear_layout(self.v_Layout_frame_items)
-                self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
+                    self.select_team.clear()
 
-                for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
-                    p = 960 - int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().width() / 2)
-                    self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - p
-
-                update_layout(self.animation_duration, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat,
-                              self.teams_properties)
-
-                self.select_team.clear()
-
-                team_2 = self.v_Layout_frame_items.itemAt(position).widget()
-                team_2.btn_Team.setChecked(True)
-                self.select_team[position + 1] = True
+                    team_2 = self.v_Layout_frame_items.itemAt(position).widget()
+                    team_2.btn_Team.setChecked(True)
+                    self.select_team[position + 1] = True
+                except AttributeError:
+                    pass
 
                 self.lineEdit_Pos.setText("")
-
-                self.click_team_widget()
-
+            self.click_team_widget()
         except ValueError:
             pass
 

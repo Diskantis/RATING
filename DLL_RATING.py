@@ -2,7 +2,6 @@
 import ast
 import os
 import re
-import time
 
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QUrl, Qt, QTimer
