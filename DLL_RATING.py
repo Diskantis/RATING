@@ -59,7 +59,7 @@ def team_widgets_rat(list_str, layout):
 
         width, height = pixmap.width(), pixmap.height()
 
-        team.setFixedSize(QtCore.QSize(width, height))
+        # team.setFixedSize(QtCore.QSize(width, height))
         team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
 
     def offset():
@@ -339,6 +339,7 @@ class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
         super(Widget_Team_Rating, self).__init__()
 
         self.setupUi(self)
+        self.resize(1024, 128)
 
         self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(self)
         self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
