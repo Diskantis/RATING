@@ -6,7 +6,8 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
-from PyQt5.QtCore import QTranslator, QPoint, QParallelAnimationGroup, QPropertyAnimation, QEasingCurve, QTimer, QRect
+from PyQt5.QtCore import QTranslator, QPoint, QParallelAnimationGroup, QPropertyAnimation, QEasingCurve, QTimer, QRect, \
+    QSize
 
 from UI_RATING import Ui_MainWindow, Ui_About
 from DLL_RATING import update_layout, clear_layout, team_widgets, team_widgets_rat, read_reference, \
@@ -472,6 +473,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         team_1_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget()
         team_2_rat = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2 - 1).widget()
+        # team_1_rat.raise_()
+        # team_2_rat.lower()
         width_1 = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget().width()
         width_2 = self.image_rating.v_Layout_grb_items_rat.itemAt(index_2 - 1).widget().width()
         height_1 = self.image_rating.v_Layout_grb_items_rat.itemAt(index_1 - 1).widget().height()
@@ -484,27 +487,66 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.anim_group_1 = QParallelAnimationGroup()
 
-        self.anim_1 = QPropertyAnimation(team_1_rat, b"geometry", self)
-        self.anim_1.setKeyValueAt(0, QRect(960 + off_x_1 - x_1, team_1_rat.y(), width_1, height_1))
-        self.anim_1.setKeyValueAt(0.3, QRect(int((960 + off_x_1 - x_1) * 1.6), int(team_1_rat.y() / 1.4),
-                                             int(width_1 * 1.2), int(height_1 * 1.2)))
-        self.anim_1.setKeyValueAt(0.7, QRect(int((960 + off_x_1 - x_1) * 1.6), int(team_1_rat.y() / 1.7),
-                                             int(width_1 * 1.2), int(height_1 * 1.2)))
-        self.anim_1.setKeyValueAt(1, QRect(960 + off_x_2 - x_1, team_2_rat.y(), width_1, height_1))
-        self.anim_1.setEasingCurve(QEasingCurve.InOutExpo)
+        # self.anim_1 = QPropertyAnimation(team_1_rat, b"geometry", self)  # front down
+        # self.anim_1.setKeyValueAt(0, QRect(960 + off_x_1 - x_1, team_1_rat.y(), width_1, height_1))
+        # # self.anim_1.setKeyValueAt(0.25, QRect(int(
+        # # (960 + off_x_1) - x_1 / 1.1), int(team_1_rat.y() / 1.2), int(width_1 / 1.1), int(height_1 / 1.1)))
+        # self.anim_1.setKeyValueAt(0.5, QRect(int(
+        #     (960 + off_x_1) - x_1 * 1.3), int(team_1_rat.y() / 1.6), int(width_1 * 1.3), int(height_1 * 1.3)))
+        # # self.anim_1.setKeyValueAt(0.75, QRect(int(
+        # # (960 + off_x_2) - x_1 / 1.1), int(team_1_rat.y() / 2.4), int(width_1 / 1.1), int(height_1 / 1.1)))
+        # self.anim_1.setKeyValueAt(1, QRect(960 + off_x_2 - x_1, team_2_rat.y(), width_1, height_1))
+        # self.anim_1.setEasingCurve(QEasingCurve.Linear)
+        # self.anim_1.setDuration(self.animation_duration)
+        # self.anim_group_1.addAnimation(self.anim_1)
+        #
+        # self.anim_2 = QPropertyAnimation(team_2_rat, b"geometry", self)  # back up
+        # self.anim_2.setKeyValueAt(0, QRect(960 + off_x_2 - x_2, team_2_rat.y(), width_2, height_2))
+        # # self.anim_2.setKeyValueAt(0.25, QRect(int(
+        # # (960 + off_x_1) - x_2 * 1.1), int((team_1_rat.y() + scale) / 2.4), int(width_2 * 1.1), int(height_2 * 1.1)))
+        # self.anim_2.setKeyValueAt(0.5, QRect(int(
+        #     (960 + off_x_1) - x_2 / 1.3), int((team_1_rat.y() + scale) / 1.6), int(width_2 / 1.3), int(height_2 / 1.3)))
+        # # self.anim_2.setKeyValueAt(0.75, QRect(int(
+        # # (960 + off_x_1) - x_2 * 1.1), int((team_1_rat.y() + scale) / 1.2), int(width_2 * 1.1), int(height_2 * 1.1)))
+        # self.anim_2.setKeyValueAt(1, QRect(960 + off_x_1 - x_2, int(team_1_rat.y() + scale), width_2, height_2))
+        # self.anim_2.setEasingCurve(QEasingCurve.Linear)
+        # self.anim_2.setDuration(self.animation_duration)
+        # self.anim_group_1.addAnimation(self.anim_2)
+
+        print(team_1_rat.y(), team_2_rat.y())
+        print((team_2_rat.y() / team_1_rat.y()))
+
+        self.anim_1 = QPropertyAnimation(team_1_rat, b"pos", self)  # back down
+        self.anim_1.setKeyValueAt(0, QPoint(960 + off_x_1 - x_1, team_1_rat.y()))
+        self.anim_1.setKeyValueAt(0.5, QPoint(int((960 + off_x_2) - x_1 * 1.3), int(team_2_rat.y())))
+        self.anim_1.setKeyValueAt(1, QPoint((960 + off_x_2) - x_1, team_2_rat.y()))
+        self.anim_1.setEasingCurve(QEasingCurve.Linear)
         self.anim_1.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_1)
 
-        self.anim_2 = QPropertyAnimation(team_2_rat, b"geometry", self)
-        self.anim_2.setKeyValueAt(0, QRect(960 + off_x_2 - x_2, team_2_rat.y(), width_2, height_2))
-        self.anim_2.setKeyValueAt(0.3, QRect(int((960 + off_x_1 - x_2) / 1.6), int((team_1_rat.y() + scale) / 1.7),
-                                             int(width_2 / 1.2), int(height_2 / 1.2)))
-        self.anim_2.setKeyValueAt(0.7, QRect(int((960 + off_x_1 - x_2) / 1.6), int((team_1_rat.y() + scale) / 1.4),
-                                             int(width_2 / 1.2), int(height_2 / 1.2)))
-        self.anim_2.setKeyValueAt(1, QRect(960 + off_x_1 - x_2, int(team_1_rat.y() + scale), width_2, height_2))
-        self.anim_2.setEasingCurve(QEasingCurve.InOutExpo)
+        self.anim_2 = QPropertyAnimation(team_2_rat, b"pos", self)  # front up
+        self.anim_2.setKeyValueAt(0, QPoint(960 + off_x_2 - x_2, team_2_rat.y()))
+        self.anim_2.setKeyValueAt(0.5, QPoint(int((960 + off_x_1) - x_2 / 1.3), int(team_1_rat.y())))
+        self.anim_2.setKeyValueAt(1, QPoint((960 + off_x_1) - x_2, int(team_1_rat.y() + scale)))
+        self.anim_2.setEasingCurve(QEasingCurve.Linear)
         self.anim_2.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_2)
+
+        self.anim_3 = QPropertyAnimation(team_1_rat, b"size", self)  # back down
+        self.anim_3.setKeyValueAt(0, QSize(width_1, height_1))
+        self.anim_3.setKeyValueAt(0.5, QSize(int(width_1 * 1.3), int(height_1 * 1.3)))
+        self.anim_3.setKeyValueAt(1, QSize(width_1, height_1))
+        self.anim_3.setEasingCurve(QEasingCurve.Linear)
+        self.anim_3.setDuration(self.animation_duration)
+        self.anim_group_1.addAnimation(self.anim_3)
+
+        self.anim_4 = QPropertyAnimation(team_2_rat, b"size", self)  # front up
+        self.anim_4.setKeyValueAt(0, QSize(width_2, height_2))
+        self.anim_4.setKeyValueAt(0.5, QSize(int(width_2 / 1.3), int(height_2 / 1.3)))
+        self.anim_4.setKeyValueAt(1, QSize(width_2, height_2))
+        self.anim_4.setEasingCurve(QEasingCurve.Linear)
+        self.anim_4.setDuration(self.animation_duration)
+        self.anim_group_1.addAnimation(self.anim_4)
 
         self.anim_group_2 = QParallelAnimationGroup()
         i = index_1 - 2
@@ -515,7 +557,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             self.anim.setKeyValueAt(0, QPoint(x_l, y_l))
             self.anim.setKeyValueAt(1, QPoint(x_l, y_l + scale))
             i -= 1
-            self.anim.setEasingCurve(QEasingCurve.InOutExpo)
+            self.anim.setEasingCurve(QEasingCurve.Linear)
             self.anim.setDuration(self.animation_duration)
             self.anim_group_2.addAnimation(self.anim)
 
@@ -528,7 +570,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.anim_group = QParallelAnimationGroup()
         self.anim_group.addAnimation(self.anim_group_1)
         self.anim_group.addAnimation(self.anim_group_2)
-        # self.anim_group.setDirection(QAbstractAnimation.Backward)
 
         self.anim_group.start()
 
@@ -545,7 +586,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         clear_layout(self.v_Layout_frame_items)
         self.team_widgets_btn = team_widgets(self.teams_properties, self.v_Layout_frame_items)
-
+        #
         for b in range(self.image_rating.v_Layout_grb_items_rat.count()):
             w = 960 - int(self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().width() / 2)
             self.teams_properties[b][4] = self.image_rating.v_Layout_grb_items_rat.itemAt(b).widget().x() - w
