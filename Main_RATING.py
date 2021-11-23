@@ -487,48 +487,21 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         self.anim_group_1 = QParallelAnimationGroup()
 
-        # self.anim_1 = QPropertyAnimation(team_1_rat, b"geometry", self)  # front down
-        # self.anim_1.setKeyValueAt(0, QRect(960 + off_x_1 - x_1, team_1_rat.y(), width_1, height_1))
-        # # self.anim_1.setKeyValueAt(0.25, QRect(int(
-        # # (960 + off_x_1) - x_1 / 1.1), int(team_1_rat.y() / 1.2), int(width_1 / 1.1), int(height_1 / 1.1)))
-        # self.anim_1.setKeyValueAt(0.5, QRect(int(
-        #     (960 + off_x_1) - x_1 * 1.3), int(team_1_rat.y() / 1.6), int(width_1 * 1.3), int(height_1 * 1.3)))
-        # # self.anim_1.setKeyValueAt(0.75, QRect(int(
-        # # (960 + off_x_2) - x_1 / 1.1), int(team_1_rat.y() / 2.4), int(width_1 / 1.1), int(height_1 / 1.1)))
-        # self.anim_1.setKeyValueAt(1, QRect(960 + off_x_2 - x_1, team_2_rat.y(), width_1, height_1))
-        # self.anim_1.setEasingCurve(QEasingCurve.Linear)
-        # self.anim_1.setDuration(self.animation_duration)
-        # self.anim_group_1.addAnimation(self.anim_1)
-        #
-        # self.anim_2 = QPropertyAnimation(team_2_rat, b"geometry", self)  # back up
-        # self.anim_2.setKeyValueAt(0, QRect(960 + off_x_2 - x_2, team_2_rat.y(), width_2, height_2))
-        # # self.anim_2.setKeyValueAt(0.25, QRect(int(
-        # # (960 + off_x_1) - x_2 * 1.1), int((team_1_rat.y() + scale) / 2.4), int(width_2 * 1.1), int(height_2 * 1.1)))
-        # self.anim_2.setKeyValueAt(0.5, QRect(int(
-        #     (960 + off_x_1) - x_2 / 1.3), int((team_1_rat.y() + scale) / 1.6), int(width_2 / 1.3), int(height_2 / 1.3)))
-        # # self.anim_2.setKeyValueAt(0.75, QRect(int(
-        # # (960 + off_x_1) - x_2 * 1.1), int((team_1_rat.y() + scale) / 1.2), int(width_2 * 1.1), int(height_2 * 1.1)))
-        # self.anim_2.setKeyValueAt(1, QRect(960 + off_x_1 - x_2, int(team_1_rat.y() + scale), width_2, height_2))
-        # self.anim_2.setEasingCurve(QEasingCurve.Linear)
-        # self.anim_2.setDuration(self.animation_duration)
-        # self.anim_group_1.addAnimation(self.anim_2)
-
-        print(team_1_rat.y(), team_2_rat.y())
-        print((team_2_rat.y() / team_1_rat.y()))
-
         self.anim_1 = QPropertyAnimation(team_1_rat, b"pos", self)  # back down
         self.anim_1.setKeyValueAt(0, QPoint(960 + off_x_1 - x_1, team_1_rat.y()))
-        self.anim_1.setKeyValueAt(0.5, QPoint(int((960 + off_x_2) - x_1 * 1.3), int(team_2_rat.y())))
-        self.anim_1.setKeyValueAt(1, QPoint((960 + off_x_2) - x_1, team_2_rat.y()))
-        self.anim_1.setEasingCurve(QEasingCurve.Linear)
+        self.anim_1.setKeyValueAt(0.5, QPoint(
+            int((960 + off_x_2) - x_1 * 1.3), int(team_2_rat.y() - ((team_2_rat.y() - team_1_rat.y()) / 2))))
+        self.anim_1.setKeyValueAt(1, QPoint(960 + off_x_2 - x_1, team_2_rat.y()))
+        self.anim_1.setEasingCurve(QEasingCurve.InOutCirc)
         self.anim_1.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_1)
 
         self.anim_2 = QPropertyAnimation(team_2_rat, b"pos", self)  # front up
         self.anim_2.setKeyValueAt(0, QPoint(960 + off_x_2 - x_2, team_2_rat.y()))
-        self.anim_2.setKeyValueAt(0.5, QPoint(int((960 + off_x_1) - x_2 / 1.3), int(team_1_rat.y())))
-        self.anim_2.setKeyValueAt(1, QPoint((960 + off_x_1) - x_2, int(team_1_rat.y() + scale)))
-        self.anim_2.setEasingCurve(QEasingCurve.Linear)
+        self.anim_2.setKeyValueAt(0.5, QPoint(
+            int((960 + off_x_1) - x_2 / 1.3), int(team_1_rat.y() + scale - ((team_1_rat.y() - team_2_rat.y()) / 2))))
+        self.anim_2.setKeyValueAt(1, QPoint(960 + off_x_1 - x_2, int(team_1_rat.y() + scale)))
+        self.anim_2.setEasingCurve(QEasingCurve.InOutCirc)
         self.anim_2.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_2)
 
@@ -536,7 +509,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.anim_3.setKeyValueAt(0, QSize(width_1, height_1))
         self.anim_3.setKeyValueAt(0.5, QSize(int(width_1 * 1.3), int(height_1 * 1.3)))
         self.anim_3.setKeyValueAt(1, QSize(width_1, height_1))
-        self.anim_3.setEasingCurve(QEasingCurve.Linear)
+        self.anim_3.setEasingCurve(QEasingCurve.InOutCirc)
         self.anim_3.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_3)
 
@@ -544,7 +517,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.anim_4.setKeyValueAt(0, QSize(width_2, height_2))
         self.anim_4.setKeyValueAt(0.5, QSize(int(width_2 / 1.3), int(height_2 / 1.3)))
         self.anim_4.setKeyValueAt(1, QSize(width_2, height_2))
-        self.anim_4.setEasingCurve(QEasingCurve.Linear)
+        self.anim_4.setEasingCurve(QEasingCurve.InOutCirc)
         self.anim_4.setDuration(self.animation_duration)
         self.anim_group_1.addAnimation(self.anim_4)
 

@@ -843,10 +843,10 @@ class Ui_Widget_Team_Button(object):
         self.rem_team = self.menuTeam.addAction("Remove")
 
 
-class Ui_Widget_Team_Rating(object):
-    def setupUi(self, Widget_Team_Rating):
-
-        self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
-        self.image_team.setScaledContents(True)
-        self.image_team.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-        self.image_team.setObjectName("image_team")
+# class Ui_Widget_Team_Rating(object):
+#     def setupUi(self, Widget_Team_Rating):
+#
+#         self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
+#         self.image_team.setScaledContents(True)
+#         self.image_team.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+#         self.image_team.setObjectName("image_team")

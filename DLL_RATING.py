@@ -10,13 +10,14 @@ from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QFileDialog, QLabel, QWidget
 
-from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Widget_Team_Rating, Ui_Menu_Team
+from UI_RATING import Ui_Preference, Ui_Add_Team, Ui_Widget_Team_Button, Ui_Menu_Team  # , Ui_Widget_Team_Rating
 
 
 def update_layout(timer, layout, list_wid_rat, list_prop):
     def sleep(list_wid):
         clear_layout(layout)
         list_wid = team_widgets_rat(list_prop, layout)
+
     QTimer.singleShot(timer, lambda: sleep(list_wid_rat))
 
 
@@ -59,8 +60,7 @@ def team_widgets_rat(list_str, layout):
 
         width, height = pixmap.width(), pixmap.height()
 
-        # team.setFixedSize(QtCore.QSize(width, height))
-        team.setBaseSize(QtCore.QSize(int(width * scale), int(height * scale)))
+        team.setFixedSize(QtCore.QSize(int(width * scale), int(height * scale)))
 
     def offset():
         for ind in enumerate(list_str[:len(list_str) + 1:]):
@@ -158,7 +158,7 @@ class ImagePlayer:
             self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
             self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)  # SetDefaultConstraint
             self.v_Layout_grb_items_rat.setContentsMargins(0, 0, 0, 0)
-            self.v_Layout_grb_items_rat.setSpacing(0)
+            self.v_Layout_grb_items_rat.setSpacing(1)
             self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
 
         if path is not None:
@@ -334,21 +334,31 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         self.label_name_team.setText(name)
 
 
-class Widget_Team_Rating(QtWidgets.QWidget, Ui_Widget_Team_Rating):
+class Widget_Team_Rating(QtWidgets.QWidget):  # , Ui_Widget_Team_Rating self.setupUi(self)
     def __init__(self, path):
         super(Widget_Team_Rating, self).__init__()
 
-        self.setupUi(self)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(1)
-        sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        # self.sizeHint()
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setVerticalStretch(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
 
         self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(self)
         self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
         self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
 
+        self.image_team = QtWidgets.QLabel(self)
+        # self.image_team.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
+        #                               "border: 1px solid rgba(50, 50, 50, 240); "
+        #                               "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
+        #                               "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
+        #                               "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
+        self.image_team.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignCenter)
+        self.image_team.setObjectName("image_team")
         self.pixmap = QPixmap(path)
         self.image_team.setPixmap(self.pixmap)
+
+        self.image_team.setScaledContents(True)
         self.v_Layout_widget_team_rating.addWidget(self.image_team)
