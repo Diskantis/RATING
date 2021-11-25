@@ -9,7 +9,7 @@ class Ui_MainWindow(object):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 660)
-        MainWindow.setGeometry(QtCore.QRect(660+500, 240, 600, 660))
+        MainWindow.setGeometry(QtCore.QRect(660, 240, 600, 660))
         MainWindow.setMinimumSize(QtCore.QSize(600, 660))
         MainWindow.setMaximumSize(QtCore.QSize(600, 16777215))
         MainWindow.setWindowIcon(QIcon('res/logo.png'))

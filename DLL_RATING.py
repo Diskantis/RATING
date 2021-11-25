@@ -334,16 +334,16 @@ class Widget_Team_Button(QtWidgets.QWidget, Ui_Widget_Team_Button):
         self.label_name_team.setText(name)
 
 
-class Widget_Team_Rating(QtWidgets.QWidget):  # , Ui_Widget_Team_Rating self.setupUi(self)
+class Widget_Team_Rating(QtWidgets.QWidget):  # , Ui_Widget_Team_Rating  self.setupUi(self)
     def __init__(self, path):
         super(Widget_Team_Rating, self).__init__()
 
-        # self.sizeHint()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        # #QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
         # sizePolicy.setHorizontalStretch(0)
         # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setVerticalStretch(self.sizePolicy().hasHeightForWidth())
-        self.setSizePolicy(sizePolicy)
+        # sizePolicy.setHeightForWidth(True)
+        # self.setSizePolicy(sizePolicy)
 
         self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(self)
         self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
