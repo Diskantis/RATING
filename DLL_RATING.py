@@ -156,7 +156,7 @@ class ImagePlayer:
 
             # слой вертекального выравнивания группы виджетов команд
             self.v_Layout_grb_items_rat = QtWidgets.QVBoxLayout(self.video)
-            self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)  # SetDefaultConstraint
+            self.v_Layout_grb_items_rat.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
             self.v_Layout_grb_items_rat.setContentsMargins(0, 0, 0, 0)
             self.v_Layout_grb_items_rat.setSpacing(1)
             self.v_Layout_grb_items_rat.setObjectName("v_Layout_grb_items")
@@ -338,14 +338,15 @@ class Widget_Team_Rating(QtWidgets.QWidget):  # , Ui_Widget_Team_Rating  self.se
     def __init__(self, path):
         super(Widget_Team_Rating, self).__init__()
 
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        # #QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(True)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        # # #QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        # # sizePolicy.setHorizontalStretch(0)
+        # # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setWidthForHeight(True)
         # self.setSizePolicy(sizePolicy)
 
         self.v_Layout_widget_team_rating = QtWidgets.QVBoxLayout(self)
+        self.v_Layout_widget_team_rating.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.v_Layout_widget_team_rating.setContentsMargins(0, 0, 0, 0)
         self.v_Layout_widget_team_rating.setObjectName("v_Layout_widget_team_rating")
 
@@ -360,5 +361,11 @@ class Widget_Team_Rating(QtWidgets.QWidget):  # , Ui_Widget_Team_Rating  self.se
         self.pixmap = QPixmap(path)
         self.image_team.setPixmap(self.pixmap)
 
+        # width, height = self.pixmap.width(), self.pixmap.height()
+        # self.setBaseSize(width, height)
+
         self.image_team.setScaledContents(True)
         self.v_Layout_widget_team_rating.addWidget(self.image_team)
+
+    def heightForWidth(self, width):
+        return width
