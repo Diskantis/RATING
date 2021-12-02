@@ -9,7 +9,7 @@ class Ui_MainWindow(object):
         # Главное окно приложения
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 660)
-        MainWindow.setGeometry(QtCore.QRect(660+600, 240, 600, 660))
+        MainWindow.setGeometry(QtCore.QRect(660, 240, 600, 660))
         MainWindow.setMinimumSize(QtCore.QSize(600, 660))
         MainWindow.setMaximumSize(QtCore.QSize(600, 16777215))
         MainWindow.setWindowIcon(QIcon('res/logo.png'))
@@ -238,7 +238,7 @@ class Ui_MainWindow(object):
         self.action_New.setShortcut(_translate("MainWindow", "Ctrl+N"))
 
         self.action_Open.setText(_translate("MainWindow", "Open"))
-        self.action_Open.setShortcut(_translate("MainWindow", "Ctrl+O"))
+        self.action_Open.setShortcut(_translate("MainWindow", "Ctrl+L"))
 
         self.action_Save.setText(_translate("MainWindow", "Save"))
         self.action_Save.setShortcut(_translate("MainWindow", "Ctrl+S"))
@@ -396,14 +396,14 @@ class Ui_Preference(object):
         self.h_Layout_video_logo.addWidget(self.btn_lg_brow_vid)
 
         self.label_logo_video = QtWidgets.QLabel(self.grp_logo)
-        self.label_logo_video.setGeometry(QtCore.QRect(12, 18, 330, 30))
+        self.label_logo_video.setGeometry(QtCore.QRect(12, 15, 330, 30))
         self.label_logo_video.setFont(font)
         self.label_logo_video.setStyleSheet("border: 0px solid;")
         self.label_logo_video.setObjectName("label_video_logo")
 
         self.tab_Widget.addTab(self.tab_Video, "")
 
-        # TAB SCENE
+        # TAB RATING
         self.tab_Scene = QtWidgets.QWidget()
         self.tab_Scene.setObjectName("tab_Scene")
 
@@ -458,13 +458,13 @@ class Ui_Preference(object):
         self.grp_animation.setObjectName("grp_animation")
 
         self.label_duration = QtWidgets.QLabel(self.grp_animation)
-        self.label_duration.setGeometry(QtCore.QRect(12, 30, 100, 30))
+        self.label_duration.setGeometry(QtCore.QRect(12, 30, 130, 30))
         self.label_duration.setFont(font)
         self.label_duration.setStyleSheet("border: 0px solid;")
         self.label_duration.setObjectName("label_duration")
 
         self.line_duration = QtWidgets.QLineEdit(self.grp_animation)
-        self.line_duration.setGeometry(QtCore.QRect(115, 30, 228, 30))
+        self.line_duration.setGeometry(QtCore.QRect(140, 30, 203, 30))  # 115
         self.line_duration.setFont(font)
         self.line_duration.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
                                          "border: 1px solid rgba(50, 50, 50, 240); "
@@ -500,11 +500,6 @@ class Ui_Preference(object):
         self.comboBox_language = QtWidgets.QComboBox(self.tab_Common)
         self.comboBox_language.setGeometry(QtCore.QRect(12, 70, 350, 30))
         self.comboBox_language.setFont(font)
-        self.comboBox_language.setStyleSheet("border-radius: 4px; color: rgb(209, 209, 217); "
-                                             "border: 1px solid rgba(50, 50, 50, 240); "
-                                             "background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, "
-                                             "stop:0 rgba(125, 126, 131, 255), stop:0.01 rgba(108, 109, 114, 255), "
-                                             "stop:0.99 rgba(91, 92, 96, 255), stop:1 rgba(125, 126, 131, 255));")
         self.comboBox_language.setObjectName("comboBox_language")
 
         self.tab_Widget.addTab(self.tab_Common, "")
@@ -559,7 +554,7 @@ class Ui_Preference(object):
         self.label_bottom.setText(_translate("Preference", "Bottom:"))
         self.grp_animation.setTitle(_translate("Preference", "Animation:"))
         self.label_duration.setText(_translate("Preference", "Duration, msecs:"))
-        self.tab_Widget.setTabText(self.tab_Widget.indexOf(self.tab_Scene), _translate("Preference", "Scene"))
+        self.tab_Widget.setTabText(self.tab_Widget.indexOf(self.tab_Scene), _translate("Preference", "Rating"))
         self.check_last_session.setText(_translate("Preference", "Restore last session"))
         self.label_interface_language.setText(_translate("Preference", "Interface language:*"))
         self.label_restart_for_changing.setText(_translate(
@@ -587,7 +582,6 @@ class Ui_About(QtWidgets.QDialog):
         font.setBold(True)
         font.setWeight(87)
         self.label_scene.setFont(font)
-        self.label_scene.setText("Scene")
         self.label_scene.setStyleSheet("font-weight: 700; color: rgb(209, 209, 217); padding: 5px 0 5px 0;")
         self.label_scene.setAlignment(QtCore.Qt.AlignCenter)
         self.label_scene.setObjectName("label_scene")
@@ -597,11 +591,19 @@ class Ui_About(QtWidgets.QDialog):
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_release.setFont(font)
-        self.label_release.setText("Release 1.1 \n\n Author - Sergey Litvinov \n linch@adsl.by \n\n "
-                                   "Python adaptation - Michael Zajkov \n mn.zajkov@gmail.com")
         self.label_release.setStyleSheet("font-weight: 700;\n color: rgb(209, 209, 217);\n padding: 5px 0 5px 0;")
         self.label_release.setAlignment(QtCore.Qt.AlignCenter)
         self.label_release.setObjectName("label_release")
+
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self)
+
+    def retranslateUi(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("About", "About"))
+        self.label_scene.setText(_translate("About", "RATING"))
+        self.label_release.setText(_translate("About", "Release 1.1 \n\n Author - Sergey Litvinov \n linch@adsl.by \n\n"
+                                                       " Python adaptation - Michael Zajkov \n mn.zajkov@gmail.com"))
 
 
 class Ui_Add_Team(object):
@@ -834,19 +836,11 @@ class Ui_Widget_Team_Button(object):
         self.menuTeam.setFont(font)
         self.menuTeam.setStyleSheet("border-bottom: 0px; selection-color: rgb(0, 0, 0); color: rgb(209, 209, 217);")
 
-        self.edt_team = self.menuTeam.addAction("Edit")
+        _translate = QtCore.QCoreApplication.translate
+        self.edt_team = self.menuTeam.addAction(_translate("menuTeam", "Edit"))
         self.menuTeam.addSeparator()
-        self.itm_scale = self.menuTeam.addAction("Set item scale")
-        self.pos_scale = self.menuTeam.addAction("Set position scale")
-        self.pos_offset = self.menuTeam.addAction("Set position offset")
+        self.itm_scale = self.menuTeam.addAction(_translate("menuTeam", "Set item scale"))
+        self.pos_scale = self.menuTeam.addAction(_translate("menuTeam", "Set position scale"))
+        self.pos_offset = self.menuTeam.addAction(_translate("menuTeam", "Set position offset"))
         self.menuTeam.addSeparator()
-        self.rem_team = self.menuTeam.addAction("Remove")
-
-
-# class Ui_Widget_Team_Rating(object):
-#     def setupUi(self, Widget_Team_Rating):
-#
-#         self.image_team = QtWidgets.QLabel(Widget_Team_Rating)
-#         self.image_team.setScaledContents(True)
-#         self.image_team.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-#         self.image_team.setObjectName("image_team")
+        self.rem_team = self.menuTeam.addAction(_translate("menuTeam", "Remove"))

@@ -102,7 +102,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         team_path_img, team_name = self.teams_properties[index][0], self.teams_properties[index][1]
 
         self.edit_team = Add_Team()
-        self.edit_team.setWindowTitle("Edit team")
+        _translate = QtCore.QCoreApplication.translate
+        self.edit_team.setWindowTitle(_translate("MainWindow", "Edit team"))
         self.edit_team.line_image.setText(team_path_img)
         self.edit_team.line_text.setText(team_name)
         self.edit_team.show()
@@ -132,11 +133,10 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale(self):
         self.item_scale = Menu_Team()
-
         self.item_scale.show()
 
         index = self.index_btn - 1
-        item_scale = self.teams_properties[index][2]
+        item_scale = self.teams_properties[index][3]
         self.item_scale.line_parameter.setText(str(item_scale))
 
         self.item_scale.btn_ok.clicked.connect(self.right_click_item_scale_ok)  # button OK
@@ -146,38 +146,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
     def right_click_item_scale_ok(self):
         index = self.index_btn - 1
-        itm_scale = float(self.item_scale.line_parameter.displayText())
-        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
-
-        self.teams_properties[index][2] = itm_scale
-
-        pixmap = QPixmap(self.teams_properties[index][0])
-        width = pixmap.width()
-        height = pixmap.height()
-        self.team.setFixedSize(QtCore.QSize(int(width * itm_scale), int(height * itm_scale)))
-
-        update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
-        self.item_scale.close()
-
-    def right_click_position_scale(self):
-        self.position_scale = Menu_Team()
-        self.position_scale.setWindowTitle("Set position scale")
-        self.position_scale.grb_menu_parameter.setTitle("Position Scale")
-        self.position_scale.label_parameter.setText("Enter position scale:")
-        self.position_scale.show()
-
-        index = self.index_btn - 1
-        position_scale = self.teams_properties[index][3]
-        self.position_scale.line_parameter.setText(str(position_scale))
-
-        self.position_scale.btn_ok.clicked.connect(self.right_click_position_scale_ok)  # button OK
-        self.position_scale.btn_ok.setAutoDefault(True)
-
-        self.position_scale.btn_cancel.clicked.connect(self.position_scale.menu_cancel)  # button
-
-    def right_click_position_scale_ok(self):
-        index = self.index_btn - 1
-        pos_scale = float(self.position_scale.line_parameter.displayText())
+        pos_scale = float(self.item_scale.line_parameter.displayText())
         self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
 
         self.teams_properties[index][3] = pos_scale
@@ -190,6 +159,38 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         height = self.pixmap.height()
 
         self.team.setFixedSize(QtCore.QSize(width, height))
+
+        update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
+        self.item_scale.close()
+
+    def right_click_position_scale(self):
+        self.position_scale = Menu_Team()
+        _translate = QtCore.QCoreApplication.translate
+        self.position_scale.setWindowTitle(_translate("MainWindow", "Set position scale"))
+        self.position_scale.grb_menu_parameter.setTitle(_translate("MainWindow", "Position Scale"))
+        self.position_scale.label_parameter.setText(_translate("MainWindow", "Enter position scale:"))
+        self.position_scale.show()
+
+        index = self.index_btn - 1
+        position_scale = self.teams_properties[index][2]
+        self.position_scale.line_parameter.setText(str(position_scale))
+
+        self.position_scale.btn_ok.clicked.connect(self.right_click_position_scale_ok)  # button OK
+        self.position_scale.btn_ok.setAutoDefault(True)
+
+        self.position_scale.btn_cancel.clicked.connect(self.position_scale.menu_cancel)  # button
+
+    def right_click_position_scale_ok(self):
+        index = self.index_btn - 1
+        itm_scale = float(self.position_scale.line_parameter.displayText())
+        self.team = self.image_rating.v_Layout_grb_items_rat.itemAt(index).widget()
+
+        self.teams_properties[index][2] = itm_scale
+
+        pixmap = QPixmap(self.teams_properties[index][0])
+        width = pixmap.width()
+        height = pixmap.height()
+        self.team.setFixedSize(QtCore.QSize(int(width * itm_scale), int(height * itm_scale)))
 
         update_layout(1, self.image_rating.v_Layout_grb_items_rat, self.team_widgets_rat, self.teams_properties)
         self.position_scale.close()
@@ -258,7 +259,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 pass
         except AttributeError:
             if os.path.isfile(lin_vbg or lin_ibg or lin_vlg):  # если плеера не запущены - проверяет правельность путей
-                self.player_1, self.player_2 = start_player()  # запускает плеера func dll.start_player
+                self.player_1, self.player_2 = start_player()  # запускает плеера
             else:
                 self.pref.line_back_video.clear()
                 self.pref.line_back_image.clear()
@@ -349,6 +350,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
 
         # TAB COMMON
         self.pref.interface_lang()  # comboBox с выбором языка программы
+        val = read_reference("reference.reg")
+        self.pref.comboBox_language.setCurrentText(val[11])
 
         # OK
         self.pref.btn_ok.clicked.connect(self.preferences_ok)  # button OK
@@ -378,6 +381,8 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             if self.logo_or_rating == 1:  # если кнопка Logo/Rating была в положение Logo меняет на Rating
                 self.logo_or_rating -= 1
                 self.btn_Logo_Rating.setChecked(False)
+                # _translate = QtCore.QCoreApplication.translate
+                # self.btn_Logo_Rating.setText(_translate("MainWindow", "R A T I N G"))
                 self.btn_Logo_Rating.setText("R A T I N G")
 
             self.pref.close()
@@ -688,12 +693,14 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
                 if self.logo_or_rating == 0:
                     self.player_2.video.activateWindow()
                     self.logo_or_rating += 1
-                    self.btn_Logo_Rating.setText("L O G O")
+                    _translate = QtCore.QCoreApplication.translate
+                    self.btn_Logo_Rating.setText(_translate("MainWindow", "L O G O"))
                 elif self.logo_or_rating == 1:
                     self.player_1.video.activateWindow()
                     self.image_rating.video.activateWindow()
                     self.logo_or_rating -= 1
-                    self.btn_Logo_Rating.setText("R A T I N G")
+                    _translate = QtCore.QCoreApplication.translate
+                    self.btn_Logo_Rating.setText(_translate("MainWindow", "R A T I N G"))
         except AttributeError:
             pass
 
@@ -711,7 +718,7 @@ if __name__ == "__main__":
     translator = QTranslator()
     translator.load("./lang/" + language)
     if not app.installTranslator(translator):
-        print("Can not install translation!")
+        pass
 
     windows = MainRATING()
     windows.show()

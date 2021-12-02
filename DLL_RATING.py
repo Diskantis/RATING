@@ -285,8 +285,9 @@ class Position_Offset(Menu_Team):
         self.resize(300, 170)
         self.setMinimumSize(QtCore.QSize(300, 170))
         self.setMaximumSize(QtCore.QSize(300, 170))
-        self.setWindowTitle("Set position offset")
-        self.grb_menu_parameter.setTitle("Position Offset")
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("MainWindow", "Set position offset"))
+        self.grb_menu_parameter.setTitle(_translate("MainWindow", "Position Offset"))
 
         self.grb_menu_parameter.setGeometry(QtCore.QRect(10, 10, 280, 110))
 
