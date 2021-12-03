@@ -283,7 +283,6 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
         self.btn_Swap_Teams.setEnabled(False)
 
     def open_file(self, path_op_preset=None):
-        self.create_new()
         try:
             if path_op_preset is None:
                 path_op_preset = QFileDialog.getOpenFileNames(self, caption="Open Teams Rating", directory="saves",
@@ -291,6 +290,7 @@ class MainRATING(QMainWindow, Ui_MainWindow, ):
             else:
                 path_op_preset = path_op_preset
 
+            self.create_new()
             list_str = []
             with open(path_op_preset, "r") as f:
                 for line in f.readlines():
